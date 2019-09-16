@@ -7,16 +7,36 @@
       </span>
     </div>
     <div class="__lists">
-      <FormSearch />
+      <div class="__search-box">
+        <SearchForm />
+        <br />
+        <SelectForm />
+      </div>
+      <div class="__company-list">
+        <div v-for="index in 10" :key="index" class="__company">
+          <img class="__logo" v-img="''" />
+          <div class="__info-box">Company name</div>
+          <div class="__favorite">
+            <IconFavorite />
+            <img />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import FormSearch from '../components/base_forms/FormSearch'
+import SearchForm from '../components/base_forms/SearchForm'
+import SelectForm from '../components/base_forms/SelectForm'
+import IconFavorite from '../components/features/IconFavorite'
+import mixinImage from '../mixin/directive_image'
 export default {
+  mixins: [mixinImage],
   components: {
-    FormSearch
+    SearchForm,
+    SelectForm,
+    IconFavorite
   },
   data() {
     return {
@@ -30,7 +50,7 @@ export default {
 .__container {
   min-width: 100vw;
   min-height: 100vh;
-  background-color: blueviolet;
+  // background-color: blueviolet;
   padding: 0 0 1px 0;
   display: flex;
   .__side-company-name {
@@ -61,8 +81,20 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    .__search {
+    flex: 1;
+    .__search-box {
+      width: 100%;
       background-color: #a5a5a5;
+    }
+
+    .__company-list {
+      width: 100%;
+      border: 1px solid red;
+      height: 100vh;
+      .__logo {
+        width: 40px;
+        height: 40px;
+      }
     }
   }
 }

@@ -54,7 +54,7 @@ body {
   }
 
   .__containers {
-    background-color: green;
+    // background-color: green;
     height: 85vh;
     max-width: 100vw;
     overflow-x: hidden;

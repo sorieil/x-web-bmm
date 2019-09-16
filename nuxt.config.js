@@ -18,7 +18,8 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/icon?family=Material+Icons+Round'
+        href:
+          'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round'
       },
       {
         rel: 'stylesheet',

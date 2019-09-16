@@ -1,14 +1,19 @@
 <template>
-  <div class="__form-search" :style="{ color: propFontColor }">
+  <div class="__search-form" :style="{ color: propFontColor }">
     <label>
-      <input v-model="value" v-bind="$attrs" :placeholder="propPlaceHolder" />
+      <input
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on="inputListeners"
+        :placeholder="propPlaceHolder"
+      />
     </label>
     <!-- v-bind="$attrs" :placeholder="propPlaceHolder" v-on="inputListeners" -->
   </div>
 </template>
 <script>
 export default {
-  name: 'FormSearch',
+  name: 'SearchForm',
   inheritAttrs: false,
   props: {
     propPlaceHolder: {
@@ -43,45 +48,40 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.__form-search {
+.__search-form {
   display: block;
   position: relative;
   width: 200px;
   height: 30px;
-  background-color: transparent;
+  border: 1px solid #d3d3d3;
+  background-color: #fafafa;
+  background-image: url('../../assets/images/common/icon_search.svg');
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-position: center left 10px;
+  border-radius: 30px;
+  overflow: hidden;
+
   label {
     display: block;
     width: inherit;
     height: inherit;
   }
 
-  &::before {
-    z-index: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: block;
-    content: '';
-    border: 1px solid #d3d3d3;
-    background-color: #fafafa;
-    background-image: url('../../assets/images/common/icon_search.svg');
-    background-repeat: no-repeat;
-    background-origin: border-box;
-    background-position: center left 10px;
-    border-radius: 30px;
-  }
   input {
+    user-select: text;
     position: absolute;
     z-index: 10;
     color: inherit;
     outline: none;
     background-color: transparent;
     border: 0;
-    top: 4px;
+    top: 0;
+    bottom: 0;
+    margin: auto 0 auto 0;
     left: 30px;
     width: 80%;
+    height: inherit;
     &::placeholder {
       color: #777777;
       font-size: 1em;
