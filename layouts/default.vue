@@ -1,55 +1,66 @@
 <template>
-  <div>
-    <nuxt />
+  <div class="__default">
+    <Header id="Header" ref="Header" />
+    <div class="__containers" @scroll="headerScroll">
+      <nuxt />
+    </div>
   </div>
 </template>
-
-<style>
-html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+<script>
+import Header from '../components/common/Header'
+export default {
+  components: {
+    Header
+  },
+  data() {
+    return {
+      targetHeader: ''
+    }
+  },
+  mounted() {},
+  methods: {
+    headerScroll(e) {
+      const top = e.target.scrollTop
+      if (top) {
+        console.log('메뉴를 보여랏')
+      } else {
+        console.log('메뉴를 닫아랏')
+      }
+    },
+    blindHeight(target) {
+      if (typeof target === 'object') {
+        // const height = console.log('height:', height)
+      } else {
+        console.log('Nop')
+      }
+    }
+  }
+}
+</script>
+<style lang="scss">
+body {
+  position: fixed;
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-  margin: 0;
-}
+.__default {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 
-.button--green {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
-  text-decoration: none;
-  padding: 10px 30px;
-}
+  .__header {
+    top: 0;
+    width: 100vw;
+    // height: 15vh;
+  }
 
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  border-radius: 4px;
-  border: 1px solid #35495e;
-  color: #35495e;
-  text-decoration: none;
-  padding: 10px 30px;
-  margin-left: 15px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+  .__containers {
+    background-color: green;
+    height: 85vh;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start;
+  }
 }
 </style>

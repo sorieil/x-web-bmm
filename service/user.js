@@ -1,11 +1,11 @@
-import { PROJECT_GET } from '../store/constant_types'
+// import { PROJECT_GET } from '../store/constant_types'
 import Base from './base'
 
-export default class Projects extends Base {
+export default class User extends Base {
   constructor(componentScope) {
     super(componentScope)
-    this.apiName = 'projects'
-    this.projectId = componentScope.$store.getters[PROJECT_GET.load].id
+    this.apiName = 'user'
+    // this.projectId = componentScope.$store.getters[PROJECT_GET.load].id
   }
 
   deploy() {

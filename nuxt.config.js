@@ -14,7 +14,18 @@ module.exports = {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/icon?family=Material+Icons+Round'
+      },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900'
+      }
+    ]
   },
   /*
    ** Customize the progress-bar color
@@ -23,7 +34,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['~/node_modules/normalize.css/normalize.css', 'assets/css/animate.css'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -40,9 +51,14 @@ module.exports = {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
     // '@nuxtjs/pwa'
   ],
+  styleResources: {
+    // your settings here
+    scss: ['./assets/scss/common.scss']
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -55,6 +71,27 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {},
+    postcss: {
+      // Add plugin names as key and arguments as value
+      // Install them before as dependencies with npm or yarn
+      plugins: {
+        // Disable a plugin by passing false as value
+        'postcss-url': false,
+        'postcss-nested': {},
+        'postcss-responsive-type': {},
+        'postcss-hexrgba': {}
+      },
+      preset: {
+        // Change the postcss-preset-env settings
+        autoprefixer: {
+          grid: true
+        }
+      }
+    }
+  },
+  server: {
+    port: 8888, // default: 3000
+    host: '10.80.211.64' // default: localhost
   }
 }
