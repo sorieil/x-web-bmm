@@ -1,5 +1,5 @@
 <template>
-  <div class="__select-form">
+  <div class="SelectForm">
     <button
       v-for="(menu, index) in propMenus"
       :key="index"
@@ -18,50 +18,50 @@ export default {
       default: () => [
         { title: '전체', value: 'all' },
         { title: '즐겨찾기', value: 'favorite' },
-        { title: '미팅가능', value: 'meeting' }
+        { title: '미팅가능', value: 'meeting' },
       ],
-      type: Array
+      type: Array,
     },
     defaultValue: {
       default: 'all',
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
-      selected: {}
-    }
+      selected: {},
+    };
   },
   watch: {
     value(newValue, oldValue) {
       if (newValue !== oldValue) {
-        const selected = this.propMenus.filter((v) => v.value === newValue)
-        this.selected = selected[0]
+        const selected = this.propMenus.filter((v) => v.value === newValue);
+        this.selected = selected[0];
       }
-    }
+    },
   },
   mounted() {
     this.$nextTick(() => {
       const selected = this.propMenus.filter(
         (v) => v.value === this.defaultValue
-      )
-      this.selected = selected[0]
-    })
+      );
+      this.selected = selected[0];
+    });
   },
   methods: {
     selecteValue(index) {
-      const selected = this.propMenus[index]
-      this.selected = selected
-      this.$emit('input', selected)
-    }
-  }
-}
+      const selected = this.propMenus[index];
+      this.selected = selected;
+      this.$emit('input', selected);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-.__select-form {
+.SelectForm {
   display: block;
   position: relative;
-  width: 300px;
+  min-width: 205px;
   height: 30px;
   background-color: transparent;
   border: 0.5px solid #a8a8a8;
@@ -83,6 +83,11 @@ export default {
     border-left: 0;
     border-right: 0.5px solid #a8a8a8;
     border-bottom: 0;
+
+    span {
+      font-size: 1em;
+      line-height: 1.4em;
+    }
 
     &:last-child {
       border-right: 0;

@@ -1,0 +1,23 @@
+{
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  // "prettier.singleQuote": true,
+  // "prettier.semi": false,
+  // "prettier.tabWidth": 2,
+  // "prettier.printWidth": 80,
+  // "prettier.arrowParens": "always",
+  // "prettier.useTabs": false,
+  // "prettier.trailingComma": "es5",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    {
+      "language": "vue",
+      "autoFix": true
+    },
+  ],
+  "vetur.grammar.customBlocks": {
+    "docs": "md",
+    "i18n": "json"
+  }
+}

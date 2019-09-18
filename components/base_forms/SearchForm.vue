@@ -1,14 +1,14 @@
+<!-- eslint-disable-line vue/v-bind-style -->
 <template>
-  <div class="__search-form" :style="{ color: propFontColor }">
+  <div class="SearchForm" :style="{ color: propFontColor }">
     <label>
       <input
+        :value="value"
         v-bind="$attrs"
-        v-bind:value="value"
+        v-on:placeholder="propPlaceHolder"
         v-on="inputListeners"
-        :placeholder="propPlaceHolder"
       />
     </label>
-    <!-- v-bind="$attrs" :placeholder="propPlaceHolder" v-on="inputListeners" -->
   </div>
 </template>
 <script>
@@ -17,48 +17,44 @@ export default {
   inheritAttrs: false,
   props: {
     propPlaceHolder: {
-      default: '검색어를 입력해주세요.',
-      type: String
+      default: '검색',
+      type: String,
     },
     propFontColor: {
       default: '#000000',
-      type: String
+      type: String,
     },
     value: {
       default: '',
-      type: String
-    }
-  },
-  mehtods: {
-    focus(event) {
-      console.log(this.$refs.input)
-    }
+      type: String,
+    },
   },
   computed: {
     inputListeners() {
-      const vm = this
-      console.log('vm:', vm)
+      const vm = this;
       return Object.assign({}, this.$listeners, {
         input(event) {
-          vm.$emit('input', event.target.value)
-        }
-      })
-    }
-  }
-}
+          if (event.target.value) {
+            vm.$emit('input', event.target.value);
+          }
+        },
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-.__search-form {
+.SearchForm {
   display: block;
   position: relative;
-  width: 200px;
+  min-width: 200px;
   height: 30px;
   border: 1px solid #d3d3d3;
   background-color: #fafafa;
   background-image: url('../../assets/images/common/icon_search.svg');
   background-repeat: no-repeat;
   background-origin: border-box;
-  background-position: center left 10px;
+  background-position: center left 12px;
   border-radius: 30px;
   overflow: hidden;
 
@@ -71,17 +67,19 @@ export default {
   input {
     user-select: text;
     position: absolute;
+    font-size: 1em;
     z-index: 10;
     color: inherit;
     outline: none;
     background-color: transparent;
     border: 0;
+    height: 20px;
     top: 0;
     bottom: 0;
-    margin: auto 0 auto 0;
+    margin: auto 0 auto 5px;
     left: 30px;
     width: 80%;
-    height: inherit;
+
     &::placeholder {
       color: #777777;
       font-size: 1em;

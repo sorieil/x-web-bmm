@@ -1,19 +1,19 @@
 // import { PROJECT_GET } from '../store/constant_types'
-import Base from './base'
+import Base from './base';
 
 export default class User extends Base {
   constructor(componentScope) {
-    super(componentScope)
-    this.apiName = 'user'
+    super(componentScope);
+    this.apiName = 'vender';
     // this.projectId = componentScope.$store.getters[PROJECT_GET.load].id
   }
 
   deploy() {
-    this.apiUrl = `${this.projectId}/versions/draft/deploy`
+    this.apiUrl = `${this.projectId}/versions/draft/deploy`;
     // this.params = {
     //   domain_id: 1,
     //   path_id: 2,
     // };
-    return this.post()
+    return this.post();
   }
 }

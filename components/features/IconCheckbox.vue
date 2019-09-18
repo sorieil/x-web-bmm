@@ -1,14 +1,12 @@
 <template>
-  <div class="IconFavorite" @click="chanage">
-    <i :class="{ __active: tempValue }" class="material-icons-round fadeIn"
-      >star</i
-    >
+  <div class="IconCheckbox" @click="chanage">
+    <i :class="{ __active: tempValue }" class="material-icons">check</i>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'IconFavorite',
+  name: 'IconCheckbox',
   props: {
     value: {
       default: false,
@@ -34,7 +32,7 @@ export default {
 </script>
 
 <style lang="scss">
-.IconFavorite {
+.IconCheckbox {
   display: flex;
   justify-content: center;
   align-items: center;

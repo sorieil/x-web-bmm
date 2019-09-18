@@ -1,7 +1,31 @@
+@font-face {
+  font-family: 'Noto Sans KR', sans-serif;
+  src:
+    /* IE6-IE8 */
+    url('/static/fonts/NotoSansKR-Black.woff2') format('woff2'),
+    url('/static/fonts/NotoSansKR-Light.woff2') format('woff2'),
+    url('/static/fonts/NotoSansKR-Regular.woff2') format('woff2'),
+    url('/static/fonts/NotoSansKR-Black.woff') format('woff'),
+    url('/static/fonts/NotoSansKR-Light.woff') format('woff'),
+    url('/static/fonts/NotoSansKR-Regular.woff') format('woff'),
+    url('/static/fonts/NotoSansKR-Black.ttf') format('ttf'),
+    url('/static/fonts/NotoSansKR-Light.ttf') format('ttf'),
+    url('/static/fonts/NotoSansKR-Regular.ttf') format('ttf'),
+}
+
 * {
   font-family: 'Noto Sans KR', sans-serif;
   user-select: none;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-size: 12px;
+}
+
+/* safari for ios */
+@supports (-webkit-text-size-adjust: none) and (not (-ms-accelerator: true)) and (not (-moz-appearance: none)) {
+  * {
+    font-size: 11px;
+  }
 }
 
 i {

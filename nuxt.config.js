@@ -11,22 +11,22 @@ module.exports = {
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+        content: process.env.npm_package_description || '',
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round'
+          'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round',
       },
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900'
-      }
-    ]
+          'https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900',
+      },
+    ],
   },
   /*
    ** Customize the progress-bar color
@@ -39,13 +39,13 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/global'],
   /*
    ** Nuxt.js dev-modules
    */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
   ],
   /*
    ** Nuxt.js modules
@@ -53,12 +53,12 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
     // '@nuxtjs/pwa'
   ],
   styleResources: {
     // your settings here
-    scss: ['./assets/scss/common.scss']
+    scss: ['./assets/scss/common.scss'],
   },
   /*
    ** Axios module configuration
@@ -81,18 +81,21 @@ module.exports = {
         'postcss-url': false,
         'postcss-nested': {},
         'postcss-responsive-type': {},
-        'postcss-hexrgba': {}
+        'postcss-hexrgba': {},
       },
       preset: {
         // Change the postcss-preset-env settings
         autoprefixer: {
-          grid: true
-        }
-      }
-    }
+          grid: true,
+        },
+      },
+    },
+  },
+  env: {
+    API_URL: 'http://localhost:8989/api' || process.env.API_URL,
   },
   server: {
     port: 8888, // default: 3000
-    host: '10.80.211.64' // default: localhost
-  }
-}
+    host: '10.80.211.64', // default: localhost
+  },
+};
