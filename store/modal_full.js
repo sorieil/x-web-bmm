@@ -8,6 +8,7 @@ import {
 export const state = () => ({
   status: false,
   component: '',
+  type: null,
 });
 
 export const getters = {

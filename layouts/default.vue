@@ -14,8 +14,8 @@
     <div
       ref="filterModal"
       :class="{
-        rotateInUpRight: MODAL_FULL_GET.status,
-        fadeOutRightBig: !MODAL_FULL_GET.status,
+        fadeInUpBig: MODAL_FULL_GET.status,
+        fadeOutUpBig: !MODAL_FULL_GET.status,
       }"
       class="__filter-modal animated"
     >
@@ -30,15 +30,30 @@
       </div>
       <ul class="__tabs">
         <li v-for="(item, index) in filters" :key="index">
-          <div class="__tab" @click="selectTap(index)">{{ item.name }}</div>
+          <div
+            class="__tab"
+            :class="{ __active: filterActive === index }"
+            @click="selectTab(index)"
+          >
+            {{ item.name }}
+          </div>
         </li>
       </ul>
-      <ul>
-        <li v-for="(item, index) in filterChild" :key="index">
-          {{ item }}
-          <IconCheckbox />
+      <ul class="__items">
+        <li
+          v-for="(item, index) in filterChild"
+          :key="index"
+          class="__item"
+          :class="[item.active ? '__active' : '']"
+        >
+          <span>{{ item.name }}</span>
+          <IconCheckbox v-model="item.active" />
         </li>
       </ul>
+    </div>
+
+    <div class="__schedule-icon-wrap">
+      <img src="../assets/images/common/icon_schedule.svg" />
     </div>
   </div>
 </template>
@@ -49,11 +64,11 @@
 // 많은것도 아니고,... 여튼..ㅎㅎㅎ
 import Header from '../components/common/Header';
 import Code from '../service/code';
-import Base from '../service/base';
+// import Base from '../service/base';
 import IconCheckbox from '../components/features/IconCheckbox';
 import ModalFull from '../mixin/modal_full';
 export default {
-  middleware: ['auth'],
+  // middleware: ['auth'],
   components: {
     Header,
     IconCheckbox,
@@ -67,50 +82,102 @@ export default {
       lastScrollTopValue: 0,
       headerOption: false,
       companyName: 'xSync',
-      filters: [],
+      filters: [
+        {
+          name: '업체구분',
+          items: [
+            {
+              name: '업체1',
+              active: false,
+            },
+            {
+              name: '업체2',
+              active: false,
+            },
+            {
+              name: '업체3',
+              active: false,
+            },
+          ],
+        },
+        {
+          name: '제품/서비스',
+          items: [
+            {
+              name: '제품1',
+              active: false,
+            },
+            {
+              name: '제품2',
+              active: false,
+            },
+            {
+              name: '제품3',
+              active: false,
+            },
+          ],
+        },
+        {
+          name: '국가',
+          items: [
+            {
+              name: '국가1',
+              active: false,
+            },
+            {
+              name: '국가2',
+              active: false,
+            },
+            {
+              name: '국가3',
+              active: false,
+            },
+          ],
+        },
+      ],
       filterChild: [],
       filterStatus: false,
+      filterActive: null,
     };
   },
   created() {
     console.log('server? ', process.server, this.$context);
   },
   mounted() {
-    this.getServiceFilterType();
-    new Base(this).setupToken().then((r) => {
-      // console.log('default layout setup token', r)
-      if (!r) {
-        // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
-        alert('토큰 설정이 안됐어요.');
-      }
-    });
+    // this.getServiceFilterType();
+    // new Base(this).setupToken().then((r) => {
+    //   // console.log('default layout setup token', r)
+    //   if (!r) {
+    //     // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
+    //     alert('토큰 설정이 안됐어요.');
+    //   }
+    // });
     this.$nextTick(() => {
       window.addEventListener('resize', () => {
         const vh = window.innerHeight * 0.01;
         this.$refs.Header.documentElement.style.setProperty('--vh', `${vh}px`);
       });
     });
+
+    setTimeout(() => {
+      this.selectTab(0);
+    }, 100);
   },
   methods: {
     filterOpen() {
       this.MODAL_FULL_ACTION_OFF();
     },
-    selectTap(index) {
+    selectTab(index) {
       const filterActive = this.filters[index].name;
-      this.filterChild = this.filters[index];
+      this.filterChild = this.filters[index].items;
+      this.filterActive = index;
       console.log('select tap:', filterActive);
-
-      // const formData = new FormData(this.$refs.form)
-      // formData.append('name', 'Test Name')
-      // console.log(formData.keys())
-      // for (const key of formData.keys()) {
-      //   const tt = key
-      //   console.log(tt)
-      // }
     },
     async getServiceFilterType() {
       const { result } = await new Code(this).getFilterType();
-      // console.log('getServiceFilterType: ', result)
+      console.log('========getFilterType result');
+      console.log(result);
+      console.log('========getFilterType result end');
       this.filters = result;
     },
     handleFilter() {},
@@ -251,31 +318,44 @@ body {
     }
 
     .__tabs {
-      background-color: #d3d3d3;
+      background-color: white;
       list-style: none;
       width: inherit;
       border-top: 0;
       border-left: 0;
       border-right: 0;
-      border-bottom: 1px solid gray;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 0;
+      margin: 0;
       li {
         line-height: 30px;
         text-align: center;
         flex: 1;
-        .__tap {
+        .__tab {
           width: inherit;
           line-height: inherit;
-          border: 1px solid red;
+          font-size: 16px;
+          padding: 7px 0;
+          border-bottom: 1px solid #d3d3d3;
+          color: #a5a5a5;
         }
-        :hover {
-          background-color: #a5a5a5;
+        .__active {
+          background-color: white !important;
+          color: #e83828;
+          border-bottom: 3px solid #e83828;
         }
       }
     }
+  }
+  .__schedule-icon-wrap {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    background: #e83828;
+    padding: 14px;
+    border-radius: 50%;
   }
 }
 </style>

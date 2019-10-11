@@ -42,6 +42,7 @@ import IconFavorite from '../components/features/IconFavorite';
 import DirectiveImage from '../mixin/directive_image';
 import ModalFull from '../mixin/modal_full';
 export default {
+  // layout: 'default1',
   components: {
     SearchForm,
     SelectForm,
@@ -174,11 +175,11 @@ export default {
 .__container {
   flex: 1;
   min-height: 100vh;
-  // background-color: blueviolet;
   padding: 0 0 1px 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
 
   .__search-box {
     width: 100%;

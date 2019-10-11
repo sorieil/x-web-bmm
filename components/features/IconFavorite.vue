@@ -1,8 +1,6 @@
 <template>
   <div class="IconFavorite" @click="chanage">
-    <i :class="{ __active: tempValue }" class="material-icons-round fadeIn"
-      >star</i
-    >
+    <i :class="{ __active: tempValue }" class="material-icons-round">star</i>
   </div>
 </template>
 

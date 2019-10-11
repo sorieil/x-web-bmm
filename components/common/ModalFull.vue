@@ -1,7 +1,7 @@
 <template>
   <div class="ModalFull" @click="close">
     <div class="__overlay"></div>
-    <slot class="__container"></slot>
+    <slot name="__modal-content" class="__container"></slot>
   </div>
 </template>
 <script>
