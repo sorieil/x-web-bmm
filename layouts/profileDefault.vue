@@ -1,5 +1,5 @@
 <template>
-  <div class="__sub-default">
+  <div ref="ProfileLayout" class="__sub-default">
     <ProfileHeader id="ProfileHeader" ref="ProfileHeader" />
     <div class="__containers">
       <nuxt />

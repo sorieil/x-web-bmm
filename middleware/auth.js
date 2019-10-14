@@ -23,18 +23,18 @@
 //   // if (route.query.hasOwnProperty('auth')) {
 //   if (ACCESS_TOKEN) {
 //     // 유저 인정 정보 가져오기
-//     // await new Token(vm).tokenVerify(ACCESS_TOKEN).then((result) => {
-//     //   // console.log('Token refresh', result)
-//     //   if (result) {
-//     //     console.log('req', req.session);
-//     //     req.session.token = ACCESS_TOKEN;
-//     //     store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
-//     //   } else {
-//     //     console.log('인증 못받음.');
-//     //     errorRedirect('/');
-//     //   }
-//     // });
-//     // app.router.replace({ path: '/' });
+//     await new Token(vm).tokenVerify(ACCESS_TOKEN).then((result) => {
+//       // console.log('Token refresh', result)
+//       if (result) {
+//         console.log('req', req.session);
+//         req.session.token = ACCESS_TOKEN;
+//         store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
+//       } else {
+//         console.log('인증 못받음.');
+//         errorRedirect('/');
+//       }
+//     });
+//     app.router.replace({ path: '/' });
 //     // scenario 시작
 //   } else {
 //     errorRedirect();

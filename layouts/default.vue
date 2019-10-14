@@ -14,8 +14,8 @@
     <div
       ref="filterModal"
       :class="{
-        fadeInUpBig: MODAL_FULL_GET.status,
-        fadeOutUpBig: !MODAL_FULL_GET.status,
+        fadeInUpBig: FILTER_GET.status,
+        fadeOutUpBig: !FILTER_GET.status,
       }"
       class="__filter-modal animated"
     >
@@ -24,7 +24,7 @@
           <span>Reset</span>
         </button>
         <span class="__title">Filter</span>
-        <button class="__close" @click="filterOpen">
+        <button class="__close" @click="closeFilter">
           <i class="material-icons-round">close</i>
         </button>
       </div>
@@ -63,17 +63,18 @@
 // 그래서 최상단 부모 레이아웃에서 모달을 불러와야 하기 때문이다. 컴포넌트로 만들면, Prop의 햇갈림도 있기에.. 현재까지는 모달 컴포넌트가
 // 많은것도 아니고,... 여튼..ㅎㅎㅎ
 import Header from '../components/common/Header';
-import Code from '../service/code';
+// import Code from '../service/code';
 // import Base from '../service/base';
 import IconCheckbox from '../components/features/IconCheckbox';
-import ModalFull from '../mixin/modal_full';
+import { FILTER_SET } from '../store/constant_types';
+import Filter from '../mixin/filter';
 export default {
   // middleware: ['auth'],
   components: {
     Header,
     IconCheckbox,
   },
-  mixins: [ModalFull],
+  mixins: [Filter],
   data() {
     return {
       targetHeader: '',
@@ -165,7 +166,19 @@ export default {
   },
   methods: {
     filterOpen() {
-      this.MODAL_FULL_ACTION_OFF();
+      this.FILTER_ACTION_ON();
+    },
+    closeFilter() {
+      this.FILTER_ACTION_OFF();
+
+      const filter = this.filterChild.reduce((a, c) => {
+        if (c.active) {
+          a.push(c.active);
+        }
+        return a;
+      }, []);
+
+      this.$store.commit(FILTER_SET.load, { filter });
     },
     selectTab(index) {
       const filterActive = this.filters[index].name;
@@ -174,11 +187,11 @@ export default {
       console.log('select tap:', filterActive);
     },
     async getServiceFilterType() {
-      const { result } = await new Code(this).getFilterType();
-      console.log('========getFilterType result');
-      console.log(result);
-      console.log('========getFilterType result end');
-      this.filters = result;
+      // const { result } = await new Code(this).getFilterType();
+      //   console.log('========getFilterType result');
+      //   console.log(result);
+      //   console.log('========getFilterType result end');
+      //   this.filters = result;
     },
     handleFilter() {},
     headerScroll(e) {

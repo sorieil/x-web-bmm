@@ -1,5 +1,5 @@
 <template>
-  <div class="__container">
+  <div ref="ProfileForm" class="__container">
     <div class="__my-profile">
       <div class="__select" @click="openLeftLayoutModal">
         <p class="__title">기업선택</p>
@@ -90,14 +90,15 @@
         * 작성된 정보는 제3자에게 노출되는 것을 알려드립니다.
       </p>
     </div>
-    <Modal
+    <!-- <ModalFull
+      ref="searchLeftLayoutModal"
       class="animated"
       :class="{
         fadeInUpBig: searchLeftLayoutModal,
         fadeOutUpBig: !searchLeftLayoutModal,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <div class="__search-input-wrap">
             <i class="material-icons">search</i>
@@ -110,7 +111,7 @@
             v-for="(company, index) in companys"
             :key="index"
             class="__company"
-            @click="openCompanyCodeModal"
+            @click="openCompanyCodeModal(index)"
           >
             <div class="__company-image">
               <img v-img="''" />
@@ -119,15 +120,22 @@
           </div>
         </div>
       </div>
-    </Modal>
-    <Modal
+    </ModalFull>-->
+    <SearchLeftLayout
+      :search-left-layout-modal="searchLeftLayoutModal"
+      :companys="companys"
+      v-on:open="openCompanyCodeModal(index)"
+      v-on:close="modalClose"
+    />
+    <ModalFull
+      ref="searchCenterLayoutModal"
       class="animated"
       :class="{
         fadeInUpBig: searchCenterLayoutModal,
         fadeOutUpBig: !searchCenterLayoutModal,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <div class="__search-input-wrap">
             <i class="material-icons">search</i>
@@ -145,21 +153,21 @@
           </div>
         </div>
       </div>
-    </Modal>
-    <Modal
+    </ModalFull>
+    <ModalFull
       class="__company-code animated"
       :class="{
         fadeInUpBig: companyCodeModal,
         fadeOutUpBig: !companyCodeModal,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div v-if="companyCodeStatus === null" class="__company-code-box">
           <h3>기업코드를 입력하세요.</h3>
           <input type="text" />
           <div class="__buttons">
             <button type="button">취소</button>
-            <button type="button" @click="companyCodeStatus = false">
+            <button type="button" @click="companyCodeStatus = true">
               확인
             </button>
           </div>
@@ -170,28 +178,34 @@
         >
           <i class="material-icons">check</i>
           <h3>기업코드가 확인되었습니다.</h3>
-          <button type="button" class="__button" @click="modalClose(true)">
+          <button
+            type="button"
+            class="__button"
+            @click="closeCompanyModal(true)"
+          >
             확인
           </button>
         </div>
         <div v-else class="__company-code-box __company-code-alert">
           <i class="material-icons">check</i>
           <h3>기업코드가 잘못되었습니다.</h3>
-          <button type="button" class="__button" @click="modalClose(true)">
+          <button type="button" class="__button" @click="closeCompanyModal()">
             확인
           </button>
         </div>
       </div>
-    </Modal>
+    </ModalFull>
   </div>
 </template>
 <script>
 import DirectiveImage from '../mixin/directive_image';
-import Modal from '../components/common/ModalFull';
+import Filter from '../mixin/filter';
+import ModalFull from '../components/common/ModalFull';
+import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
 export default {
   layout: 'profileDefault',
-  components: { Modal },
-  mixins: [DirectiveImage],
+  components: { ModalFull, SearchLeftLayout },
+  mixins: [DirectiveImage, Filter],
   data() {
     return {
       searchLeftLayoutModal: false,
@@ -209,6 +223,7 @@ export default {
         '연구기관',
         '컨벤션주최자',
       ],
+      selectCompany: null,
     };
   },
   mounted() {
@@ -217,7 +232,7 @@ export default {
       for (let i = 0; i < modalBg.length; i++) {
         if (modalBg[i].parentElement.classList.contains('__company-code')) {
           modalBg[i].addEventListener('click', () => {
-            this.modalClose(true, modalBg[i]);
+            this.closeCompanyModal();
           });
         }
       }
@@ -227,36 +242,53 @@ export default {
     openLeftLayoutModal() {
       this.searchLeftLayoutModal = true;
 
-      const modalFullEl = document.getElementsByClassName('ModalFull')[0];
+      // const bodyEl = this.$refs.ProfileForm.offsetParent;
+      // const thisModalEl = this.$refs.searchLeftLayoutModal.$el;
 
-      modalFullEl.style.top = window.scrollY + 'px';
-      document.body.style.overflow = 'hidden';
+      // bodyEl.style.overflow = 'hidden';
+      // thisModalEl.style.top = window.scrollY + 'px';
     },
     openCenterLayoutModal() {
       this.searchCenterLayoutModal = true;
 
-      const modalFullEl = document.getElementsByClassName('ModalFull')[0];
+      const bodyEl = this.$refs.ProfileForm.offsetParent;
+      const thisModalEl = this.$refs.searchCenterLayoutModal.$el;
 
-      modalFullEl.style.top = window.scrollY + 'px';
-      document.body.style.overflow = 'hidden';
+      bodyEl.style.overflow = 'hidden';
+      thisModalEl.style.top = window.scrollY + 'px';
     },
-    openCompanyCodeModal() {
+    openCompanyCodeModal(index) {
       this.companyCodeModal = true;
-
-      const modalFullEl = document.getElementsByClassName('ModalFull')[0];
-
-      modalFullEl.style.top = window.scrollY + 'px';
-      document.body.style.overflow = 'hidden';
+      console.log(index);
+      this.selectCompany = index;
     },
-    modalClose(conpanyCode) {
-      if (conpanyCode === true) {
-        this.companyCodeModal = false;
-      } else {
+    modalClose() {
+      this.searchLeftLayoutModal = false;
+      this.searchCenterLayoutModal = false;
+
+      const bodyEl = this.$refs.ProfileForm.offsetParent;
+
+      bodyEl.style.height = 'auto';
+      bodyEl.style.overflow = 'auto';
+    },
+    closeCompanyModal(closeAll) {
+      const bodyEl = this.$refs.ProfileForm.offsetParent;
+
+      if (closeAll) {
         this.searchLeftLayoutModal = false;
         this.searchCenterLayoutModal = false;
-      }
+        this.companyCodeModal = false;
 
-      document.body.style.overflow = 'auto';
+        bodyEl.style.height = 'auto';
+        bodyEl.style.overflow = 'auto';
+
+        this.getSelectCompany();
+      } else {
+        this.companyCodeModal = false;
+      }
+    },
+    getSelectCompany() {
+      console.log('select company = ' + this.selectCompany);
     },
   },
 };
@@ -412,7 +444,7 @@ export default {
     }
     .__content {
       background-color: #f4f4f4;
-      min-height: calc(100vh - 40px);
+      min-height: calc(100vh - 46px);
       position: relative;
       overflow: auto;
       .__company {

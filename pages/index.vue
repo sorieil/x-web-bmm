@@ -40,15 +40,15 @@ import SearchForm from '../components/base_forms/SearchForm';
 import SelectForm from '../components/base_forms/SelectForm';
 import IconFavorite from '../components/features/IconFavorite';
 import DirectiveImage from '../mixin/directive_image';
-import ModalFull from '../mixin/modal_full';
+// import { FILTER_GET } from '../store/constant_types';
+import Filter from '../mixin/filter';
 export default {
-  // layout: 'default1',
   components: {
     SearchForm,
     SelectForm,
     IconFavorite,
   },
-  mixins: [DirectiveImage, ModalFull],
+  mixins: [DirectiveImage, Filter],
   data() {
     return {
       companyName: 'xSync',
@@ -151,17 +151,20 @@ export default {
       ],
     };
   },
+  watch: {
+    'FILTER_GET.filter'(newValue, oldValue) {
+      console.log('FILTER_GET.filter=========================');
+      console.log(newValue, oldValue);
+    },
+  },
   mounted() {
     // console.log(process)
   },
   methods: {
     openFilter() {
-      this.MODAL_FULL_ACTION_ON();
+      this.FILTER_ACTION_ON();
       // 필터를 부르기전에 그전에 설정해놓은 필터가 있는 경우에는 세팅을 해줘야 하는데...
       // 필터를 다시 설정하게 하는것이 아니라 필터를 캐싱해둬야 한다.
-    },
-    closeFilter() {
-      // 필터가 닫힐때 데이터를 다시 불러와야 한다.
     },
     selectVender(index) {
       const vender = this.venders[index];

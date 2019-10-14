@@ -38,6 +38,21 @@ export const FILTER_GET = {
   load: 'filter/FILTER_GET',
 };
 
+export const FILTER_ACTION_ON = {
+  defines: 'FILTER_ACTION_ON',
+  load: 'filter/FILTER_ACTION_ON',
+};
+
+export const FILTER_ACTION_OFF = {
+  defines: 'FILTER_ACTION_OFF',
+  load: 'filter/FILTER_ACTION_OFF',
+};
+
+export const FILTER_ACTION_CHANGE = {
+  defines: 'FILTER_ACTION_CHANGE',
+  load: 'filter/FILTER_ACTION_CHANGE',
+};
+
 export const MODAL_FULL_SET = {
   defines: 'MODAL_FULL_SET',
   load: 'modal_full/MODAL_FULL_SET',
@@ -56,4 +71,24 @@ export const MODAL_FULL_ACTION_OFF = {
 export const MODAL_FULL_GET = {
   defines: 'MODAL_FULL_GET',
   load: 'modal_full/MODAL_FULL_GET',
+};
+
+export const SEARCH_GET = {
+  defines: 'SEARCH_GET',
+  load: 'search/SEARCH_GET',
+};
+
+export const SEARCH_SET = {
+  defines: 'SEARCH_SET',
+  load: 'search/SEARCH_SET',
+};
+
+export const SEARCH_LEFT_OFF = {
+  defines: 'SEARCH_OFF',
+  load: 'search/SEARCH_OFF',
+};
+
+export const SEARCH_LEFT_ON = {
+  defines: 'SEARCH_ON',
+  load: 'search/SEARCH_ON',
 };

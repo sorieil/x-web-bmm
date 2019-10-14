@@ -26,7 +26,6 @@ export default {
       const status = !this.tempValue;
       this.tempValue = status;
       this.$emit('input', status);
-      console.log('zzz');
     },
   },
 };
