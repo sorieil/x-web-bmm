@@ -28,5 +28,3 @@ export const mutations = {
     state = Object.assign(state, payload);
   },
 };
-
-// 필터의 모달을 스토어에 저장해서 리스트 뷰에서 띄어줘야 한다.

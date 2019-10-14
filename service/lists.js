@@ -11,22 +11,22 @@ export default class Lists extends Base {
 
   getLists(keywords) {
     // this.params = keywords;
-    return this.get();
+    return this.baseGet();
   }
 
   deleteLists(listNumber) {
     this.apiUrl = listNumber;
-    return this.delete();
+    return this.baseDelete();
   }
 
   postLists(form) {
     this.params = form;
-    return this.post();
+    return this.basePost();
   }
 
   patchLists(listNumber, form) {
     this.params = form;
     this.apiUrl = listNumber;
-    return this.patch();
+    return this.basePatch();
   }
 }

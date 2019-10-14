@@ -94,7 +94,7 @@ export default class Base {
     }
   }
 
-  async get() {
+  async baseGet() {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
@@ -114,7 +114,7 @@ export default class Base {
       .catch(this.errorPrint);
   }
 
-  async post() {
+  async basePost() {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
@@ -126,7 +126,7 @@ export default class Base {
     }
   }
 
-  async put() {
+  async basePut() {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
@@ -138,7 +138,7 @@ export default class Base {
     }
   }
 
-  async delete() {
+  async baseDelete() {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
@@ -150,7 +150,7 @@ export default class Base {
     }
   }
 
-  async patch() {
+  async basePatch() {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios

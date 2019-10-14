@@ -1,6 +1,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import {
-  FILTER_SET,
+  // FILTER_SET,
   FILTER_GET,
   FILTER_ACTION_ON,
   FILTER_ACTION_OFF,
@@ -12,7 +12,7 @@ export default {
     }),
   },
   watch: {
-    [FILTER_SET.defines](newValue, oldValue) {
+    'FILTER_GET.filter': (newValue, oldValue) => {
       console.log(newValue, oldValue);
     },
   },

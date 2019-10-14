@@ -14,6 +14,6 @@ export default class User extends Base {
     //   domain_id: 1,
     //   path_id: 2,
     // };
-    return this.post();
+    return this.basePost();
   }
 }

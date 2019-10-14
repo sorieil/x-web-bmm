@@ -8,12 +8,12 @@ export default class User extends Base {
     // this.projectId = componentScope.$store.getters[PROJECT_GET.load].id
   }
 
-  get() {
+  baseGet() {
     this.apiUrl = `${this.projectId}/versions/draft/deploy`;
     // this.params = {
     //   domain_id: 1,
     //   path_id: 2,
     // };
-    return this.post();
+    return this.basePost();
   }
 }

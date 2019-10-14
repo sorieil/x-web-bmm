@@ -1,18 +1,17 @@
 import { mapGetters, mapActions } from 'vuex';
 import {
-  SEARCH_SET,
-  SEARCH_GET,
+  SEARCH_LEFT_GET,
   SEARCH_LEFT_ON,
   SEARCH_LEFT_OFF,
 } from '../store/constant_types';
 export default {
   computed: {
     ...mapGetters({
-      [SEARCH_GET.defines]: SEARCH_GET.load,
+      [SEARCH_LEFT_GET.defines]: SEARCH_LEFT_GET.load,
     }),
   },
   watch: {
-    [SEARCH_SET.defines](newValue, oldValue) {
+    'SEARCH_LEFT_GET.returnValue': (newValue, oldValue) => {
       console.log(newValue, oldValue);
     },
   },

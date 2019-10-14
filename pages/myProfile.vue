@@ -90,139 +90,29 @@
         * 작성된 정보는 제3자에게 노출되는 것을 알려드립니다.
       </p>
     </div>
-    <!-- <ModalFull
-      ref="searchLeftLayoutModal"
-      class="animated"
-      :class="{
-        fadeInUpBig: searchLeftLayoutModal,
-        fadeOutUpBig: !searchLeftLayoutModal,
-      }"
-    >
-      <div slot="ModalContent" class="__modal-content">
-        <div class="__header">
-          <div class="__search-input-wrap">
-            <i class="material-icons">search</i>
-            <input type="text" class="__search-input" />
-          </div>
-          <button class="__close" @click="modalClose">취소</button>
-        </div>
-        <div class="__content">
-          <div
-            v-for="(company, index) in companys"
-            :key="index"
-            class="__company"
-            @click="openCompanyCodeModal(index)"
-          >
-            <div class="__company-image">
-              <img v-img="''" />
-            </div>
-            <p>{{ company }}</p>
-          </div>
-        </div>
-      </div>
-    </ModalFull>-->
-    <SearchLeftLayout
-      :search-left-layout-modal="searchLeftLayoutModal"
-      :companys="companys"
-      v-on:open="openCompanyCodeModal(index)"
-      v-on:close="modalClose"
-    />
-    <ModalFull
-      ref="searchCenterLayoutModal"
-      class="animated"
-      :class="{
-        fadeInUpBig: searchCenterLayoutModal,
-        fadeOutUpBig: !searchCenterLayoutModal,
-      }"
-    >
-      <div slot="ModalContent" class="__modal-content">
-        <div class="__header">
-          <div class="__search-input-wrap">
-            <i class="material-icons">search</i>
-            <input type="text" class="__search-input" />
-          </div>
-          <button class="__close" @click="modalClose">취소</button>
-        </div>
-        <div class="__content">
-          <div
-            v-for="(type, index) in companyTypes"
-            :key="index"
-            class="__companyType"
-          >
-            <p>{{ type }}</p>
-          </div>
-        </div>
-      </div>
-    </ModalFull>
-    <ModalFull
-      class="__company-code animated"
-      :class="{
-        fadeInUpBig: companyCodeModal,
-        fadeOutUpBig: !companyCodeModal,
-      }"
-    >
-      <div slot="ModalContent" class="__modal-content">
-        <div v-if="companyCodeStatus === null" class="__company-code-box">
-          <h3>기업코드를 입력하세요.</h3>
-          <input type="text" />
-          <div class="__buttons">
-            <button type="button">취소</button>
-            <button type="button" @click="companyCodeStatus = true">
-              확인
-            </button>
-          </div>
-        </div>
-        <div
-          v-else-if="companyCodeStatus"
-          class="__company-code-box __company-code-alert"
-        >
-          <i class="material-icons">check</i>
-          <h3>기업코드가 확인되었습니다.</h3>
-          <button
-            type="button"
-            class="__button"
-            @click="closeCompanyModal(true)"
-          >
-            확인
-          </button>
-        </div>
-        <div v-else class="__company-code-box __company-code-alert">
-          <i class="material-icons">check</i>
-          <h3>기업코드가 잘못되었습니다.</h3>
-          <button type="button" class="__button" @click="closeCompanyModal()">
-            확인
-          </button>
-        </div>
-      </div>
-    </ModalFull>
+    <SearchLeftLayout />
+    <SearchCenterLayout />
+    <CompanyCode />
   </div>
 </template>
 <script>
 import DirectiveImage from '../mixin/directive_image';
 import Filter from '../mixin/filter';
-import ModalFull from '../components/common/ModalFull';
+import SearchLeft from '../mixin/search_left';
+import SearchCenter from '../mixin/search_center';
 import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
+import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
+import CompanyCode from '../components/input_modal/CompanyCode';
 export default {
   layout: 'profileDefault',
-  components: { ModalFull, SearchLeftLayout },
-  mixins: [DirectiveImage, Filter],
+  components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
+  mixins: [DirectiveImage, Filter, SearchLeft, SearchCenter],
   data() {
     return {
       searchLeftLayoutModal: false,
       searchCenterLayoutModal: false,
       companyCodeModal: false,
       companyCodeStatus: null,
-      companys: ['피엑스디', '피엑스디 코리아'],
-      companyTypes: [
-        '정부기관',
-        '전시컨벤션센터',
-        '전시주최자',
-        '디자인설치업체',
-        '서비스업체',
-        '미디어',
-        '연구기관',
-        '컨벤션주최자',
-      ],
       selectCompany: null,
     };
   },
@@ -240,22 +130,18 @@ export default {
   },
   methods: {
     openLeftLayoutModal() {
-      this.searchLeftLayoutModal = true;
-
-      // const bodyEl = this.$refs.ProfileForm.offsetParent;
-      // const thisModalEl = this.$refs.searchLeftLayoutModal.$el;
-
-      // bodyEl.style.overflow = 'hidden';
-      // thisModalEl.style.top = window.scrollY + 'px';
-    },
-    openCenterLayoutModal() {
-      this.searchCenterLayoutModal = true;
+      this.SEARCH_LEFT_ON();
 
       const bodyEl = this.$refs.ProfileForm.offsetParent;
-      const thisModalEl = this.$refs.searchCenterLayoutModal.$el;
 
       bodyEl.style.overflow = 'hidden';
-      thisModalEl.style.top = window.scrollY + 'px';
+    },
+    openCenterLayoutModal() {
+      this.SEARCH_CENTER_ON();
+
+      const bodyEl = this.$refs.ProfileForm.offsetParent;
+
+      bodyEl.style.overflow = 'hidden';
     },
     openCompanyCodeModal(index) {
       this.companyCodeModal = true;

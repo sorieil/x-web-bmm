@@ -1,10 +1,10 @@
 <template>
   <ModalFull
-    ref="searchLeftLayoutModal"
+    ref="searchCenterLayoutModal"
     class="animated"
     :class="{
-      fadeInUpBig: SEARCH_LEFT_GET.status,
-      fadeOutUpBig: !SEARCH_LEFT_GET.status,
+      fadeInUpBig: SEARCH_CENTER_GET.status,
+      fadeOutUpBig: !SEARCH_CENTER_GET.status,
     }"
   >
     <div slot="ModalContent" class="__modal-content">
@@ -17,15 +17,11 @@
       </div>
       <div class="__content">
         <div
-          v-for="(company, index) in SEARCH_LEFT_GET.companys"
+          v-for="(type, index) in SEARCH_CENTER_GET.companyTypes"
           :key="index"
-          class="__company"
-          @click="selectCompanyCodeModal(index)"
+          class="__companyType"
         >
-          <div class="__company-image">
-            <img v-img="''" />
-          </div>
-          <p>{{ company }}</p>
+          <p>{{ type }}</p>
         </div>
       </div>
     </div>
@@ -33,32 +29,29 @@
 </template>
 <script>
 import DirectiveImage from '../../mixin/directive_image';
-import { SEARCH_LEFT_SET } from '../../store/constant_types';
-import SearchLeft from '../../mixin/search_left';
-import CompanyCode from '../../mixin/company_code';
+import { SEARCH_CENTER_SET } from '../../store/constant_types';
+import SearchCenter from '../../mixin/search_center';
 export default {
   name: 'SearchLeftLayout',
-  mixins: [DirectiveImage, SearchLeft, CompanyCode],
+  mixins: [DirectiveImage, SearchCenter],
   watch: {
-    'SEARCH_LEFT_GET.status'(newValue) {
+    'SEARCH_CENTER_GET.status'(newValue) {
       if (newValue) {
-        console.log(newValue);
-        const thisModalEl = this.$refs.searchLeftLayoutModal.$el;
+        const thisModalEl = this.$refs.searchCenterLayoutModal.$el;
         thisModalEl.style.top = window.scrollY + 'px';
       }
     },
   },
   methods: {
     selectCompanyCodeModal(index) {
-      this.$store.commit(SEARCH_LEFT_SET.load, { returnValue: index });
-      this.COMPANY_CODE_ON();
+      this.$store.commit(SEARCH_CENTER_SET.load, { returnValue: index });
     },
     modalClose() {
       const body = this.$el.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement;
 
       body.style.overflow = 'auto';
-      this.SEARCH_LEFT_OFF();
+      this.SEARCH_CENTER_OFF();
     },
   },
 };

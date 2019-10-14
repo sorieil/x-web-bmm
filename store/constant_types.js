@@ -73,22 +73,62 @@ export const MODAL_FULL_GET = {
   load: 'modal_full/MODAL_FULL_GET',
 };
 
-export const SEARCH_GET = {
-  defines: 'SEARCH_GET',
-  load: 'search/SEARCH_GET',
+export const SEARCH_LEFT_GET = {
+  defines: 'SEARCH_LEFT_GET',
+  load: 'search_left/SEARCH_LEFT_GET',
 };
 
-export const SEARCH_SET = {
-  defines: 'SEARCH_SET',
-  load: 'search/SEARCH_SET',
+export const SEARCH_LEFT_SET = {
+  defines: 'SEARCH_LEFT_SET',
+  load: 'search_left/SEARCH_LEFT_SET',
 };
 
 export const SEARCH_LEFT_OFF = {
-  defines: 'SEARCH_OFF',
-  load: 'search/SEARCH_OFF',
+  defines: 'SEARCH_LEFT_OFF',
+  load: 'search_left/SEARCH_LEFT_OFF',
 };
 
 export const SEARCH_LEFT_ON = {
-  defines: 'SEARCH_ON',
-  load: 'search/SEARCH_ON',
+  defines: 'SEARCH_LEFT_ON',
+  load: 'search_left/SEARCH_LEFT_ON',
+};
+
+export const SEARCH_CENTER_GET = {
+  defines: 'SEARCH_CENTER_GET',
+  load: 'search_center/SEARCH_CENTER_GET',
+};
+
+export const SEARCH_CENTER_SET = {
+  defines: 'SEARCH_CENTER_SET',
+  load: 'search_center/SEARCH_CENTER_SET',
+};
+
+export const SEARCH_CENTER_OFF = {
+  defines: 'SEARCH_CENTER_OFF',
+  load: 'search_center/SEARCH_CENTER_OFF',
+};
+
+export const SEARCH_CENTER_ON = {
+  defines: 'SEARCH_CENTER_ON',
+  load: 'search_center/SEARCH_CENTER_ON',
+};
+
+export const COMPANY_CODE_GET = {
+  defines: 'COMPANY_CODE_GET',
+  load: 'company_code/COMPANY_CODE_GET',
+};
+
+export const COMPANY_CODE_SET = {
+  defines: 'COMPANY_CODE_SET',
+  load: 'company_code/COMPANY_CODE_SET',
+};
+
+export const COMPANY_CODE_OFF = {
+  defines: 'COMPANY_CODE_OFF',
+  load: 'company_code/COMPANY_CODE_OFF',
+};
+
+export const COMPANY_CODE_ON = {
+  defines: 'COMPANY_CODE_ON',
+  load: 'company_code/COMPANY_CODE_ON',
 };
