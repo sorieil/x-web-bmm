@@ -206,14 +206,6 @@ export default {
           time: '11:30',
           status: '예약불가',
         },
-        {
-          time: '11:45',
-          status: '예약불가',
-        },
-        {
-          time: '12:00',
-          status: '예약가능',
-        },
       ],
       applicant: {
         name: '최수진',

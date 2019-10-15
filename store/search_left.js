@@ -8,7 +8,7 @@ import {
 export const state = () => ({
   status: false,
   returnValue: null,
-  companys: ['피엑스디', '피엑스디 코리아'],
+  companys: ['피엑스디', '피엑스디 코리아', '테스트'],
 });
 
 export const getters = {

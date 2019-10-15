@@ -37,19 +37,19 @@
         <h3>참가 정보</h3>
         <div class="__form-content">
           <div class="__select" @click="openCenterLayoutModal">
-            <p class="__title">업체구분</p>
+            <p class="__title">업체 구분</p>
             <i class="material-icons">keyboard_arrow_right</i>
           </div>
           <div class="__select" @click="openCenterLayoutModal">
-            <p class="__title">제품서비스</p>
+            <p class="__title">제품 서비스</p>
             <i class="material-icons">keyboard_arrow_right</i>
           </div>
           <div class="__item">
-            <p class="__title">관심분야</p>
+            <p class="__title">관심 분야</p>
             <input placeholder="내용을 입력하세요." />
           </div>
           <div class="__item __textarea-wrap">
-            <p class="__title">제품소개</p>
+            <p class="__title">제품 소개</p>
             <textarea placeholder="내용을 입력하세요." />
           </div>
         </div>

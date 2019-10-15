@@ -96,6 +96,6 @@ module.exports = {
   },
   server: {
     port: 8888, // default: 3000
-    host: '10.80.210.99', // default: localhost
+    host: 'localhost', // default: localhost
   },
 };
