@@ -52,29 +52,29 @@
           <div v-if="item.status === '예약가능'">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __possible" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __possible" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약됨'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __complete" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __complete" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약불가'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
+            }}</span>
             <span
               class="__status __impossible"
               @click="openStatusModal(index)"
@@ -84,12 +84,12 @@
           <div v-else-if="item.status === '신청대기'" class="__waiting">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __waiting" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __waiting" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
         </li>
       </ul>
@@ -101,7 +101,7 @@
         fadeOutUpBig: !activeMeetingModal,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">미팅 신청 정보</span>
           <button class="__close" @click="modalClose">
@@ -175,7 +175,7 @@
         fadeOutUpBig: !activeStatusModal,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">상태 설정</span>
           <button class="__close" @click="modalClose">
@@ -193,8 +193,8 @@
               <span>15min</span>
             </div>
           </div>
-          <div class="__meeting-btns">
-            <button class="__meeting-btn" type="button">확인</button>
+          <div class="__status-btns">
+            <button class="__status-btn" type="button">확인</button>
           </div>
           <div class="__status-change">
             <h3>상태</h3>
@@ -370,10 +370,10 @@ export default {
     fnOpneMeetingInfo() {
       this.activeMeetingModal = true;
 
-      // const modalFullEl = document.getElementsByClassName('ModalFull')[0];
+      const modalFullEl = document.getElementsByClassName('ModalFull')[0];
 
-      // modalFullEl.style.top = window.scrollY + 'px';
-      // document.body.style.overflow = 'hidden';
+      modalFullEl.style.top = window.scrollY + 'px';
+      document.body.style.overflow = 'hidden';
     },
     modalClose() {
       this.activeMeetingModal = false;
@@ -787,7 +787,44 @@ export default {
         position: absolute;
         width: calc(100% - 40px);
         bottom: 5vh;
+        // .__meeting-btn {
+        //   font-size: 16px;
+        //   left: 50%;
+        //   position: relative;
+        //   transform: translate(-50%, 0);
+        //   width: 50%;
+        //   padding: 14px;
+        //   background: #e83828;
+        //   border: #e83828;
+        //   border-radius: 50px;
+        //   color: white;
+        // }
+        > button {
+          background: #e4e4e4;
+          border: #e4e4e4;
+          color: #383838;
+          width: 48%;
+          font-size: 16px;
+          position: relative;
+          padding: 14px;
+          border-radius: 50px;
+        }
         .__meeting-btn {
+          background: #e83828;
+          border: #e83828;
+          color: white;
+        }
+      }
+
+      .__status-btns {
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: space-between;
+        margin: 0 20px;
+        position: absolute;
+        width: calc(100% - 40px);
+        bottom: 5vh;
+        > button {
           font-size: 16px;
           left: 50%;
           position: relative;
