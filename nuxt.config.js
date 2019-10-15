@@ -92,7 +92,7 @@ module.exports = {
     },
   },
   env: {
-    API_URL: 'http://10.80.211.64:8989/api' || process.env.API_URL,
+    API_URL: process.env.API_URL || 'http://10.80.211.64:8989/api',
   },
   server: {
     port: 8888, // default: 3000

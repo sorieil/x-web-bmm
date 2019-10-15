@@ -81,13 +81,13 @@ export default class Base {
     this.requestUrl(this.getUrl());
     if (!process.server) {
       const token =
-        this.rentStore.getters[TOKEN_GET.load] ||
+        this.rentStore.getters[TOKEN_GET.load].ACCESS_TOKEN ||
         localStorage.getItem('ACCESS_TOKEN');
       if (token) {
         await this.axios.setToken(token);
-        return Promise.resolve(true);
+        return true;
       } else {
-        return Promise.reject(new Error(false));
+        return false;
       }
     } else {
       return false;
@@ -96,6 +96,7 @@ export default class Base {
 
   async baseGet() {
     const checkToken = await this.checkToken();
+    console.log('check token:', this.axios.header);
     if (checkToken) {
       return this.axios
         .$get(this.getUrl(), { params: this.params, progress: false })
@@ -191,24 +192,24 @@ export default class Base {
     switch (code) {
       case 400:
         console.log('정상적인 데이터를 넣어주세요. =>', e.response);
-        return Promise.reject(new Error(false));
+        return Promise.reject(new Error(e.response.data.message));
       case 401:
         console.log('정상적인 토큰이 아닙니다.=>', e.response);
-        return Promise.reject(new Error(false));
+        return Promise.reject(new Error(e.response.data.message));
       case 403:
         console.log('토큰이 없습니다. 토큰을 설정해주세요.=>', e.response);
-        return Promise.reject(new Error(false));
+        return Promise.reject(new Error(e.response.data.message));
       case 500:
         console.log(
           '서버에서 에러 발생했군요. 관리자에게 문의 해주세요.',
           e.response
         );
-        return Promise.reject(new Error(false));
+        return Promise.reject(new Error(e.response.data.message));
       default:
         // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);
         // window.location.href = process.env.managerUrl;
         console.log('code', e);
-        return Promise.reject(new Error(e));
+        return Promise.reject(new Error(e.response.data.message));
     }
   }
 }

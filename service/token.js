@@ -14,10 +14,6 @@ export default class Token extends Base {
   tokenVerify(accessToken) {
     this.axios.Authorization = `JWT ${accessToken}`;
     this.axios.contentType = 'application/json';
-    // this.params = {
-    //   Authorization: `JWT ${accessToken}`,
-    //   'Content-Type': 'application/json'
-    // }
     return this.getDirect(this.getUrl());
   }
 }

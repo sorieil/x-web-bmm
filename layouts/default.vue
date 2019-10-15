@@ -63,18 +63,18 @@
 // 그래서 최상단 부모 레이아웃에서 모달을 불러와야 하기 때문이다. 컴포넌트로 만들면, Prop의 햇갈림도 있기에.. 현재까지는 모달 컴포넌트가
 // 많은것도 아니고,... 여튼..ㅎㅎㅎ
 import Header from '../components/common/Header';
-// import Code from '../service/code';
-// import Base from '../service/base';
 import IconCheckbox from '../components/features/IconCheckbox';
 import { FILTER_SET } from '../store/constant_types';
-import Filter from '../mixin/filter';
+import Base from '../service/base';
+import Filter from '../service/filter';
+import MixInFilter from '../mixin/filter';
 export default {
-  // middleware: ['auth'],
+  middleware: ['auth'],
   components: {
     Header,
     IconCheckbox,
   },
-  mixins: [Filter],
+  mixins: [MixInFilter],
   data() {
     return {
       targetHeader: '',
@@ -142,17 +142,19 @@ export default {
     };
   },
   created() {
-    console.log('server? ', process.server, this.$context);
+    // console.log('server? ', process.server, this.$context);
   },
   mounted() {
-    // this.getServiceFilterType();
-    // new Base(this).setupToken().then((r) => {
-    //   // console.log('default layout setup token', r)
-    //   if (!r) {
-    //     // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
-    //     alert('토큰 설정이 안됐어요.');
-    //   }
-    // });
+    // 레이아웃 단에서 해줘야 함.
+    // auth 에서 안되는 이유는 auth 에서는 로컬 스토리지에 접근이 안됨. auth는 서버단임.
+    new Base(this).setupToken().then((r) => {
+      if (!r) {
+        // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
+        alert('토큰 설정이 안됐어요.');
+      } else {
+        this.getServiceFilterType();
+      }
+    });
     this.$nextTick(() => {
       window.addEventListener('resize', () => {
         const vh = window.innerHeight * 0.01;
@@ -187,11 +189,11 @@ export default {
       console.log('select tap:', filterActive);
     },
     async getServiceFilterType() {
-      // const { result } = await new Code(this).getFilterType();
-      //   console.log('========getFilterType result');
-      //   console.log(result);
-      //   console.log('========getFilterType result end');
-      //   this.filters = result;
+      const { result } = await new Filter(this).get();
+      console.log('========getFilterType result');
+      console.log(result);
+      console.log('========getFilterType result end');
+      // this.filters = result;
     },
     handleFilter() {},
     headerScroll(e) {
