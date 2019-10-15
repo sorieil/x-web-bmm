@@ -209,7 +209,7 @@ export default class Base {
         // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);
         // window.location.href = process.env.managerUrl;
         console.log('code', e);
-        return Promise.reject(new Error(e.response.data.message));
+        return Promise.reject(new Error(e));
     }
   }
 }
