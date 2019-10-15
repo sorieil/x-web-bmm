@@ -116,18 +116,7 @@ export default {
       selectCompany: null,
     };
   },
-  mounted() {
-    this.$nextTick(() => {
-      const modalBg = document.getElementsByClassName('__overlay');
-      for (let i = 0; i < modalBg.length; i++) {
-        if (modalBg[i].parentElement.classList.contains('__company-code')) {
-          modalBg[i].addEventListener('click', () => {
-            this.closeCompanyModal();
-          });
-        }
-      }
-    });
-  },
+  mounted() {},
   methods: {
     openLeftLayoutModal() {
       this.SEARCH_LEFT_ON();

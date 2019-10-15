@@ -19,14 +19,7 @@ export default {
     return {};
   },
   created() {},
-  mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        const vh = window.innerHeight * 0.01;
-        this.$refs.Header.documentElement.style.setProperty('--vh', `${vh}px`);
-      });
-    });
-  },
+  mounted() {},
   methods: {
     closeModal() {
       this.MODAL_FULL_ACTION_OFF();
