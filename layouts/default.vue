@@ -52,9 +52,11 @@
       </ul>
     </div>
 
-    <div class="__schedule-icon-wrap">
+    <div class="__schedule-icon-wrap" @click="selectUserTypeOpen">
       <img src="../assets/images/common/icon_schedule.svg" />
     </div>
+
+    <SelectUserType />
   </div>
 </template>
 
@@ -64,17 +66,20 @@
 // 많은것도 아니고,... 여튼..ㅎㅎㅎ
 import Header from '../components/common/Header';
 import IconCheckbox from '../components/features/IconCheckbox';
+import SelectUserType from '../components/select_modal/SelectUserType';
 import { FILTER_SET } from '../store/constant_types';
 import Base from '../service/base';
 import Filter from '../service/filter';
 import MixInFilter from '../mixin/filter';
+import UserType from '../mixin/select_user_type';
 export default {
   middleware: ['auth'],
   components: {
     Header,
     IconCheckbox,
+    SelectUserType,
   },
-  mixins: [MixInFilter],
+  mixins: [MixInFilter, UserType],
   data() {
     return {
       targetHeader: '',
@@ -181,6 +186,9 @@ export default {
       }, []);
 
       this.$store.commit(FILTER_SET.load, { filter });
+    },
+    selectUserTypeOpen() {
+      this.USER_TYPE_ON();
     },
     selectTab(index) {
       const filterActive = this.filters[index].name;

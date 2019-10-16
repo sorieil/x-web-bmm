@@ -132,3 +132,23 @@ export const COMPANY_CODE_ON = {
   defines: 'COMPANY_CODE_ON',
   load: 'company_code/COMPANY_CODE_ON',
 };
+
+export const USER_TYPE_GET = {
+  defines: 'USER_TYPE_GET',
+  load: 'select_user_type/USER_TYPE_GET',
+};
+
+export const USER_TYPE_SET = {
+  defines: 'USER_TYPE_SET',
+  load: 'select_user_type/USER_TYPE_SET',
+};
+
+export const USER_TYPE_OFF = {
+  defines: 'USER_TYPE_OFF',
+  load: 'select_user_type/USER_TYPE_OFF',
+};
+
+export const USER_TYPE_ON = {
+  defines: 'USER_TYPE_ON',
+  load: 'select_user_type/USER_TYPE_ON',
+};

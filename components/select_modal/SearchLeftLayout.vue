@@ -73,6 +73,7 @@ export default {
     background-color: white;
     width: 100%;
     height: 100vh;
+    display: block;
     .__header {
       position: relative;
       border-top: 0;
