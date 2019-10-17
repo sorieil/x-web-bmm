@@ -4,7 +4,7 @@ export const state = () => ({
   vendors: [],
   selectedFilters: null,
   selectedFilterItems: null,
-  selectVendorItem: null,
+  selectFormStatus: null,
 });
 
 export const getters = {

@@ -32,4 +32,17 @@ export default class Vendor extends Base {
     this.params = params;
     return this.baseGet();
   }
+
+  selectGet(id) {
+    this.apiUrl = id;
+    return this.baseGet();
+  }
+
+  codePost(id, params) {
+    this.apiUrl = id + '/verify-vendor-code';
+    this.params = params;
+    return this.basePost()
+      .then(this.response)
+      .catch(this.response);
+  }
 }

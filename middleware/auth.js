@@ -24,7 +24,6 @@ export default async ({ app, route, store, from, redirect, req }) => {
   if (ACCESS_TOKEN) {
     // 유저 인정 정보 가져오기
     await new Token(vm).tokenVerify(ACCESS_TOKEN).then((result) => {
-      // console.log('Token refresh', result)
       if (result) {
         console.log('req', req.session);
         req.session.token = ACCESS_TOKEN;

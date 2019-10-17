@@ -43,7 +43,7 @@
         fadeOutUpBig: !modalStatus,
       }"
     >
-      <div slot="__modal-content" class="__modal-content">
+      <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">미팅 신청 정보</span>
           <button class="__close" @click="modalClose">
@@ -127,6 +127,7 @@
 </template>
 <script>
 import DirectiveImage from '../mixin/directive_image';
+import { SUB_HEADER_SET } from '../store/constant_types';
 import Modal from '~/components/common/ModalFull';
 export default {
   layout: 'subDefault',
@@ -254,12 +255,14 @@ export default {
   },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;
+    this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '미팅신청' });
   },
   methods: {
     fnDateChange(index, active, event) {
       this.activeDate = index;
     },
     fnOpneMeetingRequest() {
+      console.log('zzzz');
       this.modalStatus = true;
     },
     modalClose() {
@@ -274,6 +277,7 @@ export default {
 
 <style lang="scss">
 .__meeting {
+  width: 100%;
   .__dates {
     overflow-y: hidden;
     overflow-x: auto;

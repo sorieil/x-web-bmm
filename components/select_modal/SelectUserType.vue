@@ -56,6 +56,7 @@ export default {
 <style lang="scss">
 .__user-type-select {
   z-index: 999;
+  display: none;
   .__overlay {
     display: block;
     opacity: 0.6 !important;

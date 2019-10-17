@@ -5,7 +5,7 @@
     </div>
     <div class="__messages">
       <div class="__title">
-        <span>{{ propName }}</span>
+        <span>{{ SUB_HEADER_GET.subHeaderTitle }}</span>
       </div>
     </div>
     <div class="__complete">
@@ -14,8 +14,11 @@
   </div>
 </template>
 <script>
+import SubHeaderMixin from '../../mixin/sub_header';
+import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
   name: 'Header',
+  mixins: [SubHeaderMixin],
   props: {
     propName: {
       default: '정보수정',
@@ -24,7 +27,11 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.back();
+      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+
+      this.$store.commit(SUB_HEADER_SET.load, {
+        beforeRoutePath: '/',
+      });
     },
   },
 };

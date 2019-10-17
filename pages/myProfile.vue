@@ -103,6 +103,7 @@ import SearchCenter from '../mixin/search_center';
 import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
 import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
 import CompanyCode from '../components/input_modal/CompanyCode';
+import { SUB_HEADER_SET } from '../store/constant_types';
 export default {
   layout: 'profileDefault',
   components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
@@ -116,7 +117,11 @@ export default {
       selectCompany: null,
     };
   },
-  mounted() {},
+  mounted() {
+    this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
+
+    this.profileInit();
+  },
   methods: {
     openLeftLayoutModal() {
       this.SEARCH_LEFT_ON();
@@ -165,6 +170,11 @@ export default {
     getSelectCompany() {
       console.log('select company = ' + this.selectCompany);
     },
+    profileInit() {
+      const tempVendor = JSON.parse(localStorage.getItem('selectVendorItem'));
+
+      console.log(tempVendor);
+    },
   },
 };
 </script>
@@ -174,6 +184,7 @@ export default {
   background-color: #f4f4f4;
   min-height: calc(100vh - 40px);
   overflow: auto;
+  width: 100%;
   .__copy {
     color: #a8a8a8;
     text-align: right;

@@ -105,9 +105,10 @@ export default {
     }
     .__content {
       background-color: #f4f4f4;
-      min-height: calc(100vh - 46px);
+      height: calc(100vh - 46px);
       position: relative;
       overflow: auto;
+      padding-bottom: 40px;
       .__company {
         display: flex;
         align-items: center;
@@ -123,6 +124,7 @@ export default {
           height: 48px;
           border-radius: 6px;
           overflow: hidden;
+          padding: 0;
           > img {
             width: 100%;
           }

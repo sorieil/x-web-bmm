@@ -45,7 +45,7 @@
         >
           <IconFavorite
             v-model="vendor.businessVendorFavorite"
-            v-on:change="changeIconFavorite(vendor, index)"
+            v-on:change="changeIconFavorite(vendor, $event)"
           />
         </div>
       </div>
@@ -61,7 +61,7 @@ import Vendor from '../service/vendor';
 import Favorite from '../service/favorite';
 import FilterMixin from '../mixin/filter';
 import VendorMixin from '../mixin/vendor';
-import { VENDOR_SET } from '../store/constant_types';
+import { VENDOR_SET, SUB_HEADER_SET } from '../store/constant_types';
 export default {
   components: {
     SearchForm,
@@ -78,6 +78,8 @@ export default {
   },
   mounted() {
     this.getServiceVendorList();
+
+    this.$store.commit(SUB_HEADER_SET.load, { beforeRoutePath: '/' });
   },
   methods: {
     openFilter() {
@@ -86,7 +88,11 @@ export default {
       // 필터를 다시 설정하게 하는것이 아니라 필터를 캐싱해둬야 한다.
     },
     selectVendor(vendor) {
-      this.$store.commit(VENDOR_SET.load, { selectVendorItem: vendor });
+      console.log(vendor);
+      localStorage.setItem(
+        'selectVendorItem',
+        JSON.stringify(vendor.businessVendor)
+      );
 
       this.$router.replace({ path: 'vender' });
     },
@@ -94,50 +100,30 @@ export default {
       const { result } = await new Vendor(this).get();
       this.$store.commit(VENDOR_SET.load, { vendors: result });
     },
-    async changeIconFavorite(vendor, index) {
+    async changeIconFavorite(vendor, status) {
       const id = vendor.businessVendor.id;
+      const activeIcon = event.target.parentElement.parentElement;
 
-      if (vendor.businessVendorFavorite) {
-        await new Favorite(this).delete(id);
-      } else {
+      if (status) {
         await new Favorite(this).post(id);
-      }
-
-      const { result } = await new Vendor(this).searchGet(
-        this.VENDOR_GET.selectedFilter
-      );
-
-      this.$store.commit(VENDOR_SET.load, {
-        vendors: result,
-        selectedFilter: this.VENDOR_GET.selectedFilter,
-      });
-
-      if (this.VENDOR_GET.selectedFilters) {
-        const params = { filter: this.VENDOR_GET.selectedFilters.filter };
-
-        const { result } = await new Vendor(this).searchGet(params);
-
-        this.$store.commit(VENDOR_SET.load, {
-          vendors: result,
-          selectedFilters: params,
-        });
-      }
-
-      const searchBtn = this.$refs.SelectForm.$el.children;
-
-      for (const btn of searchBtn) {
-        if (btn.classList.contains('__selected')) {
-          const btnName = btn.firstChild.textContent;
-
-          if (btnName === '즐겨찾기') {
-            this.changeSelectForm({ value: 'favorite' });
-          } else if (btnName === '전체') {
-            this.changeSelectForm({ value: 'all' });
-          }
+        if (!activeIcon.classList.contains('__favorite-active')) {
+          activeIcon.classList.add('__favorite-active');
+          activeIcon.parentElement.classList.remove('__not-favorite');
         }
+      } else {
+        await new Favorite(this).delete(id);
+        if (activeIcon.classList.contains('__favorite-active')) {
+          activeIcon.classList.remove('__favorite-active');
+          activeIcon.parentElement.classList.add('__not-favorite');
+        }
+      }
+
+      if (this.VENDOR_GET.selectFormStatus) {
+        this.changeSelectForm(this.VENDOR_GET.selectFormStatus);
       }
     },
     changeSelectForm(status) {
+      this.$store.commit(VENDOR_SET.load, { selectFormStatus: status });
       const vendorItems = this.$refs.vendorItem;
 
       this.$store.commit(VENDOR_SET.load, { selectedFilterItems: status });
@@ -157,8 +143,6 @@ export default {
       }
     },
     async submitSearchForm() {
-      console.log(this.searchData);
-
       const params = { keyword: this.searchData };
 
       const { result } = await new Vendor(this).searchGet(params);

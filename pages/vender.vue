@@ -5,23 +5,19 @@
         <img v-img="''" />
       </div>
       <div class="__about">
-        <p>
-          pxd는 사용자 관찰을 통해 창조적이고 혁신적인 디자인을 컨설팅해 드리는
-          전문가 그룹입니다. 제품-기술-비즈니스-사용자에 대한 충분한 이해를
-          바탕으로 서비스 전략을 컨설팅합니다. 전문적이고 체계적인
-          관찰/분석기법을 통해 사용자들에 대한 인사이트로 사업의 성공을 이끌어
-          냅니다. 이동통신, 전자, 인터넷 비즈니스, 소프트웨어, 의료서비스 등
-          다양한 도메인의 경험을 가지고 있습니다.
-        </p>
+        <p>{{ topField }}</p>
       </div>
       <div class="__detail">
-        <p><span>대표</span>이재용</p>
-        <p><span>웹사이트</span>http://www.pxd.co.kr</p>
-        <p><span>기업형태</span>중소기업</p>
-        <p><span>본사</span>서울 강남구 신사동 538 제이타워 6층</p>
-        <p><span>설립일</span>2002.11.05</p>
-        <p><span>사원수</span>53명 (2016)</p>
-        <p><span>매출액</span>41.9억 원 ( 2016 )</p>
+        <div v-for="(item, index) of vendorFields" :key="index">
+          <p v-if="!item.value.text">
+            <span>{{ item.businessVendorField.name }}</span>
+            {{ item.value }}
+          </p>
+          <p v-else>
+            <span>{{ item.businessVendorField.name }}</span>
+            {{ item.value.text }}
+          </p>
+        </div>
       </div>
       <div class="__manager">
         <h3>담당자</h3>
@@ -55,19 +51,13 @@
       <div class="__product">
         <h3>제품소개</h3>
         <div class="__about-product">
-          <p>
-            UX, UI, GUI, Visual, Service Design Consulting pxd는 사용자 관찰을
-            통해 창조적이고 혁신적인 디자인을 컨설팅해 드리는 전문가 그룹입니다.
-            제품-기술-비즈니스-사용자에 대한 충분한 이해를 바탕으로 서비스
-            전략을 컨설팅합니다. 전문적이고 체계적인 관찰/분석기법을 통해
-            사용자들에 대한 인사이트로 사업의 성공을 이끌어 냅니다. 이동통신,
-            전자, 인터넷 비즈니스, 소프트웨어, 의료서비스 등 다양한 도메인의
-            경험을 가지고 있습니다.
-          </p>
+          <p>{{ bottomField }}</p>
         </div>
       </div>
       <div class="__meeting">
-        <button class="__meeting-btn" type="button">미팅신청</button>
+        <button class="__meeting-btn" type="button" @click="goMeeting">
+          미팅신청
+        </button>
       </div>
     </div>
   </div>
@@ -75,12 +65,17 @@
 <script>
 import DirectiveImage from '../mixin/directive_image';
 import VendorMixin from '../mixin/vendor';
+import Vendor from '../service/vendor';
+import { SUB_HEADER_SET } from '../store/constant_types';
 export default {
   layout: 'subDefault',
   components: {},
   mixins: [DirectiveImage, VendorMixin],
   data() {
     return {
+      vendorFields: [],
+      topField: null,
+      bottomField: null,
       managers: [
         {
           name: '최수진',
@@ -100,7 +95,33 @@ export default {
     };
   },
   mounted() {
-    console.log(this.VENDOR_GET.selectVendorItem);
+    this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: 'vendor' });
+
+    this.vendorInit();
+  },
+  methods: {
+    goMeeting() {
+      this.$router.replace({ path: 'meeting' });
+      this.$store.commit(SUB_HEADER_SET.load, { beforeRoutePath: 'vendor' });
+    },
+    async vendorInit() {
+      const selectedVendor = JSON.parse(
+        localStorage.getItem('selectVendorItem')
+      );
+
+      if (selectedVendor) {
+        const id = selectedVendor.id;
+        const { result } = await new Vendor(this).selectGet(id);
+        result[0].businessVendorFieldValues.forEach((field) => {
+          if (field.businessVendorField.name === '제품소개') {
+            this.topField = field.value;
+            this.bottomField = field.value;
+          } else {
+            this.vendorFields.push(field);
+          }
+        });
+      }
+    },
   },
 };
 </script>
@@ -129,12 +150,14 @@ export default {
   .__detail {
     padding: 0 20px;
     margin: 20px 0;
-    > p {
-      color: #262626;
-      font-weight: 300;
-      > span {
-        margin-right: 3px;
-        font-weight: 400;
+    > div {
+      > p {
+        color: #262626;
+        font-weight: 300;
+        > span {
+          margin-right: 3px;
+          font-weight: 400;
+        }
       }
     }
   }

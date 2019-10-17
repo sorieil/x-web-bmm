@@ -20,7 +20,7 @@
       class="__filter-modal animated"
     >
       <div class="__header">
-        <button class="__reset">
+        <button class="__reset" @click="checkReset">
           <span>Reset</span>
         </button>
         <span class="__title">Filter</span>
@@ -42,6 +42,7 @@
       <ul class="__items">
         <li
           v-for="(item, index) in filterChild"
+          ref="FilterItem"
           :key="index"
           class="__item"
           :class="[item.active ? '__active' : '']"
@@ -60,7 +61,7 @@
       <img src="../assets/images/common/icon_schedule.svg" />
     </div>
 
-    <SelectUserType />
+    <!-- <SelectUserType /> -->
   </div>
 </template>
 
@@ -70,8 +71,8 @@
 // 많은것도 아니고,... 여튼..ㅎㅎㅎ
 import Header from '../components/common/Header';
 import IconCheckbox from '../components/features/IconCheckbox';
-import SelectUserType from '../components/select_modal/SelectUserType';
-import { VENDOR_SET } from '../store/constant_types';
+// import SelectUserType from '../components/select_modal/SelectUserType';
+import { VENDOR_SET, SUB_HEADER_SET } from '../store/constant_types';
 import Vendor from '../service/vendor';
 import Base from '../service/base';
 import Filter from '../service/filter';
@@ -83,7 +84,7 @@ export default {
   components: {
     Header,
     IconCheckbox,
-    SelectUserType,
+    // SelectUserType,
   },
   mixins: [MixInFilter, UserType, VendorMixin],
   data() {
@@ -152,9 +153,7 @@ export default {
       setTimeout(() => {
         if (status) {
           if (status.value === 'favorite') {
-            console.log('11111111');
             for (const vendorItem of vendorItems) {
-              console.log('2222222');
               console.log(vendorItem);
               if (vendorItem.classList.contains('__not-favorite')) {
                 vendorItem.style.display = 'none';
@@ -171,7 +170,12 @@ export default {
       }, 100);
     },
     selectUserTypeOpen() {
-      this.USER_TYPE_ON();
+      // this.USER_TYPE_ON();
+      this.$router.replace({ path: 'myschedule' });
+
+      this.$store.commit(SUB_HEADER_SET.load, {
+        beforeRoutePath: '/',
+      });
     },
     selectTab(index) {
       // const filterActive = this.filters[index].name;
@@ -198,7 +202,6 @@ export default {
       const vendorItems = this.$refs.Containers.lastElementChild
         .lastElementChild.children;
 
-      console.log(status);
       if (status) {
         if (status.value === 'favorite') {
           for (const vendorItem of vendorItems) {
@@ -213,7 +216,21 @@ export default {
             }
           }
         }
+      } else {
+        for (const vendorItem of vendorItems) {
+          if (vendorItem.classList.contains('__not-favorite')) {
+            vendorItem.style = '';
+          }
+        }
       }
+    },
+    checkReset() {
+      this.$refs.FilterItem.forEach((el) => {
+        const checkIcons = el.children[1].firstChild;
+        if (checkIcons.classList.contains('__active')) {
+          checkIcons.click();
+        }
+      });
     },
   },
 };

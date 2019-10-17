@@ -7,8 +7,8 @@ import {
 
 export const state = () => ({
   status: false,
-  returnValue: null,
-  companys: ['피엑스디', '피엑스디 코리아', '테스트'],
+  selectCompanyCodeVendor: null,
+  vendors: ['피엑스디', '피엑스디 코리아', '테스트'],
 });
 
 export const getters = {
@@ -18,9 +18,15 @@ export const getters = {
 export const actions = {
   [SEARCH_LEFT_OFF.defines]: ({ commit }, payload) => {
     if (payload) {
-      commit(SEARCH_LEFT_SET.defines, { returnValue: payload, status: false });
+      commit(SEARCH_LEFT_SET.defines, {
+        selectCompanyCodeVendor: payload,
+        status: false,
+      });
     } else {
-      commit(SEARCH_LEFT_SET.defines, { returnValue: null, status: false });
+      commit(SEARCH_LEFT_SET.defines, {
+        selectCompanyCodeVendor: null,
+        status: false,
+      });
     }
   },
   [SEARCH_LEFT_ON.defines]: ({ commit }) => {

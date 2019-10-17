@@ -9,9 +9,7 @@
 
 <script>
 import SubHeader from '../components/common/SubHeader';
-// import Base from '../service/base';
 export default {
-  // middleware: ['auth'],
   components: {
     SubHeader,
   },

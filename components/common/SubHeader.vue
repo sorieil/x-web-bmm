@@ -5,14 +5,16 @@
     </div>
     <div class="__messages">
       <div class="__title">
-        <span>{{ propName }}</span>
+        <span>{{ SUB_HEADER_GET.subHeaderTitle }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
+import SubHeaderMixin from '../../mixin/sub_header';
 export default {
   name: 'Header',
+  mixins: [SubHeaderMixin],
   props: {
     propHeaderBg: {
       default: '#02152A',
@@ -22,10 +24,14 @@ export default {
       default: 'test',
       type: String,
     },
+    propPath: {
+      default: '/',
+      type: String,
+    },
   },
   methods: {
     goBack() {
-      this.$router.back();
+      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
     },
   },
 };

@@ -1,7 +1,8 @@
 import { SUB_HEADER_GET, SUB_HEADER_SET } from './constant_types';
 
 export const state = () => ({
-  subHeaderTitle: null,
+  subHeaderTitle: 'test',
+  beforeRoutePath: null,
 });
 
 export const getters = {

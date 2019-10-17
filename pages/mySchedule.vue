@@ -29,6 +29,7 @@
         <img
           class="__setting-icon"
           src="../assets/images/common/icon_setting.svg"
+          @click="goProfile"
         />
       </div>
       <div class="__dates">
@@ -221,6 +222,7 @@
 import DirectiveImage from '../mixin/directive_image';
 import Modal from '../components/common/ModalFull';
 import IconCheckbox from '../components/features/IconCheckbox';
+import { SUB_HEADER_SET } from '../store/constant_types';
 export default {
   layout: 'subDefault',
   components: { Modal, IconCheckbox },
@@ -365,6 +367,7 @@ export default {
   },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;
+    this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '내 스케줄' });
   },
   methods: {
     fnOpneMeetingInfo() {
@@ -396,6 +399,13 @@ export default {
         this.reservationStatus[0].status = false;
         this.reservationStatus[1].status = true;
       }
+    },
+    goProfile() {
+      this.$router.replace({ path: 'myprofile' });
+
+      this.$store.commit(SUB_HEADER_SET.load, {
+        beforeRoutePath: 'myschedule',
+      });
     },
   },
 };
