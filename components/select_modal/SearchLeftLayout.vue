@@ -73,6 +73,10 @@ export default {
 
       body.style.overflow = 'auto';
       this.SEARCH_LEFT_OFF();
+
+      const header = this.$el.parentElement.parentElement
+        .previousElementSibling;
+      header.style = '';
     },
     async SearchLeftListInit() {
       const { result } = await new Vendor(this).get();

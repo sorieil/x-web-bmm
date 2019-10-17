@@ -130,6 +130,7 @@ export default {
 .__vendor-info {
   display: inline-block;
   width: 100%;
+  padding-top: 40px;
   .__logo {
     width: 90px;
     margin: 20px auto;

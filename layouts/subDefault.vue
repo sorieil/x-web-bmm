@@ -1,7 +1,7 @@
 <template>
   <div class="__sub-default">
-    <SubHeader id="SubHeader" ref="SubHeader" />
     <div class="__containers">
+      <SubHeader id="SubHeader" ref="SubHeader" />
       <nuxt />
     </div>
   </div>
@@ -28,5 +28,13 @@ export default {
 <style lang="scss">
 body {
   position: relative;
+}
+
+#SubHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
 }
 </style>

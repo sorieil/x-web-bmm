@@ -52,6 +52,10 @@ export default {
 
       body.style.overflow = 'auto';
       this.SEARCH_CENTER_OFF();
+
+      const header = this.$el.parentElement.parentElement
+        .previousElementSibling;
+      header.style = '';
     },
   },
 };

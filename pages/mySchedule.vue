@@ -415,6 +415,7 @@ export default {
 .__schedule {
   background-color: #f2f2f2;
   width: 100%;
+  padding-top: 40px;
   .__user {
     position: relative;
     background-color: white;

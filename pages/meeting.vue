@@ -278,6 +278,7 @@ export default {
 <style lang="scss">
 .__meeting {
   width: 100%;
+  padding-top: 40px;
   .__dates {
     overflow-y: hidden;
     overflow-x: auto;

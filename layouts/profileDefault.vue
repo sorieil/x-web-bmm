@@ -27,8 +27,16 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 body {
   position: relative;
+}
+
+#ProfileHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
 }
 </style>

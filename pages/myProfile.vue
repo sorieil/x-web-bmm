@@ -129,6 +129,12 @@ export default {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
       bodyEl.style.overflow = 'hidden';
+
+      // setTimeout(() => {
+      //   const header = this.$refs.ProfileForm.parentElement
+      //     .previousElementSibling;
+      //   header.style.display = 'none';
+      // }, 860);
     },
     openCenterLayoutModal() {
       this.SEARCH_CENTER_ON();
@@ -136,6 +142,12 @@ export default {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
       bodyEl.style.overflow = 'hidden';
+
+      // setTimeout(() => {
+      //   const header = this.$refs.ProfileForm.parentElement
+      //     .previousElementSibling;
+      //   header.style.display = 'none';
+      // }, 860);
     },
     openCompanyCodeModal(index) {
       this.companyCodeModal = true;
@@ -150,6 +162,10 @@ export default {
 
       bodyEl.style.height = 'auto';
       bodyEl.style.overflow = 'auto';
+
+      const header = this.$refs.ProfileForm.parentElement
+        .previousElementSibling;
+      header.style.display = 'flex';
     },
     closeCompanyModal(closeAll) {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
@@ -161,6 +177,10 @@ export default {
 
         bodyEl.style.height = 'auto';
         bodyEl.style.overflow = 'auto';
+
+        const header = this.$refs.ProfileForm.parentElement
+          .previousElementSibling;
+        header.style.display = 'flex';
 
         this.getSelectCompany();
       } else {
@@ -185,6 +205,7 @@ export default {
   min-height: calc(100vh - 40px);
   overflow: auto;
   width: 100%;
+  padding-top: 40px;
   .__copy {
     color: #a8a8a8;
     text-align: right;

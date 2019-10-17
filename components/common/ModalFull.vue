@@ -41,6 +41,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
   .__overlay {
     position: absolute;
     top: 0;
