@@ -7,6 +7,7 @@
         v-bind="$attrs"
         v-on:placeholder="propPlaceHolder"
         v-on="inputListeners"
+        v-on:keypress.enter="submit"
       />
     </label>
   </div>
@@ -29,6 +30,11 @@ export default {
       type: String,
     },
   },
+  data() {
+    return {
+      tempValue: this.value,
+    };
+  },
   computed: {
     inputListeners() {
       const vm = this;
@@ -37,8 +43,16 @@ export default {
           if (event.target.value) {
             vm.$emit('input', event.target.value);
           }
+          if (event.inputType === 'deleteContentBackward') {
+            vm.$emit('input', event.target.value);
+          }
         },
       });
+    },
+  },
+  methods: {
+    submit() {
+      this.$emit('submit');
     },
   },
 };

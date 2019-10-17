@@ -1,6 +1,6 @@
 <template>
   <div class="__container">
-    <div class="__vender-info">
+    <div class="__vendor-info">
       <div class="__logo">
         <img v-img="''" />
       </div>
@@ -74,10 +74,11 @@
 </template>
 <script>
 import DirectiveImage from '../mixin/directive_image';
+import VendorMixin from '../mixin/vendor';
 export default {
   layout: 'subDefault',
   components: {},
-  mixins: [DirectiveImage],
+  mixins: [DirectiveImage, VendorMixin],
   data() {
     return {
       managers: [
@@ -98,11 +99,14 @@ export default {
       ],
     };
   },
+  mounted() {
+    console.log(this.VENDOR_GET.selectVendorItem);
+  },
 };
 </script>
 
 <style lang="scss">
-.__vender-info {
+.__vendor-info {
   display: inline-block;
   width: 100%;
   .__logo {

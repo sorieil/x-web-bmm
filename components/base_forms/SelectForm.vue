@@ -52,7 +52,7 @@ export default {
     selecteValue(index) {
       const selected = this.propMenus[index];
       this.selected = selected;
-      this.$emit('input', selected);
+      this.$emit('change', selected);
     },
   },
 };

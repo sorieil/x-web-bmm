@@ -10,8 +10,10 @@
     <div slot="ModalContent" class="__modal-content">
       <div class="__user-type-select-box">
         <div class="__buttons">
-          <button type="button">Vender</button>
-          <button type="button">Buyer</button>
+          <button type="button" @click="selectUserType('vendor')">
+            Vendor
+          </button>
+          <button type="button" @click="selectUserType('buyer')">Buyer</button>
         </div>
       </div>
     </div>
@@ -19,6 +21,7 @@
 </template>
 <script>
 import SelectUserType from '../../mixin/select_user_type';
+import { USER_TYPE_SET } from '../../store/constant_types';
 export default {
   name: 'SearchLeftLayout',
   mixins: [SelectUserType],
@@ -39,6 +42,13 @@ export default {
   methods: {
     modalClose() {
       this.USER_TYPE_OFF();
+    },
+    selectUserType(type) {
+      this.$store.commit(USER_TYPE_SET.load, {
+        selectedUserType: type,
+      });
+      this.USER_TYPE_OFF();
+      this.$router.replace({ path: 'myschedule' });
     },
   },
 };

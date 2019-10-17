@@ -1,6 +1,6 @@
 <template>
   <div class="IconFavorite" @click="chanage">
-    <i :class="{ __active: tempValue }" class="material-icons-round">star</i>
+    <i class="material-icons-round">star</i>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     chanage() {
       const status = !this.tempValue;
       this.tempValue = status;
-      this.$emit('input', status);
+      this.$emit('change', status);
     },
   },
 };
@@ -40,6 +40,11 @@ export default {
   height: 15px;
   color: #a5a5a5;
   .__active {
+    color: red;
+  }
+}
+.__favorite-active {
+  i {
     color: red;
   }
 }

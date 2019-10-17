@@ -7,6 +7,7 @@ import {
 
 export const state = () => ({
   status: false,
+  selectedUserType: null,
 });
 
 export const getters = {

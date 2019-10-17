@@ -1,8 +1,8 @@
 <template>
   <div class="__container">
     <div class="__search-box">
-      <SearchForm />
-      <SelectForm />
+      <SearchForm v-model="searchData" v-on:submit="submitSearchForm" />
+      <SelectForm ref="SelectForm" v-on:change="changeSelectForm" />
       <div class="__filter">
         <button @click="openFilter">
           <img src="../assets/images/common/icon_filter.svg" />
@@ -11,25 +11,42 @@
       </div>
     </div>
     <div class="__company-list">
-      <div v-for="(vender, index) in venders" :key="index" class="__company">
+      <div
+        v-for="(vendor, index) in VENDOR_GET.vendors"
+        ref="vendorItem"
+        :key="index"
+        class="__company"
+        :class="{ '__not-favorite': !vendor.businessVendorFavorite }"
+      >
         <div class="__logo">
           <img v-img="''" />
         </div>
-        <div class="__info-box" @click="selectVender(index)">
+        <div class="__info-box" @click="selectVendor(vendor)">
           <ul>
             <li class="__name">
-              <span>{{ vender.name }}</span>
+              <span>{{ vendor.companyName }}</span>
             </li>
             <li>
-              <span>{{ vender.companyName }}</span>
+              <span v-if="vendor.businessVendor.businessVendorFieldValues[1]">
+                {{
+                  vendor.businessVendor.businessVendorFieldValues[1]
+                    .businessVendorField.name
+                }}
+              </span>
             </li>
             <li>
-              <span>{{ vender.keyword }}</span>
+              <span>{{ vendor.keyword }}</span>
             </li>
           </ul>
         </div>
-        <div class="__favorite">
-          <IconFavorite />
+        <div
+          class="__favorite"
+          :class="{ '__favorite-active': vendor.businessVendorFavorite }"
+        >
+          <IconFavorite
+            v-model="vendor.businessVendorFavorite"
+            v-on:change="changeIconFavorite(vendor, index)"
+          />
         </div>
       </div>
     </div>
@@ -40,125 +57,27 @@ import SearchForm from '../components/base_forms/SearchForm';
 import SelectForm from '../components/base_forms/SelectForm';
 import IconFavorite from '../components/features/IconFavorite';
 import DirectiveImage from '../mixin/directive_image';
-// import { FILTER_GET } from '../store/constant_types';
-import Filter from '../mixin/filter';
+import Vendor from '../service/vendor';
+import Favorite from '../service/favorite';
+import FilterMixin from '../mixin/filter';
+import VendorMixin from '../mixin/vendor';
+import { VENDOR_SET } from '../store/constant_types';
 export default {
   components: {
     SearchForm,
     SelectForm,
     IconFavorite,
   },
-  mixins: [DirectiveImage, Filter],
+  mixins: [DirectiveImage, FilterMixin, VendorMixin],
   data() {
     return {
       companyName: 'xSync',
-      venders: [
-        {
-          name: 'PXD',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-        {
-          name: 'pxd',
-          companyName: '피엑스코리아',
-          keyword: '#IT #KOREA #Strong #LOL',
-        },
-      ],
+      selectFormIndex: null,
+      searchData: null,
     };
   },
-  watch: {
-    'FILTER_GET.filter'(newValue, oldValue) {
-      console.log('FILTER_GET.filter=========================');
-      console.log(newValue, oldValue);
-    },
-  },
   mounted() {
-    // console.log(process)
+    this.getServiceVendorList();
   },
   methods: {
     openFilter() {
@@ -166,9 +85,87 @@ export default {
       // 필터를 부르기전에 그전에 설정해놓은 필터가 있는 경우에는 세팅을 해줘야 하는데...
       // 필터를 다시 설정하게 하는것이 아니라 필터를 캐싱해둬야 한다.
     },
-    selectVender(index) {
-      const vender = this.venders[index];
-      console.log(vender);
+    selectVendor(vendor) {
+      this.$store.commit(VENDOR_SET.load, { selectVendorItem: vendor });
+
+      this.$router.replace({ path: 'vender' });
+    },
+    async getServiceVendorList() {
+      const { result } = await new Vendor(this).get();
+      this.$store.commit(VENDOR_SET.load, { vendors: result });
+    },
+    async changeIconFavorite(vendor, index) {
+      const id = vendor.businessVendor.id;
+
+      if (vendor.businessVendorFavorite) {
+        await new Favorite(this).delete(id);
+      } else {
+        await new Favorite(this).post(id);
+      }
+
+      const { result } = await new Vendor(this).searchGet(
+        this.VENDOR_GET.selectedFilter
+      );
+
+      this.$store.commit(VENDOR_SET.load, {
+        vendors: result,
+        selectedFilter: this.VENDOR_GET.selectedFilter,
+      });
+
+      if (this.VENDOR_GET.selectedFilters) {
+        const params = { filter: this.VENDOR_GET.selectedFilters.filter };
+
+        const { result } = await new Vendor(this).searchGet(params);
+
+        this.$store.commit(VENDOR_SET.load, {
+          vendors: result,
+          selectedFilters: params,
+        });
+      }
+
+      const searchBtn = this.$refs.SelectForm.$el.children;
+
+      for (const btn of searchBtn) {
+        if (btn.classList.contains('__selected')) {
+          const btnName = btn.firstChild.textContent;
+
+          if (btnName === '즐겨찾기') {
+            this.changeSelectForm({ value: 'favorite' });
+          } else if (btnName === '전체') {
+            this.changeSelectForm({ value: 'all' });
+          }
+        }
+      }
+    },
+    changeSelectForm(status) {
+      const vendorItems = this.$refs.vendorItem;
+
+      this.$store.commit(VENDOR_SET.load, { selectedFilterItems: status });
+
+      if (status.value === 'favorite') {
+        for (const vendorItem of vendorItems) {
+          if (vendorItem.classList.contains('__not-favorite')) {
+            vendorItem.style.display = 'none';
+          }
+        }
+      } else if (status.value === 'all') {
+        for (const vendorItem of vendorItems) {
+          if (vendorItem.classList.contains('__not-favorite')) {
+            vendorItem.style = '';
+          }
+        }
+      }
+    },
+    async submitSearchForm() {
+      console.log(this.searchData);
+
+      const params = { keyword: this.searchData };
+
+      const { result } = await new Vendor(this).searchGet(params);
+
+      this.$store.commit(VENDOR_SET.load, {
+        vendors: result,
+      });
     },
   },
 };
@@ -240,10 +237,10 @@ export default {
     height: 100vh;
     // border: 1px dotted red;
     .__company {
-      height: 68px;
       position: relative;
       display: flex;
       margin: 0 0 20px 0;
+      padding-bottom: 15px;
       ::before {
         display: block;
         content: '';

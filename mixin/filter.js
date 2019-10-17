@@ -11,11 +11,11 @@ export default {
       [FILTER_GET.defines]: FILTER_GET.load,
     }),
   },
-  watch: {
-    'FILTER_GET.filter': (newValue, oldValue) => {
-      console.log(newValue, oldValue);
-    },
-  },
+  // watch: {
+  //   'FILTER_GET.filter': (newValue, oldValue) => {
+  //     console.log(newValue, oldValue);
+  //   },
+  // },
   methods: {
     ...mapActions({
       [FILTER_ACTION_ON.defines]: FILTER_ACTION_ON.load,

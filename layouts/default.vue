@@ -7,7 +7,7 @@
         {{ companyName }}
       </span>
     </div>
-    <div class="__containers" @scroll="headerScroll">
+    <div ref="Containers" class="__containers" @scroll="headerScroll">
       <div class="__shodow-box"></div>
       <nuxt />
     </div>
@@ -46,8 +46,12 @@
           class="__item"
           :class="[item.active ? '__active' : '']"
         >
-          <span>{{ item.name }}</span>
-          <IconCheckbox v-model="item.active" />
+          <span>{{ item.text }}</span>
+          <IconCheckbox
+            :ref="index"
+            :index="index"
+            v-on:change="changeIconCheckbox"
+          />
         </li>
       </ul>
     </div>
@@ -67,11 +71,13 @@
 import Header from '../components/common/Header';
 import IconCheckbox from '../components/features/IconCheckbox';
 import SelectUserType from '../components/select_modal/SelectUserType';
-import { FILTER_SET } from '../store/constant_types';
+import { VENDOR_SET } from '../store/constant_types';
+import Vendor from '../service/vendor';
 import Base from '../service/base';
 import Filter from '../service/filter';
 import MixInFilter from '../mixin/filter';
 import UserType from '../mixin/select_user_type';
+import VendorMixin from '../mixin/vendor';
 export default {
   middleware: ['auth'],
   components: {
@@ -79,7 +85,7 @@ export default {
     IconCheckbox,
     SelectUserType,
   },
-  mixins: [MixInFilter, UserType],
+  mixins: [MixInFilter, UserType, VendorMixin],
   data() {
     return {
       targetHeader: '',
@@ -88,59 +94,7 @@ export default {
       lastScrollTopValue: 0,
       headerOption: false,
       companyName: 'xSync',
-      filters: [
-        {
-          name: '업체구분',
-          items: [
-            {
-              name: '업체1',
-              active: false,
-            },
-            {
-              name: '업체2',
-              active: false,
-            },
-            {
-              name: '업체3',
-              active: false,
-            },
-          ],
-        },
-        {
-          name: '제품/서비스',
-          items: [
-            {
-              name: '제품1',
-              active: false,
-            },
-            {
-              name: '제품2',
-              active: false,
-            },
-            {
-              name: '제품3',
-              active: false,
-            },
-          ],
-        },
-        {
-          name: '국가',
-          items: [
-            {
-              name: '국가1',
-              active: false,
-            },
-            {
-              name: '국가2',
-              active: false,
-            },
-            {
-              name: '국가3',
-              active: false,
-            },
-          ],
-        },
-      ],
+      filters: [],
       filterChild: [],
       filterStatus: false,
       filterActive: null,
@@ -157,51 +111,76 @@ export default {
         // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
         alert('토큰 설정이 안됐어요.');
       } else {
-        this.getServiceFilterType();
+        this.getServiceFilterType().then(() => {
+          this.selectTab(0);
+        });
       }
     });
-    this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        const vh = window.innerHeight * 0.01;
-        this.$refs.Header.documentElement.style.setProperty('--vh', `${vh}px`);
-      });
-    });
-
-    setTimeout(() => {
-      this.selectTab(0);
-    }, 100);
   },
   methods: {
     filterOpen() {
       this.FILTER_ACTION_ON();
     },
-    closeFilter() {
+    async closeFilter() {
       this.FILTER_ACTION_OFF();
 
-      const filter = this.filterChild.reduce((a, c) => {
-        if (c.active) {
-          a.push(c.active);
-        }
-        return a;
-      }, []);
+      const filterListItems = this.$refs.filterModal.children[2].children;
+      const activeFilterItemsId = [];
 
-      this.$store.commit(FILTER_SET.load, { filter });
+      for (const item of filterListItems) {
+        if (item.children[1].firstChild.classList.contains('__active')) {
+          const activeFilterItem = item.children[1].firstChild;
+          const activeFilterItemIndex = activeFilterItem.id.split('-')[1];
+
+          activeFilterItemsId.push(this.filterChild[activeFilterItemIndex].id);
+        }
+      }
+
+      const params = { filter: activeFilterItemsId.join(',') };
+
+      const { result } = await new Vendor(this).searchGet(params);
+
+      this.$store.commit(VENDOR_SET.load, {
+        vendors: result,
+        selectedFilters: params,
+      });
+
+      const status = this.VENDOR_GET.selectedFilterItems;
+      const vendorItems = this.$refs.Containers.lastElementChild
+        .lastElementChild.children;
+
+      setTimeout(() => {
+        if (status) {
+          if (status.value === 'favorite') {
+            console.log('11111111');
+            for (const vendorItem of vendorItems) {
+              console.log('2222222');
+              console.log(vendorItem);
+              if (vendorItem.classList.contains('__not-favorite')) {
+                vendorItem.style.display = 'none';
+              }
+            }
+          } else if (status.value === 'all') {
+            for (const vendorItem of vendorItems) {
+              if (vendorItem.classList.contains('__not-favorite')) {
+                vendorItem.style = '';
+              }
+            }
+          }
+        }
+      }, 100);
     },
     selectUserTypeOpen() {
       this.USER_TYPE_ON();
     },
     selectTab(index) {
-      const filterActive = this.filters[index].name;
-      this.filterChild = this.filters[index].items;
+      // const filterActive = this.filters[index].name;
+      this.filterChild = this.filters[index].fieldChildNodes;
       this.filterActive = index;
-      console.log('select tap:', filterActive);
     },
     async getServiceFilterType() {
       const { result } = await new Filter(this).get();
-      console.log('========getFilterType result');
-      console.log(result);
-      console.log('========getFilterType result end');
-      // this.filters = result;
+      this.filters = result;
     },
     handleFilter() {},
     headerScroll(e) {
@@ -212,6 +191,28 @@ export default {
       } else {
         this.$refs.Header.$el.classList.remove('__active');
         this.headerOption = false;
+      }
+    },
+    changeIconCheckbox() {
+      const status = this.VENDOR_GET.selectedFilters;
+      const vendorItems = this.$refs.Containers.lastElementChild
+        .lastElementChild.children;
+
+      console.log(status);
+      if (status) {
+        if (status.value === 'favorite') {
+          for (const vendorItem of vendorItems) {
+            if (vendorItem.classList.contains('__not-favorite')) {
+              vendorItem.style.display = 'none';
+            }
+          }
+        } else if (status.value === 'all') {
+          for (const vendorItem of vendorItems) {
+            if (vendorItem.classList.contains('__not-favorite')) {
+              vendorItem.style = '';
+            }
+          }
+        }
       }
     },
   },

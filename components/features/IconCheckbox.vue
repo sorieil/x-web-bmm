@@ -1,6 +1,11 @@
 <template>
-  <div class="IconCheckbox" @click="chanage">
-    <i class="material-icons">check</i>
+  <div ref="IconCheckbox" class="IconCheckbox" @click="chanage">
+    <i
+      :id="'__checkbox-' + index"
+      class="material-icons"
+      :class="{ __active: tempValue }"
+      >check</i
+    >
   </div>
 </template>
 
@@ -12,20 +17,26 @@ export default {
       default: false,
       type: Boolean,
     },
+    index: {
+      default: 0,
+      type: Number,
+    },
   },
   data() {
     return {
       tempValue: false,
+      tempIndex: false,
     };
   },
   mounted() {
     this.tempValue = this.value;
+    this.tempIndex = this.index;
   },
   methods: {
     chanage() {
       const status = !this.tempValue;
       this.tempValue = status;
-      this.$emit('input', status);
+      this.$emit('change', this.tempIndex, status);
     },
   },
 };

@@ -48,11 +48,6 @@ export const FILTER_ACTION_OFF = {
   load: 'filter/FILTER_ACTION_OFF',
 };
 
-export const FILTER_ACTION_CHANGE = {
-  defines: 'FILTER_ACTION_CHANGE',
-  load: 'filter/FILTER_ACTION_CHANGE',
-};
-
 export const MODAL_FULL_SET = {
   defines: 'MODAL_FULL_SET',
   load: 'modal_full/MODAL_FULL_SET',
@@ -151,4 +146,24 @@ export const USER_TYPE_OFF = {
 export const USER_TYPE_ON = {
   defines: 'USER_TYPE_ON',
   load: 'select_user_type/USER_TYPE_ON',
+};
+
+export const VENDOR_GET = {
+  defines: 'VENDOR_GET',
+  load: 'vendor/VENDOR_GET',
+};
+
+export const VENDOR_SET = {
+  defines: 'VENDOR_SET',
+  load: 'vendor/VENDOR_SET',
+};
+
+export const SUB_HEADER_GET = {
+  defines: 'SUB_HEADER_GET',
+  load: 'sub_header/SUB_HEADER_GET',
+};
+
+export const SUB_HEADER_SET = {
+  defines: 'SUB_HEADER_SET',
+  load: 'sub_header/SUB_HEADER_SET',
 };
