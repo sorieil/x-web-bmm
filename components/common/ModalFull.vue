@@ -54,8 +54,5 @@ export default {
     opacity: 0.2;
     background-color: #000000;
   }
-
-  .__container {
-  }
 }
 </style>

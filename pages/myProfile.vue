@@ -129,12 +129,6 @@ export default {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
       bodyEl.style.overflow = 'hidden';
-
-      // setTimeout(() => {
-      //   const header = this.$refs.ProfileForm.parentElement
-      //     .previousElementSibling;
-      //   header.style.display = 'none';
-      // }, 860);
     },
     openCenterLayoutModal() {
       this.SEARCH_CENTER_ON();
@@ -142,12 +136,6 @@ export default {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
       bodyEl.style.overflow = 'hidden';
-
-      // setTimeout(() => {
-      //   const header = this.$refs.ProfileForm.parentElement
-      //     .previousElementSibling;
-      //   header.style.display = 'none';
-      // }, 860);
     },
     openCompanyCodeModal(index) {
       this.companyCodeModal = true;
