@@ -25,8 +25,8 @@ export default async ({ app, route, store, from, redirect, req }) => {
     // 유저 인정 정보 가져오기
     await new Token(vm).tokenVerify(ACCESS_TOKEN).then((result) => {
       if (result) {
-        console.log('req', req.session);
-        req.session.token = ACCESS_TOKEN;
+        // console.log('req', req.session);
+        // req.session.token = ACCESS_TOKEN;
         store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
       } else {
         console.log('인증 못받음.');
