@@ -9,12 +9,7 @@
     <div slot="ModalContent" class="__modal-content">
       <div v-if="companyCodeStatus === null" class="__company-code-box">
         <h3>기업코드를 입력하세요.</h3>
-        <input
-          type="text"
-          :value="inputCode"
-          v-bind="$attrs"
-          v-on="inputListeners"
-        />
+        <SearchForm v-model="inputCode" />
         <div class="__buttons">
           <button type="button" @click="modalClose">취소</button>
           <button type="button" @click="checkVendorCode">확인</button>
@@ -43,26 +38,18 @@ import DirectiveImage from '../../mixin/directive_image';
 import CompanyCode from '../../mixin/company_code';
 import SearchLeft from '../../mixin/search_left';
 import Vendor from '../../service/vendor';
+import SearchForm from '../../components/base_forms/SearchForm';
 export default {
   name: 'SearchLeftLayout',
+  components: {
+    SearchForm,
+  },
   mixins: [DirectiveImage, CompanyCode, SearchLeft],
   data() {
     return {
       companyCodeStatus: null,
       inputCode: null,
     };
-  },
-  computed: {
-    inputListeners() {
-      const vm = this;
-      return Object.assign({}, this.$listeners, {
-        input(event) {
-          if (event.target.value) {
-            vm.inputCode = event.target.value;
-          }
-        },
-      });
-    },
   },
   methods: {
     modalClose() {
@@ -93,4 +80,17 @@ export default {
   },
 };
 </script>
-<style lang="scss"></style>
+<style lang="scss">
+.__company-code-box {
+  > .SearchForm {
+    background-image: none;
+    width: 222px;
+    > label {
+      > input {
+        width: 100%;
+        left: 0;
+      }
+    }
+  }
+}
+</style>

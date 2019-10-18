@@ -105,6 +105,8 @@ export default {
         right: 20px;
         font-size: 16px;
         color: #383838;
+        border: 0;
+        background-color: transparent;
       }
     }
     .__content {
