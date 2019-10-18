@@ -150,10 +150,6 @@ export default {
 
       bodyEl.style.height = 'auto';
       bodyEl.style.overflow = 'auto';
-
-      const header = this.$refs.ProfileForm.parentElement
-        .previousElementSibling;
-      header.style.display = 'flex';
     },
     closeCompanyModal(closeAll) {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
@@ -165,10 +161,6 @@ export default {
 
         bodyEl.style.height = 'auto';
         bodyEl.style.overflow = 'auto';
-
-        const header = this.$refs.ProfileForm.parentElement
-          .previousElementSibling;
-        header.style.display = 'flex';
 
         this.getSelectCompany();
       } else {
