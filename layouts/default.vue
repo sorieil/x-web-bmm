@@ -33,7 +33,7 @@
           <div
             class="__tab"
             :class="{ __active: filterActive === index }"
-            @click="selectTab(index)"
+            @click="selectTab(index, $event)"
           >
             {{ item.name }}
           </div>
@@ -45,13 +45,12 @@
           ref="FilterItem"
           :key="index"
           class="__item"
-          :class="[item.active ? '__active' : '']"
         >
           <span>{{ item.text }}</span>
           <IconCheckbox
-            :ref="index"
+            :id="'filterCheckbox-' + item.id"
             :index="index"
-            v-on:change="changeIconCheckbox"
+            v-on:change="changeIconCheckbox(item.id)"
           />
         </li>
       </ul>
@@ -99,6 +98,7 @@ export default {
       filterChild: [],
       filterStatus: false,
       filterActive: null,
+      checkedFilterItems: [],
     };
   },
   created() {
@@ -177,10 +177,38 @@ export default {
         beforeRoutePath: '/',
       });
     },
-    selectTab(index) {
+    selectTab(index, $event) {
       // const filterActive = this.filters[index].name;
       this.filterChild = this.filters[index].fieldChildNodes;
       this.filterActive = index;
+
+      setTimeout(() => {
+        this.checkReset();
+
+        if ($event) {
+          const filterItemsEl =
+            $event.target.parentElement.parentElement.nextElementSibling
+              .children;
+
+          for (const checkedItem of this.checkedFilterItems) {
+            for (const item of filterItemsEl) {
+              const itemId = item.lastElementChild.id.split('-')[1] * 1;
+              if (checkedItem === itemId) {
+                for (const filterItem of this.$refs.FilterItem) {
+                  if (
+                    filterItem.lastElementChild.id ===
+                    'filterCheckbox-' + itemId
+                  ) {
+                    setTimeout(() => {
+                      filterItem.lastElementChild.click();
+                    }, 10);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }, 10);
     },
     async getServiceFilterType() {
       const { result } = await new Filter(this).get();
@@ -197,7 +225,7 @@ export default {
         this.headerOption = false;
       }
     },
-    changeIconCheckbox() {
+    changeIconCheckbox(id) {
       const status = this.VENDOR_GET.selectedFilters;
       const vendorItems = this.$refs.Containers.lastElementChild
         .lastElementChild.children;
@@ -222,6 +250,12 @@ export default {
             vendorItem.style = '';
           }
         }
+      }
+
+      if (!event.target.classList.contains('__active')) {
+        this.checkedFilterItems.push(id);
+
+        this.checkedFilterItems = Array.from(new Set(this.checkedFilterItems));
       }
     },
     checkReset() {

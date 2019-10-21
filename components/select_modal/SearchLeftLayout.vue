@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     selectCompanyCodeModal(vendor) {
+      console.log(vendor);
       this.$store.commit(SEARCH_LEFT_SET.load, {
         selectCompanyCodeVendor: vendor,
       });

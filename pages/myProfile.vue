@@ -7,8 +7,38 @@
       </div>
       <div class="__form-info">
         <h3>기업 정보</h3>
-        <div class="__form-content">
-          <div class="__item">
+        <div v-if="Object.entries(form).length > 1" class="__form-content">
+          <div v-for="(field, index) of companyInformation" :key="index">
+            <div
+              v-if="field.fieldType.columnType === 'select_box'"
+              class="__select"
+              @click="openCenterLayoutModal(field.fieldChildNodes)"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <i class="material-icons">keyboard_arrow_right</i>
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'text'"
+              class="__item"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <input
+                v-model="form[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'textarea'"
+              class="__item __textarea-wrap"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <textarea
+                v-model="form[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
+            </div>
+          </div>
+          <!-- <div class="__item">
             <p class="__title">기업로고</p>
             <div class="__image-upload">
               <img
@@ -22,42 +52,72 @@
                 src="../assets/images/common/icon_ pencil.svg"
               />
             </div>
-          </div>
-          <div class="__item">
-            <p class="__title">기업명</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
-          <div class="__item">
-            <p class="__title">대표명</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
+          </div>-->
         </div>
       </div>
       <div class="__form-info">
         <h3>참가 정보</h3>
-        <div class="__form-content">
-          <div class="__select" @click="openCenterLayoutModal">
-            <p class="__title">업체 구분</p>
-            <i class="material-icons">keyboard_arrow_right</i>
-          </div>
-          <div class="__select" @click="openCenterLayoutModal">
-            <p class="__title">제품 서비스</p>
-            <i class="material-icons">keyboard_arrow_right</i>
-          </div>
-          <div class="__item">
-            <p class="__title">관심 분야</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
-          <div class="__item __textarea-wrap">
-            <p class="__title">제품 소개</p>
-            <textarea placeholder="내용을 입력하세요." />
+        <div v-if="Object.entries(form).length > 1" class="__form-content">
+          <div v-for="(field, index) of informationType" :key="index">
+            <div
+              v-if="field.fieldType.columnType === 'select_box'"
+              class="__select"
+              @click="openCenterLayoutModal(field.fieldChildNodes)"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <i class="material-icons">keyboard_arrow_right</i>
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'text'"
+              class="__item"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <input
+                v-model="form[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'textarea'"
+              class="__item __textarea-wrap"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <textarea
+                v-model="form[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
+            </div>
           </div>
         </div>
       </div>
       <div class="__form-info">
         <h3>담당자 정보</h3>
         <div class="__form-content">
-          <div class="__item">
+          <div v-for="(field, index) of manager" :key="index">
+            <div
+              v-if="field.fieldType.columnType === 'select_box'"
+              class="__select"
+              @click="openCenterLayoutModal(field.fieldChildNodes)"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <i class="material-icons">keyboard_arrow_right</i>
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'text'"
+              class="__item"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <input placeholder="내용을 입력하세요." />
+            </div>
+            <div
+              v-else-if="field.fieldType.columnType === 'textarea'"
+              class="__item __textarea-wrap"
+            >
+              <p class="__title">{{ field.name }}</p>
+              <textarea placeholder="내용을 입력하세요." />
+            </div>
+          </div>
+          <!-- <div class="__item">
             <p class="__title">프로필 이미지</p>
             <div class="__image-upload">
               <img
@@ -71,19 +131,7 @@
                 src="../assets/images/common/icon_ pencil.svg"
               />
             </div>
-          </div>
-          <div class="__item">
-            <p class="__title">담당자명</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
-          <div class="__item">
-            <p class="__title">연락처</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
-          <div class="__item">
-            <p class="__title">이메일</p>
-            <input placeholder="내용을 입력하세요." />
-          </div>
+          </div>-->
         </div>
       </div>
       <p class="__copy">
@@ -92,7 +140,7 @@
     </div>
     <SearchLeftLayout />
     <SearchCenterLayout />
-    <CompanyCode />
+    <CompanyCode @close="companyCodeModalClose" />
   </div>
 </template>
 <script>
@@ -100,14 +148,20 @@ import DirectiveImage from '../mixin/directive_image';
 import Filter from '../mixin/filter';
 import SearchLeft from '../mixin/search_left';
 import SearchCenter from '../mixin/search_center';
+import CompanyCodeMixin from '../mixin/company_code';
 import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
 import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
 import CompanyCode from '../components/input_modal/CompanyCode';
-import { SUB_HEADER_SET } from '../store/constant_types';
+import {
+  SUB_HEADER_SET,
+  SEARCH_CENTER_SET,
+  FIELD_SET,
+} from '../store/constant_types';
+import Field from '../service/field';
 export default {
   layout: 'profileDefault',
   components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
-  mixins: [DirectiveImage, Filter, SearchLeft, SearchCenter],
+  mixins: [DirectiveImage, Filter, SearchLeft, SearchCenter, CompanyCodeMixin],
   data() {
     return {
       searchLeftLayoutModal: false,
@@ -115,7 +169,21 @@ export default {
       companyCodeModal: false,
       companyCodeStatus: null,
       selectCompany: null,
+      companyInformation: null,
+      informationType: null,
+      manager: null,
+      postVendorField: [],
+      form: {},
+      convert: {},
     };
+  },
+  watch: {
+    convert(n, o) {
+      console.log(n, o);
+      if (o) {
+        console.log(o);
+      }
+    },
   },
   mounted() {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
@@ -130,8 +198,12 @@ export default {
 
       bodyEl.style.overflow = 'hidden';
     },
-    openCenterLayoutModal() {
+    openCenterLayoutModal(fieldChildNodes) {
       this.SEARCH_CENTER_ON();
+
+      this.$store.commit(SEARCH_CENTER_SET.load, {
+        companyTypes: fieldChildNodes,
+      });
 
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
@@ -170,10 +242,55 @@ export default {
     getSelectCompany() {
       console.log('select company = ' + this.selectCompany);
     },
-    profileInit() {
-      const tempVendor = JSON.parse(localStorage.getItem('selectVendorItem'));
+    async profileInit() {
+      const { result } = await new Field(this).get();
 
-      console.log(tempVendor);
+      this.companyInformation = result[0].companyInformation;
+      this.informationType = result[0].informationType;
+      this.manager = result[0].manager;
+      const form = {};
+      for (const item of result[0].companyInformation) {
+        const key = item.id;
+        this.$set(form, key, { value: null, id: key });
+      }
+
+      for (const item of result[0].informationType) {
+        const key = item.id;
+        this.$set(form, key, { value: null, id: key });
+      }
+
+      for (const item of result[0].manager) {
+        const key = item.id;
+        this.$set(form, key, { value: null, id: key });
+      }
+
+      setTimeout(() => {
+        this.form = form;
+      }, 0);
+    },
+    companyCodeModalClose() {
+      const selectCompanyFields = this.COMPANY_CODE_GET.company
+        .businessVendorFieldValues;
+
+      const form = {};
+      for (const item of selectCompanyFields) {
+        const field = item.businessVendorField;
+        const key = field.id;
+        this.$set(form, key, { value: item.value, id: item.id });
+      }
+
+      setTimeout(() => {
+        Object.assign(this.form, form);
+
+        this.$store.commit(FIELD_SET.load, { formBusinessVendor: this.form });
+      }, 0);
+    },
+    changeVendorField(id, $event) {
+      // const value = $event.target.value;
+      console.log(id);
+      console.log($event.target.value);
+
+      // this.postVendorField.push({ id, value });
     },
   },
 };

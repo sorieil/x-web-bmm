@@ -167,3 +167,13 @@ export const SUB_HEADER_SET = {
   defines: 'SUB_HEADER_SET',
   load: 'sub_header/SUB_HEADER_SET',
 };
+
+export const FIELD_GET = {
+  defines: 'FIELD_GET',
+  load: 'field/FIELD_GET',
+};
+
+export const FIELD_SET = {
+  defines: 'SUB_HEADER_SET',
+  load: 'field/SUB_HEADER_SET',
+};

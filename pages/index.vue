@@ -16,7 +16,10 @@
         ref="vendorItem"
         :key="index"
         class="__company"
-        :class="{ '__not-favorite': !vendor.businessVendorFavorite }"
+        :class="{
+          '__not-favorite': !vendor.businessVendorFavorite,
+          '__not-meeting': !vendor.businessVendorMeeting,
+        }"
       >
         <div class="__logo">
           <img v-img="''" />
@@ -128,9 +131,20 @@ export default {
 
       this.$store.commit(VENDOR_SET.load, { selectedFilterItems: status });
 
+      console.log(status.value);
+
       if (status.value === 'favorite') {
         for (const vendorItem of vendorItems) {
+          if (vendorItem.classList.contains('__not-meeting')) {
+            vendorItem.style = '';
+          }
           if (vendorItem.classList.contains('__not-favorite')) {
+            vendorItem.style.display = 'none';
+          }
+        }
+      } else if (status.value === 'meeting') {
+        for (const vendorItem of vendorItems) {
+          if (vendorItem.classList.contains('__not-meeting')) {
             vendorItem.style.display = 'none';
           }
         }

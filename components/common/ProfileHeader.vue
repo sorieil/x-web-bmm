@@ -15,10 +15,11 @@
 </template>
 <script>
 import SubHeaderMixin from '../../mixin/sub_header';
-import { SUB_HEADER_SET } from '../../store/constant_types';
+import FieldMixin from '../../mixin/field';
+// import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
   name: 'Header',
-  mixins: [SubHeaderMixin],
+  mixins: [SubHeaderMixin, FieldMixin],
   props: {
     propName: {
       default: '정보수정',
@@ -27,11 +28,19 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+      const formBusinessVendor = this.FIELD_GET.formBusinessVendor;
 
-      this.$store.commit(SUB_HEADER_SET.load, {
-        beforeRoutePath: '/',
-      });
+      console.log(formBusinessVendor);
+
+      const items = Object.keys(formBusinessVendor).map(
+        (i) => formBusinessVendor[i]
+      );
+
+      console.log(items);
+      // this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+      // this.$store.commit(SUB_HEADER_SET.load, {
+      //   beforeRoutePath: '/',
+      // });
     },
   },
 };

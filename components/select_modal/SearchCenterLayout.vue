@@ -21,7 +21,7 @@
           :key="index"
           class="__companyType"
         >
-          <p>{{ type }}</p>
+          <p>{{ type.text }}</p>
         </div>
       </div>
     </div>

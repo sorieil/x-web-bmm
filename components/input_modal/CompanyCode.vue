@@ -39,6 +39,7 @@ import CompanyCode from '../../mixin/company_code';
 import SearchLeft from '../../mixin/search_left';
 import Vendor from '../../service/vendor';
 import SearchForm from '../../components/base_forms/SearchForm';
+import { COMPANY_CODE_SET } from '../../store/constant_types';
 export default {
   name: 'SearchLeftLayout',
   components: {
@@ -48,7 +49,7 @@ export default {
   data() {
     return {
       companyCodeStatus: null,
-      inputCode: null,
+      inputCode: 'UAZK',
     };
   },
   methods: {
@@ -60,6 +61,11 @@ export default {
     allModalClose() {
       this.COMPANY_CODE_OFF();
       this.SEARCH_LEFT_OFF();
+      this.$emit('close');
+      const body = this.$el.parentElement.parentElement.parentElement
+        .parentElement.parentElement.parentElement;
+
+      body.style.overflow = 'auto';
     },
     async checkVendorCode() {
       const selectvendor = this.SEARCH_LEFT_GET.selectCompanyCodeVendor;
@@ -72,6 +78,9 @@ export default {
       const { result } = await new Vendor(this).codePost(id, params);
 
       if (result) {
+        this.$store.commit(COMPANY_CODE_SET.load, {
+          company: result[0],
+        });
         this.companyCodeStatus = true;
       } else {
         this.companyCodeStatus = false;

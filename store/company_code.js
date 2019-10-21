@@ -7,6 +7,7 @@ import {
 
 export const state = () => ({
   status: false,
+  company: null,
 });
 
 export const getters = {
