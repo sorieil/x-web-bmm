@@ -53,29 +53,29 @@
           <div v-if="item.status === '예약가능'">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __possible" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __possible" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약됨'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __complete" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __complete" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약불가'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
+            }}</span>
             <span
               class="__status __impossible"
               @click="openStatusModal(index)"
@@ -85,12 +85,12 @@
           <div v-else-if="item.status === '신청대기'" class="__waiting">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __waiting" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __waiting" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
         </li>
       </ul>
@@ -411,7 +411,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .__schedule {
   background-color: #f2f2f2;
   width: 100%;
