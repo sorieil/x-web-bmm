@@ -18,6 +18,7 @@ export const state = () => ({
     '연구기관',
     '컨벤션주최자',
   ],
+  selectFieldValue: null,
 });
 
 export const getters = {

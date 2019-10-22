@@ -13,15 +13,37 @@
           <i class="material-icons">search</i>
           <input type="text" class="__search-input" />
         </div>
-        <button class="__close" @click="modalClose">취소</button>
+        <button class="__close" @click="modalClose">완료</button>
       </div>
       <div class="__content">
         <div
           v-for="(type, index) in SEARCH_CENTER_GET.companyTypes"
           :key="index"
-          class="__companyType"
         >
-          <p>{{ type.text }}</p>
+          <div v-if="!SEARCH_CENTER_GET.selectFieldValue">
+            <div
+              ref="companyTypeItem"
+              class="__companyType"
+              @click="eddCompanyType(type, field, $event)"
+            >
+              <p>{{ type.text }}</p>
+            </div>
+          </div>
+
+          <div v-else>
+            <div
+              ref="companyTypeItem"
+              class="__companyType"
+              :class="
+                type.text && SEARCH_CENTER_GET.selectFieldValue === type.id
+                  ? '__active'
+                  : ''
+              "
+              @click="eddCompanyType(type, field, $event)"
+            >
+              <p>{{ type.text }}</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,6 +56,12 @@ import SearchCenter from '../../mixin/search_center';
 export default {
   name: 'SearchLeftLayout',
   mixins: [DirectiveImage, SearchCenter],
+  props: {
+    field: {
+      default: null,
+      type: Object,
+    },
+  },
   watch: {
     'SEARCH_CENTER_GET.status'(newValue) {
       if (newValue) {
@@ -56,6 +84,13 @@ export default {
       const header = this.$el.parentElement.parentElement
         .previousElementSibling;
       header.style = '';
+    },
+    eddCompanyType(type, field, $event) {
+      this.$emit('changeCompanyType', type, field);
+
+      this.$store.commit(SEARCH_CENTER_SET.load, {
+        selectFieldValue: type.id,
+      });
     },
   },
 };
@@ -158,6 +193,12 @@ export default {
           font-size: 16px;
           margin: 0;
           padding-left: 10px;
+        }
+      }
+      .__active {
+        background-color: #4e4e4e;
+        p {
+          color: white;
         }
       }
     }

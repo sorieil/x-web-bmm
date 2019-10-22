@@ -62,7 +62,7 @@
             <div
               v-if="field.fieldType.columnType === 'select_box'"
               class="__select"
-              @click="openCenterLayoutModal(field.fieldChildNodes)"
+              @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
               <p class="__title">{{ field.name }}</p>
               <i class="material-icons">keyboard_arrow_right</i>
@@ -97,7 +97,7 @@
             <div
               v-if="field.fieldType.columnType === 'select_box'"
               class="__select"
-              @click="openCenterLayoutModal(field.fieldChildNodes)"
+              @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
               <p class="__title">{{ field.name }}</p>
               <i class="material-icons">keyboard_arrow_right</i>
@@ -139,7 +139,10 @@
       </p>
     </div>
     <SearchLeftLayout />
-    <SearchCenterLayout />
+    <SearchCenterLayout
+      :field="selectField"
+      @changeCompanyType="changeCompanyType"
+    />
     <CompanyCode @close="companyCodeModalClose" />
   </div>
 </template>
@@ -152,10 +155,11 @@ import CompanyCodeMixin from '../mixin/company_code';
 import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
 import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
 import CompanyCode from '../components/input_modal/CompanyCode';
+import Vendor from '../service/vendor';
 import {
   SUB_HEADER_SET,
   SEARCH_CENTER_SET,
-  FIELD_SET,
+  // FIELD_SET,
 } from '../store/constant_types';
 import Field from '../service/field';
 export default {
@@ -174,23 +178,52 @@ export default {
       manager: null,
       postVendorField: [],
       form: {},
-      convert: {},
+      selectBoxValue: null,
+      requestType: 'post',
+      selectField: null,
     };
-  },
-  watch: {
-    convert(n, o) {
-      console.log(n, o);
-      if (o) {
-        console.log(o);
-      }
-    },
   },
   mounted() {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
 
     this.profileInit();
+
+    const headerCompleteButton = this.$refs.ProfileForm.parentElement
+      .parentElement.firstElementChild.lastElementChild;
+
+    headerCompleteButton.addEventListener('click', () => {
+      if (this.requestType === 'post') {
+        this.postField();
+      } else if (this.requestType === 'patch') {
+        this.patchField();
+      }
+    });
   },
   methods: {
+    async postField() {
+      const items = Object.keys(this.form).map((i) => this.form[i]);
+      console.log(items);
+
+      const params = { data: items };
+
+      const { result } = await new Vendor(this).post(params);
+
+      console.log(result);
+    },
+    async patchField() {
+      const items = Object.keys(this.form).map((i) => this.form[i]);
+
+      const id = this.COMPANY_CODE_GET.company.id;
+
+      const params = { data: items };
+
+      const { result } = await new Vendor(this).patch(id, params);
+
+      console.log(result);
+    },
+    changeCompanyType(selectedValue, field) {
+      this.form[field.id].value = selectedValue.id;
+    },
     openLeftLayoutModal() {
       this.SEARCH_LEFT_ON();
 
@@ -198,12 +231,15 @@ export default {
 
       bodyEl.style.overflow = 'hidden';
     },
-    openCenterLayoutModal(fieldChildNodes) {
+    openCenterLayoutModal(fieldChildNodes, field) {
       this.SEARCH_CENTER_ON();
 
       this.$store.commit(SEARCH_CENTER_SET.load, {
         companyTypes: fieldChildNodes,
+        selectFieldValue: this.form[field.id].value,
       });
+
+      this.selectField = field;
 
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
@@ -248,6 +284,7 @@ export default {
       this.companyInformation = result[0].companyInformation;
       this.informationType = result[0].informationType;
       this.manager = result[0].manager;
+
       const form = {};
       for (const item of result[0].companyInformation) {
         const key = item.id;
@@ -273,24 +310,25 @@ export default {
         .businessVendorFieldValues;
 
       const form = {};
+
       for (const item of selectCompanyFields) {
         const field = item.businessVendorField;
         const key = field.id;
-        this.$set(form, key, { value: item.value, id: item.id });
+
+        if (item.businessVendorField.fieldType.columnType === 'select_box') {
+          this.$set(form, key, { value: item.value.id, id: item.id });
+        } else {
+          this.$set(form, key, { value: item.value, id: item.id });
+        }
       }
 
       setTimeout(() => {
         Object.assign(this.form, form);
 
-        this.$store.commit(FIELD_SET.load, { formBusinessVendor: this.form });
-      }, 0);
-    },
-    changeVendorField(id, $event) {
-      // const value = $event.target.value;
-      console.log(id);
-      console.log($event.target.value);
+        console.log(this.form);
 
-      // this.postVendorField.push({ id, value });
+        this.requestType = 'patch';
+      }, 0);
     },
   },
 };

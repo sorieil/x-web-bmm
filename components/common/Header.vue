@@ -9,10 +9,10 @@
       </div>
       <div class="__messages">
         <div class="__text">
-          <span>{{ propMessages }}</span>
+          <span>{{ messages }}</span>
         </div>
         <div class="__company-name">
-          <span>{{ propCompanyName }}</span>
+          <span>{{ companyName }}</span>
         </div>
       </div>
     </div>
@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+import Business from '../../service/business';
 export default {
   name: 'Header',
   props: {
@@ -36,16 +37,33 @@ export default {
       type: String,
     },
     propMessages: {
-      default: '원하는 바이어/벤더를 찾아 미팅을 성공시키세요!!',
+      default: '',
       type: String,
     },
     propCompanyName: {
-      default: '매치메이킹',
+      default: '',
       type: String,
     },
     propHeaderOption: {
       default: false,
       type: Boolean,
+    },
+  },
+  data() {
+    return {
+      messages: this.propMessages,
+      companyName: this.propCompanyName,
+    };
+  },
+  mounted() {
+    this.headerInit();
+  },
+  methods: {
+    async headerInit() {
+      const { result } = await new Business(this).get();
+
+      this.companyName = result[0].title;
+      this.messages = result[0].subTitle;
     },
   },
 };

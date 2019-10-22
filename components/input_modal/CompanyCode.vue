@@ -78,6 +78,7 @@ export default {
       const { result } = await new Vendor(this).codePost(id, params);
 
       if (result) {
+        const { result } = await new Vendor(this).selectGet(id);
         this.$store.commit(COMPANY_CODE_SET.load, {
           company: result[0],
         });

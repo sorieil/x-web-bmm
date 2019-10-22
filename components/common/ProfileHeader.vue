@@ -9,14 +9,14 @@
       </div>
     </div>
     <div class="__complete">
-      <span @click="goBack">완료</span>
+      <span>완료</span>
     </div>
   </div>
 </template>
 <script>
 import SubHeaderMixin from '../../mixin/sub_header';
 import FieldMixin from '../../mixin/field';
-// import { SUB_HEADER_SET } from '../../store/constant_types';
+import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
   name: 'Header',
   mixins: [SubHeaderMixin, FieldMixin],
@@ -28,20 +28,19 @@ export default {
   },
   methods: {
     goBack() {
-      const formBusinessVendor = this.FIELD_GET.formBusinessVendor;
-
-      console.log(formBusinessVendor);
-
-      const items = Object.keys(formBusinessVendor).map(
-        (i) => formBusinessVendor[i]
-      );
-
-      console.log(items);
-      // this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
-      // this.$store.commit(SUB_HEADER_SET.load, {
-      //   beforeRoutePath: '/',
-      // });
+      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+      this.$store.commit(SUB_HEADER_SET.load, {
+        beforeRoutePath: '/',
+      });
     },
+    // complete() {
+    //   const formBusinessVendor = this.FIELD_GET.formBusinessVendor;
+    //   console.log(formBusinessVendor);
+    //   const items = Object.keys(formBusinessVendor).map(
+    //     (i) => formBusinessVendor[i]
+    //   );
+    //   console.log(items);
+    // },
   },
 };
 </script>

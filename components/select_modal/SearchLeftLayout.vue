@@ -82,8 +82,6 @@ export default {
     async SearchLeftListInit() {
       const { result } = await new Vendor(this).get();
 
-      console.log(result);
-
       this.$store.commit(SEARCH_LEFT_SET.load, {
         vendors: result,
       });
