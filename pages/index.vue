@@ -97,7 +97,7 @@ export default {
         JSON.stringify(vendor.businessVendor)
       );
 
-      this.$router.replace({ path: 'vender' });
+      this.$router.push({ path: 'vender' });
     },
     async getServiceVendorList() {
       const { result } = await new Vendor(this).get();

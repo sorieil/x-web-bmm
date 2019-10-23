@@ -33,7 +33,7 @@ export default async ({ app, route, store, from, redirect, req }) => {
         errorRedirect('/');
       }
     });
-    app.router.replace({ path: '/' });
+    // app.router.replace({ path: '/' });
     // scenario 시작
   } else {
     errorRedirect();

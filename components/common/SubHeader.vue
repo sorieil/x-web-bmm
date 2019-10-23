@@ -31,7 +31,10 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+      // switch(this.$route.name) {
+      //   case
+      // }
+      // this.$router.back();
     },
   },
 };

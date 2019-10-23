@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     goMeeting() {
-      this.$router.replace({ path: 'meeting' });
+      this.$router.push({ path: 'meeting' });
       this.$store.commit(SUB_HEADER_SET.load, { beforeRoutePath: 'vendor' });
     },
     async vendorInit() {

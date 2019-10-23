@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.replace({ path: this.SUB_HEADER_GET.beforeRoutePath });
+      this.$router.push({ path: this.SUB_HEADER_GET.beforeRoutePath });
       this.$store.commit(SUB_HEADER_SET.load, {
         beforeRoutePath: '/',
       });
