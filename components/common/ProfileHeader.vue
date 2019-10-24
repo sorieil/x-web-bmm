@@ -16,7 +16,6 @@
 <script>
 import SubHeaderMixin from '../../mixin/sub_header';
 import FieldMixin from '../../mixin/field';
-import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
   name: 'Header',
   mixins: [SubHeaderMixin, FieldMixin],
@@ -28,10 +27,7 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.push({ path: this.SUB_HEADER_GET.beforeRoutePath });
-      this.$store.commit(SUB_HEADER_SET.load, {
-        beforeRoutePath: '/',
-      });
+      this.$router.back();
     },
     // complete() {
     //   const formBusinessVendor = this.FIELD_GET.formBusinessVendor;

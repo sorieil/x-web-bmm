@@ -31,10 +31,11 @@ export default {
   },
   methods: {
     goBack() {
+      console.log(this.$route.name);
       // switch(this.$route.name) {
       //   case
       // }
-      // this.$router.back();
+      this.$router.back();
     },
   },
 };

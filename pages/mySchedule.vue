@@ -96,6 +96,8 @@
       </ul>
     </div>
     <Modal
+      ref="MeetingModal"
+      style="display:none"
       class="animated"
       :class="{
         fadeInUpBig: activeMeetingModal,
@@ -170,6 +172,8 @@
       </div>
     </Modal>
     <Modal
+      ref="StatusModal"
+      style="display:none"
       class="animated"
       :class="{
         fadeInUpBig: activeStatusModal,
@@ -371,6 +375,9 @@ export default {
   },
   methods: {
     fnOpneMeetingInfo() {
+      const meetingModal = this.$refs.MeetingModal.$el;
+      meetingModal.style = '';
+
       this.activeMeetingModal = true;
 
       const modalFullEl = document.getElementsByClassName('ModalFull')[0];
@@ -385,6 +392,9 @@ export default {
       document.body.style.overflow = 'auto';
     },
     openStatusModal(index) {
+      const statusModal = this.$refs.StatusModal.$el;
+      statusModal.style = '';
+
       this.activeStatusModal = true;
 
       const modalFullEl = document.getElementsByClassName('ModalFull')[1];
@@ -401,11 +411,7 @@ export default {
       }
     },
     goProfile() {
-      this.$router.replace({ path: 'myprofile' });
-
-      this.$store.commit(SUB_HEADER_SET.load, {
-        beforeRoutePath: 'myschedule',
-      });
+      this.$router.push({ path: 'myprofile' });
     },
   },
 };
@@ -597,6 +603,9 @@ export default {
       .__close {
         position: absolute;
         right: 0;
+        > .material-icons-round {
+          font-size: 1.5em;
+        }
       }
     }
     .__content {

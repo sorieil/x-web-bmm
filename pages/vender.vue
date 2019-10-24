@@ -102,7 +102,6 @@ export default {
   methods: {
     goMeeting() {
       this.$router.push({ path: 'meeting' });
-      this.$store.commit(SUB_HEADER_SET.load, { beforeRoutePath: 'vendor' });
     },
     async vendorInit() {
       const selectedVendor = JSON.parse(

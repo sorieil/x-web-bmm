@@ -64,7 +64,7 @@ import Vendor from '../service/vendor';
 import Favorite from '../service/favorite';
 import FilterMixin from '../mixin/filter';
 import VendorMixin from '../mixin/vendor';
-import { VENDOR_SET, SUB_HEADER_SET } from '../store/constant_types';
+import { VENDOR_SET } from '../store/constant_types';
 export default {
   components: {
     SearchForm,
@@ -81,8 +81,6 @@ export default {
   },
   mounted() {
     this.getServiceVendorList();
-
-    this.$store.commit(SUB_HEADER_SET.load, { beforeRoutePath: '/' });
   },
   methods: {
     openFilter() {

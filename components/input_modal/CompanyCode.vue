@@ -82,6 +82,8 @@ export default {
         this.$store.commit(COMPANY_CODE_SET.load, {
           company: result[0],
         });
+
+        console.log(result);
         this.companyCodeStatus = true;
       } else {
         this.companyCodeStatus = false;

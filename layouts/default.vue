@@ -71,7 +71,7 @@
 import Header from '../components/common/Header';
 import IconCheckbox from '../components/features/IconCheckbox';
 // import SelectUserType from '../components/select_modal/SelectUserType';
-import { VENDOR_SET, SUB_HEADER_SET } from '../store/constant_types';
+import { VENDOR_SET } from '../store/constant_types';
 import Vendor from '../service/vendor';
 import Base from '../service/base';
 import Filter from '../service/filter';
@@ -171,11 +171,7 @@ export default {
     },
     selectUserTypeOpen() {
       // this.USER_TYPE_ON();
-      this.$router.replace({ path: 'myschedule' });
-
-      this.$store.commit(SUB_HEADER_SET.load, {
-        beforeRoutePath: '/',
-      });
+      this.$router.push({ path: 'myschedule' });
     },
     selectTab(index, $event) {
       // const filterActive = this.filters[index].name;
@@ -425,9 +421,9 @@ body {
     }
   }
   .__schedule-icon-wrap {
-    position: absolute;
+    position: fixed;
     right: 20px;
-    bottom: 20px;
+    bottom: 3vh;
     background: #e83828;
     padding: 14px;
     border-radius: 50%;

@@ -31,6 +31,7 @@
               v-else-if="field.fieldType.columnType === 'textarea'"
               class="__item __textarea-wrap"
             >
+              {{ field.id }}
               <p class="__title">{{ field.name }}</p>
               <textarea
                 v-model="form[field.id].value"
@@ -138,12 +139,18 @@
         * 작성된 정보는 제3자에게 노출되는 것을 알려드립니다.
       </p>
     </div>
-    <SearchLeftLayout />
+    <SearchLeftLayout ref="SearchLeftLayout" style="display:none;" />
     <SearchCenterLayout
+      ref="SearchCenterLayout"
+      style="display:none;"
       :field="selectField"
       @changeCompanyType="changeCompanyType"
     />
-    <CompanyCode @close="companyCodeModalClose" />
+    <CompanyCode
+      ref="CompanyCode"
+      style="display:none;"
+      @close="companyCodeModalClose"
+    />
   </div>
 </template>
 <script>
@@ -159,6 +166,7 @@ import Vendor from '../service/vendor';
 import {
   SUB_HEADER_SET,
   SEARCH_CENTER_SET,
+  // SEARCH_LEFT_SET,
   // FIELD_SET,
 } from '../store/constant_types';
 import Field from '../service/field';
@@ -206,6 +214,8 @@ export default {
 
       const params = { data: items };
 
+      console.log(params);
+
       const { result } = await new Vendor(this).post(params);
 
       console.log(result);
@@ -217,14 +227,21 @@ export default {
 
       const params = { data: items };
 
+      console.log('patch params ************************************');
+      console.log(params);
+
       const { result } = await new Vendor(this).patch(id, params);
 
+      console.log('patch result ************************************');
       console.log(result);
     },
     changeCompanyType(selectedValue, field) {
       this.form[field.id].value = selectedValue.id;
     },
     openLeftLayoutModal() {
+      const searchLeftLayoutEl = this.$refs.SearchLeftLayout.$el;
+      searchLeftLayoutEl.style = '';
+
       this.SEARCH_LEFT_ON();
 
       const bodyEl = this.$refs.ProfileForm.offsetParent;
@@ -232,6 +249,9 @@ export default {
       bodyEl.style.overflow = 'hidden';
     },
     openCenterLayoutModal(fieldChildNodes, field) {
+      const searchCenterLayoutEl = this.$refs.SearchCenterLayout.$el;
+      searchCenterLayoutEl.style = '';
+
       this.SEARCH_CENTER_ON();
 
       this.$store.commit(SEARCH_CENTER_SET.load, {
@@ -244,11 +264,6 @@ export default {
       const bodyEl = this.$refs.ProfileForm.offsetParent;
 
       bodyEl.style.overflow = 'hidden';
-    },
-    openCompanyCodeModal(index) {
-      this.companyCodeModal = true;
-      console.log(index);
-      this.selectCompany = index;
     },
     modalClose() {
       this.searchLeftLayoutModal = false;
@@ -353,7 +368,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 15px 20px;
+        padding: 10px 20px;
         background-color: white;
         border-bottom: 1px solid #d3d3d3;
         position: relative;
@@ -363,7 +378,9 @@ export default {
         }
         input {
           font-size: 15px;
-          width: 122px;
+          width: 142px;
+          height: 40px;
+          padding: 0 10px;
         }
         textarea {
           width: 100%;

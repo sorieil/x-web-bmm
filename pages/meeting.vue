@@ -83,14 +83,14 @@
           <div class="__date-time">
             <h3>날짜/시간</h3>
             <div>
-              <span>
+              <span ref="selectDate">
                 {{ meetingDateMM }}월 {{ meetingDateDD }}일
                 <datetime
                   v-model="meetingSelectDate"
                   format="MM/DD/YYYY"
                 ></datetime>
               </span>
-              <span class="timepicker">
+              <span ref="selectTime" class="timepicker">
                 {{ meetingTime }} {{ meetingAmPm }}
                 <datetime v-model="meetingSelectTime" format="H:i"></datetime>
               </span>
@@ -262,14 +262,48 @@ export default {
       this.activeDate = index;
     },
     fnOpneMeetingRequest() {
-      console.log('zzzz');
       this.modalStatus = true;
+
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const selectDate = this.$refs.selectDate.firstElementChild;
+          const selectTime = this.$refs.selectTime.firstElementChild;
+          const selectDateBlock = selectDate.firstElementChild.lastElementChild;
+          const selectTimeBlock = selectTime.firstElementChild.lastElementChild;
+
+          selectDate.addEventListener('click', (e) => {
+            if (selectDateBlock.classList.contains('noDisplay')) {
+              selectDateBlock.classList.remove('noDisplay');
+            }
+
+            if (!selectTimeBlock.classList.contains('noDisplay')) {
+              selectTimeBlock.classList.add('noDisplay');
+            }
+          });
+
+          selectTime.addEventListener('click', (e) => {
+            if (selectTimeBlock.classList.contains('noDisplay')) {
+              selectTimeBlock.classList.remove('noDisplay');
+            }
+
+            if (!selectDateBlock.classList.contains('noDisplay')) {
+              selectDateBlock.classList.add('noDisplay');
+            }
+          });
+        }, 10);
+      });
     },
     modalClose() {
       this.modalStatus = false;
     },
     fnMemoRemove() {
       this.meetingMemo = '';
+    },
+    selectedDate() {
+      console.log('날짜 선택됨');
+    },
+    selectedTime() {
+      console.log('시간 선택됨');
     },
   },
 };

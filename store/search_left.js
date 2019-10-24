@@ -8,6 +8,7 @@ import {
 export const state = () => ({
   status: false,
   selectCompanyCodeVendor: null,
+  searchLeftLayoutEl: null,
   vendors: ['피엑스디', '피엑스디 코리아', '테스트'],
 });
 

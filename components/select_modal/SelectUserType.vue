@@ -48,7 +48,7 @@ export default {
         selectedUserType: type,
       });
       this.USER_TYPE_OFF();
-      this.$router.replace({ path: 'myschedule' });
+      this.$router.push({ path: 'myschedule' });
     },
   },
 };

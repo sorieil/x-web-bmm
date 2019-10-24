@@ -62,7 +62,10 @@ export default {
   },
   methods: {
     selectCompanyCodeModal(vendor) {
-      console.log(vendor);
+      const companyCodeEl = this.$refs.searchLeftLayoutModal.$el
+        .nextElementSibling.nextElementSibling;
+      companyCodeEl.style = '';
+
       this.$store.commit(SEARCH_LEFT_SET.load, {
         selectCompanyCodeVendor: vendor,
       });
