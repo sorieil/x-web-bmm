@@ -5,7 +5,7 @@
   "author": "Xsync",
   "private": true,
   "scripts": {
-    "dev": "clear && cross-env NODE_ENV=development API_URL=http://localhost:8989/api nodemon server/index.js --watch server",
+    "dev": "clear && cross-env NODE_ENV=development API_URL=http://10.80.211.64:8989/api nodemon server/index.js --watch server",
     "dev-live-api": "clear && cross-env NODE_ENV=development API_URL=https://bmm.xsync.info/api nodemon server/index.js --watch server",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node server/index.js",

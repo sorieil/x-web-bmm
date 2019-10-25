@@ -10,12 +10,25 @@
         <div v-if="Object.entries(form).length > 1" class="__form-content">
           <div v-for="(field, index) of companyInformation" :key="index">
             <div
-              v-if="field.fieldType.columnType === 'select_box'"
+              v-if="field.fieldType.columnType === 'idx'"
               class="__select"
-              @click="openCenterLayoutModal(field.fieldChildNodes)"
+              @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
               <p class="__title">{{ field.name }}</p>
-              <i class="material-icons">keyboard_arrow_right</i>
+
+              <div v-if="form[field.id].value">
+                <div
+                  v-for="(item, selectIndex) of field.fieldChildNodes"
+                  :key="selectIndex"
+                >
+                  <div v-if="item.id === form[field.id].value">
+                    <input :value="item.text" class="__select-value" readonly />
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <i class="material-icons">keyboard_arrow_right</i>
+              </div>
             </div>
             <div
               v-else-if="field.fieldType.columnType === 'text'"
@@ -61,7 +74,7 @@
         <div v-if="Object.entries(form).length > 1" class="__form-content">
           <div v-for="(field, index) of informationType" :key="index">
             <div
-              v-if="field.fieldType.columnType === 'select_box'"
+              v-if="field.fieldType.columnType === 'idx'"
               class="__select"
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
@@ -109,12 +122,25 @@
         <div class="__form-content">
           <div v-for="(field, index) of manager" :key="index">
             <div
-              v-if="field.fieldType.columnType === 'select_box'"
+              v-if="field.fieldType.columnType === 'idx'"
               class="__select"
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
               <p class="__title">{{ field.name }}</p>
-              <i class="material-icons">keyboard_arrow_right</i>
+
+              <div v-if="form[field.id].value">
+                <div
+                  v-for="(item, selectIndex) of field.fieldChildNodes"
+                  :key="selectIndex"
+                >
+                  <div v-if="item.id === form[field.id].value">
+                    <input :value="item.text" class="__select-value" readonly />
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <i class="material-icons">keyboard_arrow_right</i>
+              </div>
             </div>
             <div
               v-else-if="field.fieldType.columnType === 'text'"
@@ -224,6 +250,8 @@ export default {
   methods: {
     async postField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
+
+      console.log('**********************post');
       console.log(items);
 
       const params = { data: items };
@@ -238,6 +266,9 @@ export default {
       const items = Object.keys(this.form).map((i) => this.form[i]);
 
       const id = this.COMPANY_CODE_GET.company.id;
+
+      console.log('**********************patchField');
+      console.log(items);
 
       const params = { data: items };
 
@@ -322,10 +353,10 @@ export default {
         this.$set(form, key, { value: null, id: key });
       }
 
-      for (const item of result[0].manager) {
-        const key = item.id;
-        this.$set(form, key, { value: null, id: key });
-      }
+      // for (const item of result[0].manager) {
+      //   const key = item.id;
+      //   this.$set(form, key, { value: null, id: key });
+      // }
 
       setTimeout(() => {
         this.form = form;
@@ -341,7 +372,7 @@ export default {
         const field = item.businessVendorField;
         const key = field.id;
 
-        if (item.businessVendorField.fieldType.columnType === 'select_box') {
+        if (item.businessVendorField.fieldType.columnType === 'idx') {
           this.$set(form, key, { value: item.value.id, id: item.id });
         } else {
           this.$set(form, key, { value: item.value, id: item.id });
