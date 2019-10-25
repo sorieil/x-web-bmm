@@ -154,6 +154,7 @@ export default {
       > p {
         color: #262626;
         font-weight: 300;
+        word-break: break-all;
         > span {
           margin-right: 3px;
           font-weight: 400;
