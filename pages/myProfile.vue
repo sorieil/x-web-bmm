@@ -258,23 +258,24 @@ export default {
 
       console.log(params);
 
-      const { result } = await new Vendor(this).post(params);
+      const { resCode } = await new Vendor(this).post(params);
 
-      console.log(result);
+      if (resCode === 201) {
+        alert('등록이 완료되었습니다.');
+      }
     },
     async patchField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
 
       const id = this.COMPANY_CODE_GET.company.id;
 
-      console.log('**********************patchField');
-      console.log(items);
-
       const params = { data: items };
 
-      const { result } = await new Vendor(this).patch(id, params);
+      const { resCode } = await new Vendor(this).patch(id, params);
 
-      console.log(result);
+      if (resCode === 201) {
+        alert('수정이 완료되었습니다.');
+      }
     },
     changeCompanyType(selectedValue, field) {
       this.form[field.id].value = selectedValue.id;

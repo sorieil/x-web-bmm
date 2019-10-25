@@ -9,14 +9,16 @@
       </div>
       <div class="__detail">
         <div v-for="(item, index) of vendorFields" :key="index">
-          <p v-if="!item.value.text">
-            <span>{{ item.businessVendorField.name }}</span>
-            {{ item.value }}
-          </p>
-          <p v-else>
-            <span>{{ item.businessVendorField.name }}</span>
-            {{ item.value.text }}
-          </p>
+          <div v-if="item.value">
+            <p v-if="!item.value.text">
+              <span>{{ item.businessVendorField.name }}</span>
+              {{ item.value }}
+            </p>
+            <p v-else>
+              <span>{{ item.businessVendorField.name }}</span>
+              {{ item.value.text }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="__manager">
@@ -95,9 +97,19 @@ export default {
     };
   },
   mounted() {
-    this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: 'vendor' });
-
     this.vendorInit();
+
+    setTimeout(() => {
+      for (const item of this.vendorFields) {
+        if (item.businessVendorField.name === '기업명') {
+          console.log('******************************');
+          console.log(item);
+          this.$store.commit(SUB_HEADER_SET.load, {
+            subHeaderTitle: item.value,
+          });
+        }
+      }
+    }, 100);
   },
   methods: {
     goMeeting() {
@@ -151,13 +163,15 @@ export default {
     padding: 0 20px;
     margin: 20px 0;
     > div {
-      > p {
-        color: #262626;
-        font-weight: 300;
-        word-break: break-all;
-        > span {
-          margin-right: 3px;
-          font-weight: 400;
+      > div {
+        > p {
+          color: #262626;
+          font-weight: 300;
+          word-break: break-all;
+          > span {
+            margin-right: 3px;
+            font-weight: 400;
+          }
         }
       }
     }
