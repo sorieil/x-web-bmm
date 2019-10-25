@@ -66,7 +66,20 @@
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
             >
               <p class="__title">{{ field.name }}</p>
-              <i class="material-icons">keyboard_arrow_right</i>
+
+              <div v-if="form[field.id].value">
+                <div
+                  v-for="(item, selectIndex) of field.fieldChildNodes"
+                  :key="selectIndex"
+                >
+                  <div v-if="item.id === form[field.id].value">
+                    <input :value="item.text" class="__select-value" readonly />
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <i class="material-icons">keyboard_arrow_right</i>
+              </div>
             </div>
             <div
               v-else-if="field.fieldType.columnType === 'text'"
@@ -189,6 +202,7 @@ export default {
       selectBoxValue: null,
       requestType: 'post',
       selectField: null,
+      getCompanyInfo: null,
     };
   },
   mounted() {
@@ -227,12 +241,8 @@ export default {
 
       const params = { data: items };
 
-      console.log('patch params ************************************');
-      console.log(params);
-
       const { result } = await new Vendor(this).patch(id, params);
 
-      console.log('patch result ************************************');
       console.log(result);
     },
     changeCompanyType(selectedValue, field) {
@@ -296,6 +306,7 @@ export default {
     async profileInit() {
       const { result } = await new Field(this).get();
 
+      this.getCompanyInfo = result[0];
       this.companyInformation = result[0].companyInformation;
       this.informationType = result[0].informationType;
       this.manager = result[0].manager;
@@ -397,6 +408,12 @@ export default {
       .__select {
         border-bottom: 1px solid #d3d3d3;
         margin: 0;
+        .__select-value {
+          font-size: 15px;
+          width: 142px;
+          height: 40px;
+          padding: 0 10px;
+        }
       }
       .__textarea-wrap {
         display: block;
