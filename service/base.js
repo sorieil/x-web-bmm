@@ -96,7 +96,6 @@ export default class Base {
 
   async baseGet() {
     const checkToken = await this.checkToken();
-    console.log('check token:', this.axios.header);
     if (checkToken) {
       return this.axios
         .$get(this.getUrl(), { params: this.params, progress: false })

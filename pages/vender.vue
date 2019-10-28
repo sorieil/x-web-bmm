@@ -28,24 +28,16 @@
             <div class="__profile-img">
               <img v-img="''" />
             </div>
-            <p>{{ manager.name }}</p>
+            <p v-managerName="manager.businessVendorFieldManagerValues"></p>
           </div>
-          <div class="__manager-detail">
-            <p>
-              <span>직위</span>
-              {{ manager.position }}
-            </p>
-            <p>
-              <span>부서</span>
-              {{ manager.department }}
-            </p>
-            <p>
-              <span>연락처</span>
-              {{ manager.number }}
-            </p>
-            <p>
-              <span>이메일</span>
-              {{ manager.email }}
+          <div
+            v-for="(field, index1) in manager.businessVendorFieldManagerValues"
+            :key="index1"
+            class="__manager-detail"
+          >
+            <p v-if="field.businessVendorField.name !== '담당자명'">
+              <span>{{ field.businessVendorField.name }}</span>
+              {{ field.value }}
             </p>
           </div>
         </div>
@@ -72,38 +64,32 @@ import { SUB_HEADER_SET } from '../store/constant_types';
 export default {
   layout: 'subDefault',
   components: {},
+  directives: {
+    managerName: {
+      inserted(el, binding, vnode) {
+        const item = binding.value;
+        const managerName = item.filter(
+          (v) => v.businessVendorField.name === '담당자명'
+        )[0].value;
+        console.log();
+        vnode.elm.textContent = managerName;
+      },
+    },
+  },
   mixins: [DirectiveImage, VendorMixin],
   data() {
     return {
       vendorFields: [],
       topField: null,
       bottomField: null,
-      managers: [
-        {
-          name: '최수진',
-          position: '팀장',
-          department: '디자인컨설팅',
-          number: '010-4444-5555',
-          email: 'sujin.lee@pxd.co.kr',
-        },
-        {
-          name: '최수진',
-          position: '팀장',
-          department: '디자인컨설팅',
-          number: '010-4444-5555',
-          email: 'sujin.lee@pxd.co.kr',
-        },
-      ],
+      managers: [],
     };
   },
   mounted() {
     this.vendorInit();
-
     setTimeout(() => {
       for (const item of this.vendorFields) {
         if (item.businessVendorField.name === '기업명') {
-          console.log('******************************');
-          console.log(item);
           this.$store.commit(SUB_HEADER_SET.load, {
             subHeaderTitle: item.value,
           });
@@ -131,6 +117,8 @@ export default {
             this.vendorFields.push(field);
           }
         });
+
+        this.managers.push(...result[0].businessVendorManagers);
       }
     },
   },
