@@ -16,9 +16,14 @@ fi
 
 cd $DIRECTORY
 
+# printf "================================\n "
+# git pull >/dev/null
+# printf "  Git pull done \n "
+# printf "================================\n "
+
 printf "================================\n "
-git pull >/dev/null
-printf "  Git pull done \n "
+printf "  Git reset release branch \n "
+git fetch && git checkout -B release >/dev/null
 printf "================================\n "
 
 yarn --ignore-engines >/dev/null
