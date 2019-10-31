@@ -186,28 +186,29 @@ export default class Base {
   }
 
   errorPrint(e) {
-    const code = parseInt(e.response && e.response.status);
+    const code =
+      typeof e !== 'number' ? parseInt(e.response && e.response.status) : e;
     console.log('error print:', code);
     switch (code) {
       case 400:
-        console.log('정상적인 데이터를 넣어주세요. =>', e.response);
-        return Promise.reject(new Error(e.response.data.message));
+        console.log('정상적인 데이터를 넣어주세요. =>', e);
+        return Promise.reject(new Error(e));
       case 401:
-        console.log('정상적인 토큰이 아닙니다.=>', e.response);
-        return Promise.reject(new Error(e.response.data.message));
+        console.log('정상적인 토큰이 아닙니다.=>', e);
+        return Promise.reject(new Error(e));
       case 403:
-        console.log('토큰이 없습니다. 토큰을 설정해주세요.=>', e.response);
-        return Promise.reject(new Error(e.response.data.message));
+        console.log('토큰이 없습니다. 토큰을 설정해주세요.=>', e);
+        return Promise.reject(new Error(e));
       case 500:
         console.log(
           '서버에서 에러 발생했군요. 관리자에게 문의 해주세요.',
           e.response
         );
-        return Promise.reject(new Error(e.response.data.message));
+        return Promise.reject(new Error(e));
       default:
         // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);
         // window.location.href = process.env.managerUrl;
-        console.log('code', e);
+        console.log('Else error: ', e);
         return Promise.reject(new Error(e));
     }
   }

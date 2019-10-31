@@ -71,13 +71,14 @@
 import Header from '../components/common/Header';
 import IconCheckbox from '../components/features/IconCheckbox';
 // import SelectUserType from '../components/select_modal/SelectUserType';
-import { VENDOR_SET } from '../store/constant_types';
+import { VENDOR_SET, USER_SET } from '../store/constant_types';
 import Vendor from '../service/vendor';
 import Base from '../service/base';
 import Filter from '../service/filter';
 import MixInFilter from '../mixin/filter';
 import UserType from '../mixin/select_user_type';
 import VendorMixin from '../mixin/vendor';
+import User from '../service/user';
 export default {
   middleware: ['auth'],
   components: {
@@ -112,6 +113,16 @@ export default {
         // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
         alert('토큰 설정이 안됐어요.');
       } else {
+        const userResult = new User(this).get();
+        userResult
+          .then(({ result }) => {
+            console.log('user type result:', result);
+            const userType = result[0].type === 'null' ? null : result[0].type;
+            this.$store.commit(USER_SET.load, { type: userType });
+          })
+          .catch((e) => {
+            console.log('catch error:', e);
+          });
         this.getServiceFilterType().then(() => {
           this.selectTab(0);
         });
@@ -171,7 +182,7 @@ export default {
     },
     selectUserTypeOpen() {
       // this.USER_TYPE_ON();
-      this.$router.push({ path: 'myschedule' });
+      this.$router.push({ path: 'my-schedule' });
     },
     selectTab(index, $event) {
       // const filterActive = this.filters[index].name;

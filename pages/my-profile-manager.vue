@@ -248,21 +248,26 @@ export default {
     });
   },
   methods: {
-    async postField() {
+    postField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
-
+      const itemsLength = items.filter((v) => v.value !== '');
       console.log('**********************post');
       console.log(items);
+      if (Object.entries(this.form).length !== itemsLength) {
+        // 모든 데이터를 입력해야 한다.
+        alert('모든 항목을 입력해주세요.');
+        return;
+      }
 
       const params = { data: items };
 
       console.log(params);
 
-      const { resCode } = await new Vendor(this).post(params);
+      // const { resCode } = await new Vendor(this).post(params);
 
-      if (resCode === 201) {
-        alert('등록이 완료되었습니다.');
-      }
+      // if (resCode === 201) {
+      //   alert('등록이 완료되었습니다.');
+      // }
     },
     async patchField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
@@ -275,6 +280,15 @@ export default {
 
       if (resCode === 201) {
         alert('수정이 완료되었습니다.');
+      }
+    },
+    getVendor(vendorId) {
+      // 매니저가 속한 밴더 정보를 가져온다.
+      if (vendorId) {
+        const { result } = new Vendor(this).get(vendorId);
+        console.log('vendor infor: ', result[0]);
+      } else {
+        alert('벤더 정보를 입력해주세요.');
       }
     },
     changeCompanyType(selectedValue, field) {

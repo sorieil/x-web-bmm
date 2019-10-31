@@ -5,7 +5,6 @@ export default class Token extends Base {
   constructor(componentScope) {
     super(componentScope);
     this.apiName = 'v1/token-verify';
-    // this.projectId = componentScope.$store.getters[PROJECT_GET.load].id
   }
   /**
    *
