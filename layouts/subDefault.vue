@@ -9,14 +9,24 @@
 
 <script>
 import SubHeader from '../components/common/SubHeader';
+import MixinUser from '../mixin/user';
 export default {
   components: {
     SubHeader,
   },
+  mixins: [MixinUser],
   data() {
     return {};
   },
-  created() {},
+  created() {
+    console.log('console:', this.USER_GET.type);
+    if (this.USER_GET.type === null || this.USER_GET.type === 'buyer') {
+      alert('바이어 정보를 입력해주세요.');
+      this.$router.replace({ path: '/my-profile' });
+    } else {
+      this.$router.replace({ path: '/my-profile-manager' });
+    }
+  },
   mounted() {},
   methods: {
     closeModal() {
