@@ -2,7 +2,7 @@ image: atlassian/default-image:latest
 pipelines:
   default:
     - step:
-        name: Deploy to BMM API
+        name: Deploy to BMM WEB
         deployment: production
         script:
           - ssh centos@13.209.7.132 'bash -s' < ./build/deploy.sh
