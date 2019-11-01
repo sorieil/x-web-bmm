@@ -5,6 +5,8 @@ DIRECTORY=web-xsync-2.0-bmm
 
 cd /home/centos
 
+#TODO 다음부터는 도커로 세팅을 해놓는다.
+
 if ! command -v node >/dev/null; then
   sudo npm install -g yarn
 fi
@@ -22,15 +24,17 @@ cd $DIRECTORY
 # printf "================================\n "
 
 printf "================================\n "
-printf "  Git reset release branch \n "
 git fetch && git checkout -B release >/dev/null
+printf "  Git reset release branch \n "
 printf "================================\n "
 
+printf "================================\n "
 yarn --ignore-engines >/dev/null
 printf "  Yarn Done \n "
 printf "================================\n "
 
-pm2 link uc0d267w80u4837 huiiiy90kar9kie 'BMM WEB(ec2)'
+printf "================================\n "
+npx pm2 link uc0d267w80u4837 huiiiy90kar9kie 'BMM WEB(ec2)'
 printf "  PM2 plus setup \n "
 printf "================================\n "
 
