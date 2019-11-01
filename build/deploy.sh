@@ -38,6 +38,11 @@ npx pm2 link uc0d267w80u4837 huiiiy90kar9kie 'BMM WEB(ec2)'
 printf "  PM2 plus setup \n "
 printf "================================\n "
 
+printf "================================\n "
+printf "  build \n "
+yarn build >/dev/null
+printf "================================\n "
+
 yarn server-start >/dev/null
 printf "  Web start \n"
 printf "================================\n "
