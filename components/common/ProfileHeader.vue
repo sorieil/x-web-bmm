@@ -8,7 +8,7 @@
         <span>{{ SUB_HEADER_GET.subHeaderTitle }}</span>
       </div>
     </div>
-    <div class="__complete">
+    <div id="profileHeaderButton" class="__complete">
       <span>완료</span>
     </div>
   </div>

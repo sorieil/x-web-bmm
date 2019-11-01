@@ -172,6 +172,14 @@
               />
             </div>
           </div>-->
+          <div class="__item">
+            <button
+              class="__manager-swich-button-buyer"
+              @click="buttonSwichManager"
+            >
+              바이어 전환
+            </button>
+          </div>
         </div>
       </div>
       <p class="__copy">
@@ -235,19 +243,39 @@ export default {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
 
     this.profileInit();
+    // 공통 해더의 아이디의 클릭 이벤트를 부여해준다. 호출하는 컴포넌트마다 하게 되어 있어서 중복 이벤트에 유의 해야 한다.
+    const profileHeaderButton = document.querySelector('#profileHeaderButton');
 
-    const headerCompleteButton = this.$refs.ProfileForm.parentElement
-      .parentElement.firstElementChild.lastElementChild;
-
-    headerCompleteButton.addEventListener('click', () => {
-      if (this.requestType === 'post') {
-        this.postField();
-      } else if (this.requestType === 'patch') {
-        this.patchField();
-      }
-    });
+    profileHeaderButton.addEventListener(
+      'click',
+      this.actionsHeaderCompleteButton
+    );
+  },
+  destroyed() {
+    const profileHeaderButton = document.querySelector('#profileHeaderButton');
+    profileHeaderButton.removeEventListener(
+      'click',
+      this.actionsHeaderCompleteButton
+    );
   },
   methods: {
+    actionsHeaderCompleteButton() {
+      if (this.requestType === 'post') {
+        alert('새로 입력');
+        // this.postField();
+        // this.postField();
+      } else if (this.requestType === 'patch') {
+        alert('수정 입력');
+        // this.patchField();
+      }
+    },
+    getVendorByUser() {
+      // 매니저로 등록이 됐다는건 밴더 정보가 있다는 것이다.
+      // todo: user.type이 null이거나 buyer인 경우에는 데이터를 불러오지 않는다.
+    },
+    buttonSwichManager() {
+      this.$router.replace({ path: '/my-profile' });
+    },
     postField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
       const itemsLength = items.filter((v) => v.value !== '');
@@ -413,6 +441,19 @@ export default {
   overflow: auto;
   width: 100%;
   padding-top: 40px;
+
+  .__manager-swich-button-buyer {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 30px;
+    border-radius: 15px;
+    border: 0;
+    background-color: #a8a8a8;
+    color: fff;
+  }
+
   .__copy {
     color: #a8a8a8;
     text-align: right;

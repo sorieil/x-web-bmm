@@ -4,82 +4,28 @@
       <div class="__form-info">
         <h3>나의 정보</h3>
         <div class="__form-content">
-          <form id="formManager" method="post" @submit="checkForm">
-            <div v-for="(field, index) of manager" :key="index">
-              <div
-                v-if="field.fieldType.columnType === 'idx'"
-                class="__select"
-                @click="openCenterLayoutModal(field.fieldChildNodes, field)"
-              >
-                <p class="__title">{{ field.name }}</p>
-
-                <div v-if="form[field.id].value">
-                  <div
-                    v-for="(item, selectIndex) of field.fieldChildNodes"
-                    :key="selectIndex"
-                  >
-                    <div v-if="item.id === form[field.id].value">
-                      <input
-                        :value="item.text"
-                        class="__select-value"
-                        readonly
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div v-else>
-                  <i class="material-icons">keyboard_arrow_right</i>
-                </div>
-              </div>
-              <div
-                v-else-if="field.fieldType.columnType === 'text'"
-                class="__item"
-              >
-                <p class="__title">{{ field.name }}</p>
-                <input placeholder="내용을 입력하세요." />
-              </div>
-              <div
-                v-else-if="field.fieldType.columnType === 'textarea'"
-                class="__item __textarea-wrap"
-              >
-                <p class="__title">{{ field.name }}</p>
-                <textarea placeholder="내용을 입력하세요." />
-              </div>
-            </div>
-            <!-- <div class="__item">
-            <p class="__title">프로필 이미지</p>
-            <div class="__image-upload">
-              <img
-                class="__image-icon"
-                src="../assets/images/common/icon_default_logo_gray.svg"
-              />
-            </div>
-            <div class="__pencil-icon-wrap">
-              <img
-                class="__pencil-icon"
-                src="../assets/images/common/icon_ pencil.svg"
-              />
-            </div>
-            </div>-->
-          </form>
+          <div class="__item">
+            <p class="__title">담당자명</p>
+            <input v-model="form.name" placeholder="내용을 입력하세요." />
+          </div>
+          <div class="__item">
+            <p class="__title">연락처</p>
+            <input v-model="form.phone" placeholder="내용을 입력하세요." />
+          </div>
+          <div class="__item">
+            <p class="__title">이메일</p>
+            <input
+              v-model="form.email"
+              type="email"
+              placeholder="이메일 입력하세요."
+            />
+          </div>
         </div>
       </div>
-      <p class="__copy">
-        * 작성된 정보는 제3자에게 노출되는 것을 알려드립니다.
-      </p>
+      <button class="__manager-swich-button" @click="buttonSwichManager">
+        매니저 전환
+      </button>
     </div>
-    <SearchLeftLayout ref="SearchLeftLayout" style="display:none;" />
-    <SearchCenterLayout
-      ref="SearchCenterLayout"
-      style="display:none;"
-      :field="selectField"
-      @changeCompanyType="changeCompanyType"
-    />
-    <CompanyCode
-      ref="CompanyCode"
-      style="display:none;"
-      @close="companyCodeModalClose"
-    />
   </div>
 </template>
 <script>
@@ -88,21 +34,25 @@ import Filter from '../mixin/filter';
 import SearchLeft from '../mixin/search_left';
 import SearchCenter from '../mixin/search_center';
 import CompanyCodeMixin from '../mixin/company_code';
-import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
-import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
-import CompanyCode from '../components/input_modal/CompanyCode';
-import Vendor from '../service/vendor';
+import MixsinUser from '../mixin/user';
+import Buyer from '../service/buyer';
 import {
   SUB_HEADER_SET,
-  SEARCH_CENTER_SET,
+
   // SEARCH_LEFT_SET,
   // FIELD_SET,
 } from '../store/constant_types';
-import Field from '../service/field';
+
 export default {
   layout: 'profileDefault',
-  components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
-  mixins: [DirectiveImage, Filter, SearchLeft, SearchCenter, CompanyCodeMixin],
+  mixins: [
+    DirectiveImage,
+    Filter,
+    SearchLeft,
+    SearchCenter,
+    CompanyCodeMixin,
+    MixsinUser,
+  ],
   data() {
     return {
       searchLeftLayoutModal: false,
@@ -114,12 +64,11 @@ export default {
       informationType: null,
       manager: null,
       postVendorField: [],
-      form: {},
       selectBoxValue: null,
       requestType: 'post',
       selectField: null,
       getCompanyInfo: null,
-      formManager: {
+      form: {
         name: null,
         phone: null,
         email: null,
@@ -129,192 +78,87 @@ export default {
   mounted() {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
 
-    this.profileInit();
+    this.$nextTick(() => {
+      this.getBuyer();
+      const profileHeaderButton = document.querySelector(
+        '#profileHeaderButton'
+      );
+      profileHeaderButton.addEventListener(
+        'click',
+        this.actionsHeaderCompleteButton
+      );
+    });
+  },
+  destroyed() {
+    const profileHeaderButton = document.querySelector('#profileHeaderButton');
 
-    const headerCompleteButton = this.$refs.ProfileForm.parentElement
-      .parentElement.firstElementChild.lastElementChild;
-
-    headerCompleteButton.addEventListener('click', () => {
+    profileHeaderButton.removeEventListener(
+      'click',
+      this.actionsHeaderCompleteButton
+    );
+  },
+  methods: {
+    actionsHeaderCompleteButton() {
       if (this.requestType === 'post') {
-        this.postField();
+        // this.postField();
+        this.checkForm();
       } else if (this.requestType === 'patch') {
         this.patchField();
       }
-    });
-  },
-  methods: {
-    checkForm(e) {
-      const formCount = Object.entries(this.formManager);
-      // const InputFormCount =
-      console.log(formCount);
-      if (formCount) {
-        return true;
-      }
-
-      this.errors = [];
-
-      if (!this.name) {
-        this.errors.push('Name required.');
-      }
-      if (!this.age) {
-        this.errors.push('Age required.');
-      }
-
-      e.preventDefault();
     },
-    postField() {
-      const items = Object.keys(this.form).map((i) => this.form[i]);
-      const itemsLength = items.filter((v) => v.value !== '');
-      console.log('**********************post');
-      console.log(items);
-      if (Object.entries(this.form).length !== itemsLength) {
-        // 모든 데이터를 입력해야 한다.
-        alert('모든 항목을 입력해주세요.');
-        return;
-      }
-
-      const params = { data: items };
-
-      console.log(params);
-
-      // const { resCode } = await new Vendor(this).post(params);
-
-      // if (resCode === 201) {
-      //   alert('등록이 완료되었습니다.');
-      // }
+    buttonSwichManager() {
+      this.$router.replace({ path: '/my-profile-manager' });
     },
-    async patchField() {
-      const items = Object.keys(this.form).map((i) => this.form[i]);
-
-      const id = this.COMPANY_CODE_GET.company.id;
-
-      const params = { data: items };
-
-      const { resCode } = await new Vendor(this).patch(id, params);
-
-      if (resCode === 201) {
-        alert('수정이 완료되었습니다.');
-      }
-    },
-    getVendor(vendorId) {
-      // 매니저가 속한 밴더 정보를 가져온다.
-      if (vendorId) {
-        const { result } = new Vendor(this).get(vendorId);
-        console.log('vendor infor: ', result[0]);
-      } else {
-        alert('벤더 정보를 입력해주세요.');
-      }
-    },
-    changeCompanyType(selectedValue, field) {
-      this.form[field.id].value = selectedValue.id;
-    },
-    openLeftLayoutModal() {
-      const searchLeftLayoutEl = this.$refs.SearchLeftLayout.$el;
-      searchLeftLayoutEl.style = '';
-
-      this.SEARCH_LEFT_ON();
-
-      const bodyEl = this.$refs.ProfileForm.offsetParent;
-
-      bodyEl.style.overflow = 'hidden';
-    },
-    openCenterLayoutModal(fieldChildNodes, field) {
-      const searchCenterLayoutEl = this.$refs.SearchCenterLayout.$el;
-      searchCenterLayoutEl.style = '';
-
-      this.SEARCH_CENTER_ON();
-
-      this.$store.commit(SEARCH_CENTER_SET.load, {
-        companyTypes: fieldChildNodes,
-        selectFieldValue: this.form[field.id].value,
-      });
-
-      this.selectField = field;
-
-      const bodyEl = this.$refs.ProfileForm.offsetParent;
-
-      bodyEl.style.overflow = 'hidden';
-    },
-    modalClose() {
-      this.searchLeftLayoutModal = false;
-      this.searchCenterLayoutModal = false;
-
-      const bodyEl = this.$refs.ProfileForm.offsetParent;
-
-      bodyEl.style.height = 'auto';
-      bodyEl.style.overflow = 'auto';
-    },
-    closeCompanyModal(closeAll) {
-      const bodyEl = this.$refs.ProfileForm.offsetParent;
-
-      if (closeAll) {
-        this.searchLeftLayoutModal = false;
-        this.searchCenterLayoutModal = false;
-        this.companyCodeModal = false;
-
-        bodyEl.style.height = 'auto';
-        bodyEl.style.overflow = 'auto';
-
-        this.getSelectCompany();
-      } else {
-        this.companyCodeModal = false;
-      }
-    },
-    getSelectCompany() {
-      console.log('select company = ' + this.selectCompany);
-    },
-    async profileInit() {
-      const { result } = await new Field(this).get();
-
-      this.getCompanyInfo = result[0];
-      this.companyInformation = result[0].companyInformation;
-      this.informationType = result[0].informationType;
-      this.manager = result[0].manager;
-
-      const form = {};
-      for (const item of result[0].companyInformation) {
-        const key = item.id;
-        this.$set(form, key, { value: null, id: key });
-      }
-
-      for (const item of result[0].informationType) {
-        const key = item.id;
-        this.$set(form, key, { value: null, id: key });
-      }
-
-      // for (const item of result[0].manager) {
-      //   const key = item.id;
-      //   this.$set(form, key, { value: null, id: key });
-      // }
-
-      setTimeout(() => {
-        this.form = form;
-      }, 0);
-    },
-    companyCodeModalClose() {
-      const selectCompanyFields = this.COMPANY_CODE_GET.company
-        .businessVendorFieldValues;
-
-      const form = {};
-
-      for (const item of selectCompanyFields) {
-        const field = item.businessVendorField;
-        const key = field.id;
-
-        if (item.businessVendorField.fieldType.columnType === 'idx') {
-          this.$set(form, key, { value: item.value.id, id: item.id });
-        } else {
-          this.$set(form, key, { value: item.value, id: item.id });
+    getBuyer() {
+      const service = new Buyer(this);
+      service.get().then(({ result, resCode }) => {
+        console.log(result, resCode);
+        if (resCode === 200) {
+          if (result[0] !== null) {
+            const buyer = result[0];
+            for (const [key, value] of Object.entries(buyer)) {
+              console.log(key, value);
+              this.form[key] = value;
+            }
+          }
         }
+      });
+    },
+    checkForm(e) {
+      const formCheckCount = Object.entries(this.form)
+        .filter(([key, value]) => key !== 'profileImage')
+        .every(([key, value]) => {
+          console.log('v:', key, value);
+          return value !== null && value !== '';
+        });
+      console.log(formCheckCount);
+      if (formCheckCount) {
+        // 여기에서 패치인지 포스트 인지 구별
+        const service = new Buyer(this);
+        service
+          .post(this.form)
+          .then(({ resCode }) => {
+            if (resCode === 200) {
+              alert('바이어 설정 성공');
+            } else if (resCode === 201) {
+              alert('수정 완료');
+            }
+          })
+          .catch((e) => {
+            alert('정상적인 데이터를 넣어주세요.');
+          });
+      } else {
+        alert('모든 항목을 입력해주세요.');
       }
 
-      setTimeout(() => {
-        Object.assign(this.form, form);
+      // this.errors = [];
 
-        console.log(this.form);
-
-        this.requestType = 'patch';
-      }, 0);
+      // if (!this.name) {
+      //   this.errors.push('Name required.');
+      // }
+      // if (!this.age) {
+      //   this.errors.push('Age required.');
+      // }
     },
   },
 };
@@ -327,6 +171,19 @@ export default {
   overflow: auto;
   width: 100%;
   padding-top: 40px;
+
+  .__manager-swich-button {
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 30px;
+    border-radius: 15px;
+    border: 0;
+    background-color: #a8a8a8;
+    color: fff;
+  }
   .__copy {
     color: #a8a8a8;
     text-align: right;

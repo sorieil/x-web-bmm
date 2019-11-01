@@ -1,9 +1,9 @@
 import Base from './base';
 
-export default class User extends Base {
+export default class Buyer extends Base {
   constructor(componentScope) {
     super(componentScope);
-    this.apiName = 'v1/user';
+    this.apiName = 'v1/user/buyer';
   }
 
   get() {
