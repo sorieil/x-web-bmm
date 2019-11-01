@@ -5,6 +5,5 @@ pipelines:
         name: Deploy to BMM WEB
         deployment: production
         script:
-          # - ssh centos@13.209.7.132 'bash -s' < ./build/deploy.sh
-          - ssh centos@13.209.7.132 'pwd'
+          - ssh centos@13.209.7.132 'bash -s' < ./build/deploy.sh
           - echo "Deploy step finished"
