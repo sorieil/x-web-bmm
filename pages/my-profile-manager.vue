@@ -128,13 +128,17 @@
             >
               <p class="__title">{{ field.name }}</p>
 
-              <div v-if="form[field.id].value">
+              <div v-if="formManager[field.id]">
                 <div
                   v-for="(item, selectIndex) of field.fieldChildNodes"
                   :key="selectIndex"
                 >
-                  <div v-if="item.id === form[field.id].value">
-                    <input :value="item.text" class="__select-value" readonly />
+                  <div v-if="item.id === formManager[field.id].value">
+                    <input
+                      v-model="formManager[field.id].value"
+                      class="__select-value"
+                      readonly
+                    />
                   </div>
                 </div>
               </div>
@@ -143,18 +147,29 @@
               </div>
             </div>
             <div
-              v-else-if="field.fieldType.columnType === 'text'"
+              v-else-if="
+                field.fieldType.columnType === 'text' && formManager[field.id]
+              "
               class="__item"
             >
               <p class="__title">{{ field.name }}</p>
-              <input placeholder="내용을 입력하세요." />
+              <input
+                v-model="formManager[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
             </div>
             <div
-              v-else-if="field.fieldType.columnType === 'textarea'"
+              v-else-if="
+                field.fieldType.columnType === 'textarea' &&
+                  formManager[field.id]
+              "
               class="__item __textarea-wrap"
             >
               <p class="__title">{{ field.name }}</p>
-              <textarea placeholder="내용을 입력하세요." />
+              <textarea
+                v-model="formManager[field.id].value"
+                placeholder="내용을 입력하세요."
+              />
             </div>
           </div>
           <!-- <div class="__item">
@@ -210,6 +225,8 @@ import SearchLeftLayout from '../components/select_modal/SearchLeftLayout';
 import SearchCenterLayout from '../components/select_modal/SearchCenterLayout';
 import CompanyCode from '../components/input_modal/CompanyCode';
 import Vendor from '../service/vendor';
+import MixinUser from '../mixin/user';
+import Manager from '../service/manager';
 import {
   SUB_HEADER_SET,
   SEARCH_CENTER_SET,
@@ -220,7 +237,14 @@ import Field from '../service/field';
 export default {
   layout: 'profileDefault',
   components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
-  mixins: [DirectiveImage, Filter, SearchLeft, SearchCenter, CompanyCodeMixin],
+  mixins: [
+    DirectiveImage,
+    Filter,
+    SearchLeft,
+    SearchCenter,
+    CompanyCodeMixin,
+    MixinUser,
+  ],
   data() {
     return {
       searchLeftLayoutModal: false,
@@ -233,10 +257,13 @@ export default {
       manager: null,
       postVendorField: [],
       form: {},
+      formManager: {},
       selectBoxValue: null,
       requestType: 'post',
       selectField: null,
       getCompanyInfo: null,
+      vendorId: null,
+      vendorManagerId: null,
     };
   },
   mounted() {
@@ -250,6 +277,8 @@ export default {
       'click',
       this.actionsHeaderCompleteButton
     );
+
+    this.getVendorWithManager();
   },
   destroyed() {
     const profileHeaderButton = document.querySelector('#profileHeaderButton');
@@ -259,28 +288,130 @@ export default {
     );
   },
   methods: {
-    actionsHeaderCompleteButton() {
-      if (this.requestType === 'post') {
-        alert('새로 입력');
-        // this.postField();
-        // this.postField();
-      } else if (this.requestType === 'patch') {
-        alert('수정 입력');
-        // this.patchField();
+    getVendor() {
+      // 매니저인 경우 매니저의 밴더를 가져 올수 있다.?!!!!
+      // 매니저가 속한 밴더 정보를 가져온다.
+      if (this.USER_GET.type === 'manager') {
+        const { result } = new Vendor(this).get();
+        console.log('vendor infor: ', result[0]);
+      } else {
+        alert('벤더 정보를 입력해주세요.');
       }
     },
-    getVendorByUser() {
-      // 매니저로 등록이 됐다는건 밴더 정보가 있다는 것이다.
-      // todo: user.type이 null이거나 buyer인 경우에는 데이터를 불러오지 않는다.
+    getVendorWithManager() {
+      console.log('User type:', this.USER_GET.type);
+      if (this.USER_GET.type === 'manager') {
+        // 매니저 인경우 등록된 밴더 정보를 불러온다.
+        // 바이어에서 전환 한 경우도 새로 가입으로 보기 때문에
+        // 밴저 정보를 가져오진 않는다.
+        const serviceManagerManager = new Manager(this);
+        const query = serviceManagerManager.get();
+        query
+          .then(({ result, resCode }) => {
+            console.log(
+              '매니저 이시군요. 밴저 정보 불러 오기',
+              result,
+              resCode
+            );
+            this.vendorManagerId = result[0].id;
+            // TODO 불러온 매니저 정보 바인딩 해준다.
+            // 그리고 vendorManagerId 변수에 아이디 값을 넣어준다.
+            // 그리고 불러온 매니저 정보를 토대로 밴더 정보를 불러오고,
+            // 밴더 정보를 바인딩 해준다. this.companyCodeModalClose() 이 함수 처럼.
+
+            for (const item of result[0].businessVendorFieldManagerValues) {
+              const fieldId = item.businessVendorField.id;
+              if (item.businessVendorField.fieldType.columnType === 'idx') {
+                this.$set(this.formManager, fieldId, {
+                  value: item.value.id,
+                  id: item.id,
+                });
+              } else {
+                console.log(fieldId, item.id, item.value);
+                this.$set(this.formManager, fieldId, {
+                  value: item.value,
+                  id: item.id,
+                });
+              }
+            }
+
+            setTimeout(() => {
+              // Object.assign(this.formManager, this.formManager);
+              this.requestType = 'patch';
+            }, 0);
+          })
+          .catch((error) => {
+            console.log('Error:', error);
+          });
+      }
+    },
+    actionsHeaderCompleteButton() {
+      if (!this.vendorId) {
+        this.saveVendorManager().then(async (result) => {
+          console.log('Update vendor');
+          if (result) {
+            await this.patchField();
+          }
+        });
+      } else {
+        this.saveVendorManager().then(async (result) => {
+          console.log('Add vendor');
+          if (result) {
+            await this.postField();
+          }
+        });
+      }
+    },
+    saveVendorManager() {
+      if (this.vendorId) {
+        const items = [];
+        for (const [key, value] of Object.entries(this.formManager)) {
+          if (!value.id || !value.value) {
+            alert('모든 정보를 입력해주세요.');
+            return Promise.resolve(false);
+          }
+          console.log('key:', key);
+          items.push(value);
+        }
+
+        /**
+         * 여기에서도 새 입력과 수정을 구분해서 해줘야 하는데 주의 할 점은
+         * 새로운 매니저 등록은 밴더의 아이디가 필요하다.
+         * 새 입력이 아닌 경우는 밴더의 아이디가 필요 없다. 서버에서 밴더매니저는 한 유저당
+         * 하나만 등록이 가능하기 때문에 서버에서 유저 토큰으로 유추를 할 수 있다. req.user.users[0].busienssVendorManager 로
+         * this.vendorManagerId 로 새 입력과 업데이트를 구현하면, 끝~~~~
+         **/
+
+        if (this.vendorManagerId) {
+          console.log('update saveVendorManager', this.vendorManagerId, items);
+          const serviceManager = new Manager(this);
+          serviceManager.patch(this.vendorManagerId, items).catch(() => {
+            alert('매니저 업데이트 실패');
+            return Promise.resolve(false);
+          });
+        } else {
+          console.log('save saveVendorManager', this.vendorId, items);
+          const serviceManager = new Manager(this);
+          serviceManager.post(this.vendorId, items).catch(() => {
+            alert('새로 입력 매니저 입력 실패');
+            return Promise.resolve(false);
+          });
+        }
+
+        // serivce.post
+        return Promise.resolve(true);
+      } else {
+        alert('벤더 정보가 없습니다. 밴더를 검색해서 인증해주세요.');
+        return Promise.resolve(false);
+      }
     },
     buttonSwichManager() {
       this.$router.replace({ path: '/my-profile' });
     },
-    postField() {
+    async postField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
       const itemsLength = items.filter((v) => v.value !== '');
-      console.log('**********************post');
-      console.log(items);
+
       if (Object.entries(this.form).length !== itemsLength) {
         // 모든 데이터를 입력해야 한다.
         alert('모든 항목을 입력해주세요.');
@@ -291,32 +422,24 @@ export default {
 
       console.log(params);
 
-      // const { resCode } = await new Vendor(this).post(params);
+      const { resCode } = await new Vendor(this).post(params);
 
-      // if (resCode === 201) {
-      //   alert('등록이 완료되었습니다.');
-      // }
+      if (resCode === 201) {
+        alert('등록이 완료되었습니다.');
+      }
     },
     async patchField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
+      console.log('patchField:', items);
 
-      const id = this.COMPANY_CODE_GET.company.id;
+      this.vendorId = this.COMPANY_CODE_GET.company.id;
 
       const params = { data: items };
 
-      const { resCode } = await new Vendor(this).patch(id, params);
+      const { resCode } = await new Vendor(this).patch(this.vendorId, params);
 
       if (resCode === 201) {
         alert('수정이 완료되었습니다.');
-      }
-    },
-    getVendor(vendorId) {
-      // 매니저가 속한 밴더 정보를 가져온다.
-      if (vendorId) {
-        const { result } = new Vendor(this).get(vendorId);
-        console.log('vendor infor: ', result[0]);
-      } else {
-        alert('벤더 정보를 입력해주세요.');
       }
     },
     changeCompanyType(selectedValue, field) {
@@ -377,6 +500,7 @@ export default {
     getSelectCompany() {
       console.log('select company = ' + this.selectCompany);
     },
+    // 필드 생성
     async profileInit() {
       const { result } = await new Field(this).get();
 
@@ -386,6 +510,7 @@ export default {
       this.manager = result[0].manager;
 
       const form = {};
+      const formManager = {};
       for (const item of result[0].companyInformation) {
         const key = item.id;
         this.$set(form, key, { value: null, id: key });
@@ -396,20 +521,23 @@ export default {
         this.$set(form, key, { value: null, id: key });
       }
 
-      // for (const item of result[0].manager) {
-      //   const key = item.id;
-      //   this.$set(form, key, { value: null, id: key });
-      // }
+      for (const item of result[0].manager) {
+        const key = item.id;
+        this.$set(formManager, key, { value: null, id: key });
+      }
 
       setTimeout(() => {
+        this.formManager = formManager;
         this.form = form;
       }, 0);
     },
+    // 데이터를 주입해주는 구간
     companyCodeModalClose() {
       const selectCompanyFields = this.COMPANY_CODE_GET.company
         .businessVendorFieldValues;
 
       const form = {};
+      this.vendorId = this.COMPANY_CODE_GET.company.id;
 
       for (const item of selectCompanyFields) {
         const field = item.businessVendorField;
@@ -423,10 +551,8 @@ export default {
       }
 
       setTimeout(() => {
-        Object.assign(this.form, form);
-
-        console.log(this.form);
-
+        // Object.assign(this.form, form);
+        this.from = form;
         this.requestType = 'patch';
       }, 0);
     },

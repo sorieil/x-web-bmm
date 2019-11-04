@@ -53,29 +53,29 @@
           <div v-if="item.status === '예약가능'">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __possible" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __possible" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약됨'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __complete" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __complete" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
           <div v-else-if="item.status === '예약불가'" class="__disabled">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
+            }}</span>
             <span
               class="__status __impossible"
               @click="openStatusModal(index)"
@@ -85,12 +85,12 @@
           <div v-else-if="item.status === '신청대기'" class="__waiting">
             <span class="__time">{{ item.time }}</span>
             <span class="__company">{{ item.company }}</span>
-            <span class="__user" @click="fnOpneMeetingInfo()">
-              {{ item.user }}
-            </span>
-            <span class="__status __waiting" @click="openStatusModal(index)">{{
-              item.status
+            <span class="__user" @click="fnOpneMeetingInfo()">{{
+              item.user
             }}</span>
+            <span class="__status __waiting" @click="openStatusModal(index)">
+              {{ item.status }}
+            </span>
           </div>
         </li>
       </ul>
@@ -224,13 +224,14 @@
 </template>
 <script>
 import DirectiveImage from '../mixin/directive_image';
+import MixinUserType from '../mixin/user';
 import Modal from '../components/common/ModalFull';
 import IconCheckbox from '../components/features/IconCheckbox';
 import { SUB_HEADER_SET } from '../store/constant_types';
 export default {
   layout: 'subDefault',
   components: { Modal, IconCheckbox },
-  mixins: [DirectiveImage],
+  mixins: [DirectiveImage, MixinUserType],
   data() {
     return {
       dates: [
@@ -411,7 +412,11 @@ export default {
       }
     },
     goProfile() {
-      this.$router.push({ path: 'my-profile' });
+      if (this.USER_GET.type === 'manager') {
+        this.$router.replace({ path: '/my-profile-manager' });
+      } else {
+        this.$router.replace({ path: '/my-profile' });
+      }
     },
   },
 };

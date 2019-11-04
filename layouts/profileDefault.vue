@@ -9,32 +9,19 @@
 
 <script>
 import ProfileHeader from '../components/common/ProfileHeader';
-import User from '../service/user';
-import { USER_SET } from '../store/constant_types';
-import MixinUserType from '../mixin/user';
+import MixinUser from '../mixin/user';
 // import Base from '../service/base';
 export default {
   middleware: ['auth'],
   components: {
     ProfileHeader,
   },
-  mixins: [MixinUserType],
+  mixins: [MixinUser],
   data() {
     return {};
   },
   created() {},
-  mounted() {
-    const userResult = new User(this).get();
-    userResult
-      .then(({ result }) => {
-        console.log('user type result:', result);
-        const userType = result[0].type === 'null' ? null : result[0].type;
-        this.$store.commit(USER_SET.load, { type: userType });
-      })
-      .catch((e) => {
-        console.log('catch error:', e);
-      });
-  },
+  mounted() {},
   methods: {
     closeModal() {
       this.MODAL_FULL_ACTION_OFF();

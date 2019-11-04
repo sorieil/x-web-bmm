@@ -20,10 +20,8 @@ export default {
   },
   created() {
     console.log('console:', this.USER_GET.type);
-    if (this.USER_GET.type === null || this.USER_GET.type === 'buyer') {
+    if (this.USER_GET.type === null) {
       this.$router.replace({ path: '/my-profile' });
-    } else {
-      this.$router.replace({ path: '/my-profile-manager' });
     }
   },
   mounted() {},
