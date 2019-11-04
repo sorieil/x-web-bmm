@@ -30,15 +30,17 @@
             </div>
             <p v-managerName="manager.businessVendorFieldManagerValues"></p>
           </div>
-          <div
-            v-for="(field, index1) in manager.businessVendorFieldManagerValues"
-            :key="index1"
-            class="__manager-detail"
-          >
-            <p v-if="field.businessVendorField.name !== '담당자명'">
-              <span>{{ field.businessVendorField.name }}</span>
-              {{ field.value }}
-            </p>
+          <div class="__manager-detail">
+            <div
+              v-for="(field,
+              index1) in manager.businessVendorFieldManagerValues"
+              :key="index1"
+            >
+              <p v-if="field.businessVendorField.name !== '담당자명'">
+                <span>{{ field.businessVendorField.name }}</span>
+                {{ field.value }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -209,13 +211,16 @@ export default {
     }
     .__manager-detail {
       margin-left: auto;
-      margin-right: 40px;
-      > p {
-        font-weight: 300;
-        color: #262626;
-        > span {
-          margin-right: 3px;
-          font-weight: 400;
+      margin-right: 20px;
+      max-width: 170px;
+      > div {
+        > p {
+          font-weight: 300;
+          color: #262626;
+          > span {
+            margin-right: 3px;
+            font-weight: 400;
+          }
         }
       }
     }
