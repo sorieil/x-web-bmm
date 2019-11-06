@@ -30,6 +30,7 @@
     "express": "^4.16.4",
     "express-session": "^1.16.2",
     "localStorage": "^1.0.4",
+    "moment": "^2.24.0",
     "nuxt": "^2.0.0"
   },
   "devDependencies": {

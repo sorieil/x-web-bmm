@@ -56,17 +56,21 @@
               }}</span>
               <span class="__company">예약한 회사명</span>
               <span class="__user" @click="fnOpneMeetingInfo()">예약명</span>
-              <span class="__status __complate">예약완료</span>
+              <span class="__status __complate" @click="openStatusModal(index)"
+                >예약완료</span
+              >
             </div>
-            <div v-else class="__time-block" @click="fnOpneMeetingInfo()">
+            <div v-else class="__time-block">
               <span class="__time">{{
                 item.businessMeetingTimeList.timeBlock
               }}</span>
               <span class="__company">
                 {{ item.businessMeetingRoomReservation }}
               </span>
-              <span class="__user"></span>
-              <span class="__status __possible">예약가능</span>
+              <span class="__user" @click="fnOpneMeetingInfo()"></span>
+              <span class="__status __possible" @click="openStatusModal(index)"
+                >예약가능</span
+              >
             </div>
           </div>
           <!-- 예약 불가능 -->
@@ -78,7 +82,9 @@
               {{ item.businessMeetingRoomReservation }}
             </span>
             <!-- <span class="__user" @click="fnOpneMeetingInfo()"></span> -->
-            <span class="__status __complete">예약불가</span>
+            <span class="__status __complete" @click="openStatusModal(index)"
+              >예약불가</span
+            >
           </div>
           <!-- <div v-else-if="item.status === '예약불가'" class="__disabled">
             <span class="__time">{{ item.time }}</span>

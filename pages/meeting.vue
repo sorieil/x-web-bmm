@@ -128,7 +128,9 @@
 <script>
 import DirectiveImage from '../mixin/directive_image';
 import { SUB_HEADER_SET } from '../store/constant_types';
+import BusinessTime from '../service/business_time';
 import Modal from '~/components/common/ModalFull';
+const moment = require('moment');
 export default {
   layout: 'subDefault',
   components: { Modal, datetime: () => import('vuejs-datetimepicker') },
@@ -253,11 +255,36 @@ export default {
       }
     },
   },
+  created() {
+    this.getBusinessTime();
+  },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '미팅신청' });
   },
   methods: {
+    async getBusinessTime() {
+      const service = new BusinessTime(this);
+      const { result } = await service.get();
+      console.log('result:', result);
+      const startDate = moment(result[0].startDate).add(-1, 'days');
+      const endDate = moment(result[0].endDate);
+      const diffDay = endDate.diff(startDate, 'days');
+      this.dates = [];
+      setTimeout(() => {
+        for (let i = 0; i < diffDay; i++) {
+          const newDate = startDate.add(1, 'days');
+          console.log('newDate:', newDate);
+          this.dates.push({
+            mm: newDate.format('MM'),
+            dd: newDate.format('DD'),
+            week: newDate.format('ddd').toUpperCase(),
+            date: newDate.format('YYYY-MM-DD'),
+          });
+        }
+        console.log(this.dates, diffDay);
+      });
+    },
     fnDateChange(index, active, event) {
       this.activeDate = index;
     },

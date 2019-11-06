@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "dbaeumer.vscode-eslint",
+    "hollowtree.vue-snippets",
+    "dariofuzinato.vue-peek",
+    "sdras.vue-vscode-extensionpack",
+    "octref.vetur"
+  ]
+}
