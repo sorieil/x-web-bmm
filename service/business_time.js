@@ -1,10 +1,10 @@
 // import { PROJECT_GET } from '../store/constant_types'
 import Base from './base';
 
-export default class Vendor extends Base {
+export default class BusinessTime extends Base {
   constructor(componentScope) {
     super(componentScope);
-    this.apiName = 'v1/user/vendor';
+    this.apiName = 'v1/user/business-time';
   }
 
   get() {
@@ -26,23 +26,5 @@ export default class Vendor extends Base {
     this.apiUrl = id;
     this.params = params;
     return this.baseDelete();
-  }
-
-  searchGet(params) {
-    this.params = params;
-    return this.baseGet();
-  }
-
-  selectGet(id) {
-    this.apiUrl = id;
-    return this.baseGet();
-  }
-
-  codePost(id, params) {
-    this.apiUrl = id + '/verify-vendor-code';
-    this.params = params;
-    return this.basePost()
-      .then(this.response)
-      .catch(this.response);
   }
 }

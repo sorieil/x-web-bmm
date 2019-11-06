@@ -318,25 +318,49 @@ export default {
             // 그리고 vendorManagerId 변수에 아이디 값을 넣어준다.
             // 그리고 불러온 매니저 정보를 토대로 밴더 정보를 불러오고,
             // 밴더 정보를 바인딩 해준다. this.companyCodeModalClose() 이 함수 처럼.
-
+            const formManager = {};
             for (const item of result[0].businessVendorFieldManagerValues) {
               const fieldId = item.businessVendorField.id;
               if (item.businessVendorField.fieldType.columnType === 'idx') {
-                this.$set(this.formManager, fieldId, {
+                this.$set(formManager, fieldId, {
                   value: item.value.id,
                   id: item.id,
                 });
               } else {
                 console.log(fieldId, item.id, item.value);
-                this.$set(this.formManager, fieldId, {
+                this.$set(formManager, fieldId, {
                   value: item.value,
                   id: item.id,
                 });
               }
             }
 
+            // 유저의 정보를 조회 해서 밴더 정보를 바인딩 해준다.
+            const form = {};
+            if (result[0].businessVendor.id) {
+              this.vendorId = result[0].businessVendor.id;
+
+              for (const item of result[0].businessVendor
+                .businessVendorFieldValues) {
+                const fieldId = item.businessVendorField.id;
+                if (item.businessVendorField.fieldType.columnType === 'idx') {
+                  this.$set(form, fieldId, {
+                    value: item.value.id,
+                    id: item.id,
+                  });
+                } else {
+                  this.$set(form, fieldId, {
+                    value: item.value,
+                    id: item.id,
+                  });
+                }
+              }
+            }
+
             setTimeout(() => {
-              // Object.assign(this.formManager, this.formManager);
+              Object.assign(this.form, form);
+              Object.assign(this.formManager, formManager);
+              console.log('Success bind:', this.form, this.formManager);
               this.requestType = 'patch';
             }, 0);
           })
@@ -346,7 +370,7 @@ export default {
       }
     },
     actionsHeaderCompleteButton() {
-      if (!this.vendorId) {
+      if (this.vendorId) {
         this.saveVendorManager().then(async (result) => {
           console.log('Update vendor');
           if (result) {
@@ -430,13 +454,8 @@ export default {
     },
     async patchField() {
       const items = Object.keys(this.form).map((i) => this.form[i]);
-      console.log('patchField:', items);
 
-      this.vendorId = this.COMPANY_CODE_GET.company.id;
-
-      const params = { data: items };
-
-      const { resCode } = await new Vendor(this).patch(this.vendorId, params);
+      const { resCode } = await new Vendor(this).patch(this.vendorId, items);
 
       if (resCode === 201) {
         alert('수정이 완료되었습니다.');
@@ -542,17 +561,50 @@ export default {
       for (const item of selectCompanyFields) {
         const field = item.businessVendorField;
         const key = field.id;
-
         if (item.businessVendorField.fieldType.columnType === 'idx') {
+          console.log('item.id:', item.id);
           this.$set(form, key, { value: item.value.id, id: item.id });
         } else {
           this.$set(form, key, { value: item.value, id: item.id });
         }
       }
+      /**
+       * Todo: 나중에 바이어와 매니저를 왔다 갔다 할 경우에 대해서 매니저로 등록 되어 있었다면,
+       * 밴더를 조회 할때 매니저가 같이 오기 때문에 내가 지금 로그인한 계정의 매니저 아이디가 같다면,
+       * 담당자 정보를 바인딩 해준다.
+       *
+      if (this.COMPANY_CODE_GET.company.businessVendorManagers.length) {
+        // 유저가 소유한 밴더 매니저가 있는 경우 바인딩 해준다.
+        const vendorManager = this.COMPANY_CODE_GET.company
+          .businessVendorManagers;
+        // this.vendorManagerId = result[0].id;
+        // TODO 불러온 매니저 정보 바인딩 해준다.
+        // 그리고 vendorManagerId 변수에 아이디 값을 넣어준다.
+        // 그리고 불러온 매니저 정보를 토대로 밴더 정보를 불러오고,
+        // 밴더 정보를 바인딩 해준다. this.companyCodeModalClose() 이 함수 처럼.
+
+        for (const item of vendorManager) {
+          // if (this.USER_GET)
+          const fieldId = item.businessVendorField.id;
+          if (item.businessVendorField.fieldType.columnType === 'idx') {
+            this.$set(this.formManager, fieldId, {
+              value: item.value.id,
+              id: item.id,
+            });
+          } else {
+            console.log(fieldId, item.id, item.value);
+            this.$set(this.formManager, fieldId, {
+              value: item.value,
+              id: item.id,
+            });
+          }
+        }
+      }
+       */
 
       setTimeout(() => {
-        // Object.assign(this.form, form);
-        this.from = form;
+        Object.assign(this.form, form);
+        // this.from = form;
         this.requestType = 'patch';
       }, 0);
     },
