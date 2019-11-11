@@ -1,19 +1,13 @@
 // import { PROJECT_GET } from '../store/constant_types'
 import Base from './base';
 
-export default class BusinessTime extends Base {
+export default class BusinessMeetingRoom extends Base {
   constructor(componentScope) {
     super(componentScope);
-    this.apiName = 'v1/user/business-time';
+    this.apiName = 'v1/user/meeting-room';
   }
 
   get() {
-    return this.baseGet();
-  }
-
-  _getBusinessTime() {
-    // vendor 모드로 조회 해온다.
-    this.apiUrl = 'vendor';
     return this.baseGet();
   }
 
@@ -24,7 +18,7 @@ export default class BusinessTime extends Base {
 
   patch(id, params) {
     this.apiUrl = id;
-    this.params = { data: params };
+    this.params = params;
     return this.basePatch();
   }
 

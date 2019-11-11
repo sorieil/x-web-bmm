@@ -1,12 +1,11 @@
-import Token from '../service/token';
-import { TOKEN_SET } from '~/store/constant_types';
+import ServerToken from '../api/server_token';
+import ServerUser from '../api/server_user';
+import { TOKEN_SET, USER_SET } from '~/store/constant_types';
 
 // 중요함:::::: 이 페이지는 무조건 토큰을 받아서 처리를 해야 합니다.
 export default async ({ app, route, store, from, redirect, req }) => {
   const ACCESS_TOKEN =
     'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJldmVudElkIjoiNWQ2Yzc4MWEwYzJkNTk0YWZiMzc5ZWZlIiwiZXZlbnROYW1lIjoiQk1NIENvbnRlc3QiLCJwYWNrYWdlTmFtZSI6ImNvbS54c3luYy5ldmVudCIsImV2ZW50VXBkYXRlVmVyc2lvbiI6MywiX2lkIjoiNWQ1ZTYxM2QwMTI4MmUwYTUzZDkzOWE2IiwiZW1haWwiOiJqaGtpbUB4YXluYy5jbyIsIm5hbWUiOiLrsqDri4jsiqTrpqwiLCJsZXZlbCI6ImVVc2VyIiwiaWF0IjoxNTcxMTE4NjA1LCJleHAiOjEwMDAwMTU3MTExODYwNH0.6Po92mlcZ42HS4ZrpREUBQJlypnT9CK8ln93QX9mIek';
-
-  const vm = { $store: store, $axios: app.$axios };
 
   /**
    * TODO 토큰을 받으면, 받은 토큰에 대해서 회원정보를 가져와야 한다.
@@ -20,19 +19,28 @@ export default async ({ app, route, store, from, redirect, req }) => {
     redirect('/');
   };
 
+  // req.session.token = ACCESS_TOKEN;
+
   // if (route.query.hasOwnProperty('auth')) {
   if (ACCESS_TOKEN) {
+    // console.log('res:', req.session.token);
     // 유저 인정 정보 가져오기
-    await new Token(vm).tokenVerify(ACCESS_TOKEN).then((res) => {
-      if (res.resCode === 200) {
-        store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
-        // console.log('req', req.session);
-        // req.session.token = ACCESS_TOKEN;
-      } else {
-        console.log('인증 못받음.');
-        errorRedirect('/');
+    const token = await new ServerToken(req).tokenVerify(ACCESS_TOKEN);
+    if (token.resCode === 200) {
+      store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
+
+      if (process.server) {
+        req.session.token = ACCESS_TOKEN;
+        const user = await new ServerUser(req).get();
+
+        req.session.userType = user.result[0].type;
+        store.commit(USER_SET.load, { type: user.result[0].type });
       }
-    });
+    } else {
+      console.log('인증 못받음.');
+      errorRedirect('/');
+    }
+
     // app.router.replace({ path: '/' });
   } else {
     errorRedirect('/');

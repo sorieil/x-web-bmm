@@ -235,7 +235,7 @@ import {
 } from '../store/constant_types';
 import Field from '../service/field';
 export default {
-  layout: 'profileDefault',
+  layout: 'profile_default',
   components: { SearchLeftLayout, SearchCenterLayout, CompanyCode },
   mixins: [
     DirectiveImage,
@@ -272,20 +272,23 @@ export default {
     this.profileInit();
     // 공통 해더의 아이디의 클릭 이벤트를 부여해준다. 호출하는 컴포넌트마다 하게 되어 있어서 중복 이벤트에 유의 해야 한다.
     const profileHeaderButton = document.querySelector('#profileHeaderButton');
-
-    profileHeaderButton.addEventListener(
-      'click',
-      this.actionsHeaderCompleteButton
-    );
+    if (profileHeaderButton) {
+      profileHeaderButton.addEventListener(
+        'click',
+        this.actionsHeaderCompleteButton
+      );
+    }
 
     this.getVendorWithManager();
   },
   destroyed() {
     const profileHeaderButton = document.querySelector('#profileHeaderButton');
-    profileHeaderButton.removeEventListener(
-      'click',
-      this.actionsHeaderCompleteButton
-    );
+    if (profileHeaderButton) {
+      profileHeaderButton.removeEventListener(
+        'click',
+        this.actionsHeaderCompleteButton
+      );
+    }
   },
   methods: {
     getVendor() {

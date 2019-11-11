@@ -1,6 +1,6 @@
 <template>
-  <div ref="ProfileLayout" class="__sub-default">
-    <ProfileHeader id="ProfileHeader" ref="ProfileHeader" />
+  <div class="ProfileLayout">
+    <ProfileHeader id="ProfileHeader" />
     <div class="__containers">
       <nuxt />
     </div>
@@ -33,12 +33,13 @@ export default {
 body {
   position: relative;
 }
-
-#ProfileHeader {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
+.ProfileLayout {
+  .ProfileHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+  }
 }
 </style>

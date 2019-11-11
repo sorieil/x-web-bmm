@@ -4,15 +4,16 @@ import Base from './base';
 export default class Token extends Base {
   constructor(componentScope) {
     super(componentScope);
-    this.apiName = 'v1/token-verify';
+    this.apiName = 'token';
   }
-  /**
-   *
-   * @param {jwt token} accessToken
-   */
-  tokenVerify(accessToken) {
-    this.axios.Authorization = `JWT ${accessToken}`;
-    this.axios.contentType = 'application/json';
-    return this.getDirect(this.getUrl());
+
+  async requestToken(accessToken) {
+    console.log('Environment :', process.server);
+    this.params = {
+      token: accessToken,
+    };
+    const result = await this.postDirect(this.getUrl());
+    console.log('token request = ', result);
+    return true;
   }
 }

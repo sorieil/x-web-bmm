@@ -2,7 +2,11 @@
   <div class="__container">
     <div class="__meeting">
       <div class="__dates">
-        <div class="__scroll" :style="{ width: dateScrollWidth + 'px' }">
+        <div
+          v-if="dates.length > 0"
+          class="__scroll"
+          :style="{ width: dateScrollWidth + 'px' }"
+        >
           <div
             v-for="(date, index) in dates"
             :key="index"
@@ -16,22 +20,29 @@
         </div>
       </div>
       <ul class="__times">
-        <li
-          v-for="(time, index) in times"
-          :key="index"
-          @click="fnOpneMeetingRequest()"
-        >
-          <div v-if="time.status === '예약가능'">
-            <span class="__time">{{ time.time }}</span>
-            <span class="__status __possible">{{ time.status }}</span>
+        <li v-for="(item, index) in times" :key="item.id">
+          <div
+            v-if="item.businessMeetingTimeList.use === 'yes'"
+            class="__time-block"
+          >
+            <div v-if="item.meetingAvailable">
+              <span class="__time" @click="fnOpneMeetingRequest(index)">{{
+                item.businessMeetingTimeList.timeBlock
+              }}</span>
+              <span class="__status __complete">예약가능</span>
+            </div>
+            <div v-else>
+              <span class="__time">{{
+                item.businessMeetingTimeList.timeBlock
+              }}</span>
+              <span class="__status __possible">예약완료</span>
+            </div>
           </div>
-          <div v-else-if="time.status === '예약됨'" class="__disabled">
-            <span class="__time">{{ time.time }}</span>
-            <span class="__status __complete">{{ time.status }}</span>
-          </div>
-          <div v-else-if="time.status === '예약불가'" class="__disabled">
-            <span class="__time">{{ time.time }}</span>
-            <span class="__status __impossible">{{ time.status }}</span>
+          <div v-else class="__time-block __disabled">
+            <span class="__time">{{
+              item.businessMeetingTimeList.timeBlock
+            }}</span>
+            <span class="__status __impossible">예약불가</span>
           </div>
         </li>
       </ul>
@@ -40,7 +51,8 @@
       class="__meeting-modal animated"
       :class="{
         fadeInUpBig: modalStatus,
-        fadeOutUpBig: !modalStatus,
+        fadeOutDownBig: !modalStatus,
+        __active: modalStatus,
       }"
     >
       <div slot="ModalContent" class="__modal-content">
@@ -50,7 +62,7 @@
             <i class="material-icons-round">close</i>
           </button>
         </div>
-        <div v-if="modalStatus" class="__content">
+        <div v-if="modalStatus && profile" class="__content">
           <div class="__applicant">
             <h3>신청자</h3>
             <div>
@@ -58,24 +70,16 @@
                 <div class="__profile-img">
                   <img v-img="''" />
                 </div>
-                <p>{{ applicant.name }}</p>
+                <p>{{ profile.name }}</p>
               </div>
               <div class="__applicant-detail">
                 <p>
-                  <span>직위</span>
-                  {{ applicant.position }}
-                </p>
-                <p>
-                  <span>부서</span>
-                  {{ applicant.department }}
-                </p>
-                <p>
                   <span>연락처</span>
-                  {{ applicant.number }}
+                  {{ profile.phone }}
                 </p>
                 <p>
                   <span>이메일</span>
-                  {{ applicant.email }}
+                  {{ profile.email }}
                 </p>
               </div>
             </div>
@@ -84,17 +88,10 @@
             <h3>날짜/시간</h3>
             <div>
               <span ref="selectDate">
-                {{ meetingDateMM }}월 {{ meetingDateDD }}일
-                <datetime
-                  v-model="meetingSelectDate"
-                  format="MM/DD/YYYY"
-                ></datetime>
+                {{ dateBlock.split('-')[1] }}월 {{ dateBlock.split('-')[2] }}일
               </span>
-              <span ref="selectTime" class="timepicker">
-                {{ meetingTime }} {{ meetingAmPm }}
-                <datetime v-model="meetingSelectTime" format="H:i"></datetime>
-              </span>
-              <span>15min</span>
+              <span ref="selectTime" class="timepicker">{{ timeBlock }}</span>
+              <span>{{ timeInterval }} min</span>
             </div>
           </div>
           <div class="__request-content">
@@ -115,8 +112,14 @@
           </div>
 
           <div class="__meeting-btns">
-            <button class="__meeting-btn" type="button">미팅 신청 확인</button>
-            <button class="__meeting-cancel-btn" type="button">
+            <button class="__meeting-btn" type="button" @click="submit">
+              미팅 신청 확인
+            </button>
+            <button
+              class="__meeting-cancel-btn"
+              type="button"
+              @click="modalClose"
+            >
               미팅 신청 취소
             </button>
           </div>
@@ -126,90 +129,27 @@
   </div>
 </template>
 <script>
-import DirectiveImage from '../mixin/directive_image';
-import { SUB_HEADER_SET } from '../store/constant_types';
-import BusinessTime from '../service/business_time';
+import DirectiveImage from '../../mixin/directive_image';
+import { SUB_HEADER_SET } from '../../store/constant_types';
+import BusinessTime from '../../service/business_time';
+import UserSchedule from '../../service/user_schedule';
+import BusinessMeetingRoom from '../../service/business_meeting_room';
+import MeetingReservation from '../../service/meeting_reservation';
 import Modal from '~/components/common/ModalFull';
 const moment = require('moment');
 export default {
-  layout: 'subDefault',
-  components: { Modal, datetime: () => import('vuejs-datetimepicker') },
+  layout: 'sub_default',
+  validate({ params }) {
+    console.log('params:', params);
+    // 숫자만 가능합니다.
+    return /^\d+$/.test(params.id);
+  },
+  components: { Modal },
   mixins: [DirectiveImage],
   data() {
     return {
-      dates: [
-        {
-          mm: 11,
-          dd: 11,
-          week: 'TUE',
-        },
-        {
-          mm: 11,
-          dd: 12,
-          week: 'MON',
-        },
-        {
-          mm: 11,
-          dd: 13,
-          week: 'WED',
-        },
-        {
-          mm: 11,
-          dd: 14,
-          week: 'THU',
-        },
-        {
-          mm: 11,
-          dd: 15,
-          week: 'FRI',
-        },
-      ],
-      times: [
-        {
-          time: '09:00',
-          status: '예약됨',
-        },
-        {
-          time: '09:15',
-          status: '예약됨',
-        },
-        {
-          time: '09:30',
-          status: '예약됨',
-        },
-        {
-          time: '09:45',
-          status: '예약됨',
-        },
-        {
-          time: '10:00',
-          status: '예약가능',
-        },
-        {
-          time: '10:15',
-          status: '예약됨',
-        },
-        {
-          time: '10:30',
-          status: '예약됨',
-        },
-        {
-          time: '10:45',
-          status: '예약가능',
-        },
-        {
-          time: '11:00',
-          status: '예약가능',
-        },
-        {
-          time: '11:15',
-          status: '예약불가',
-        },
-        {
-          time: '11:30',
-          status: '예약불가',
-        },
-      ],
+      dates: [],
+      times: [],
       applicant: {
         name: '최수진',
         position: '팀장',
@@ -219,9 +159,9 @@ export default {
       },
       meetingSelectDate: null,
       meetingSelectTime: null,
-      meetingDateMM: '00',
+      dateBlock: '00',
       meetingDateDD: '00',
-      meetingTime: '00:00',
+      timeBlock: '00:00',
       meetingAmPm: 'AM',
       activeDate: 0,
       dateScrollWidth: null,
@@ -229,6 +169,8 @@ export default {
       meetingMemo: null,
       memoRemoveIcon: false,
       meetingRoom: '네트워킹 테이블 A81',
+      timeInterval: 0,
+      reservationDateBlock: null,
     };
   },
   watch: {
@@ -262,19 +204,54 @@ export default {
     this.dateScrollWidth = this.dates.length * 120;
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '미팅신청' });
   },
+
   methods: {
+    async submit() {
+      if (this.meetingMemo !== null) {
+        console.log('this.reservationDateBlock:', this.reservationDateBlock);
+        const service = new MeetingReservation(this);
+        const data = {
+          vendorId: this.$route.params.id, // Vendor id
+          vendorTimeListId: this.reservationDateBlock.id, // vendorTimeBlock id
+          businessMeetingTimeList: this.reservationDateBlock
+            .businessMeetingTimeList.id, // businessTimeBlock id
+          memo: this.meetingMemo, // Memo
+        };
+        const query = await service.post(data);
+        console.log('query', query);
+
+        if (query) {
+          alert('예약이 완료 되었습니다.');
+          this.getBusinessTime();
+          this.modalClose();
+        } else {
+          alert('이미 예약이 완료 되었습니다. 다른 시간대를 선택해주세요.');
+        }
+      } else {
+        alert('메모를 입력해주세요.');
+      }
+    },
+    async getSchedule(date) {
+      const service = new UserSchedule(this);
+      const { result } = await service.get(date);
+      this.times = result;
+    },
     async getBusinessTime() {
       const service = new BusinessTime(this);
       const { result } = await service.get();
-      console.log('result:', result);
-      const startDate = moment(result[0].startDate).add(-1, 'days');
-      const endDate = moment(result[0].endDate);
+      console.log('profile:', result[0].userBuyer);
+      this.profile = result[0].userBuyer || null;
+      this.timeInterval = result[0].businessTime.intervalTime;
+      const startDate = moment(result[0].businessTime.startDate).add(
+        -1,
+        'days'
+      );
+      const endDate = moment(result[0].businessTime.endDate);
       const diffDay = endDate.diff(startDate, 'days');
       this.dates = [];
-      setTimeout(() => {
+      return setTimeout(() => {
         for (let i = 0; i < diffDay; i++) {
           const newDate = startDate.add(1, 'days');
-          console.log('newDate:', newDate);
           this.dates.push({
             mm: newDate.format('MM'),
             dd: newDate.format('DD'),
@@ -282,55 +259,39 @@ export default {
             date: newDate.format('YYYY-MM-DD'),
           });
         }
-        console.log(this.dates, diffDay);
+        this.dateScrollWidth = this.dates.length * 120;
+        return this.dates;
       });
     },
     fnDateChange(index, active, event) {
       this.activeDate = index;
+      this.getSchedule(this.dates[index].date);
     },
-    fnOpneMeetingRequest() {
+    async getBusinessMeetingRoom() {
+      const service = new BusinessMeetingRoom(this);
+      const { result } = await service.get();
+      this.meetingRoom = result.reduce((aa, cc) => {
+        aa = `${cc.name} [${cc.location}] `;
+        return aa;
+      }, '');
+    },
+    fnOpneMeetingRequest(index) {
+      this.getBusinessMeetingRoom();
+      const item = this.times[index];
+      console.log('profile:', this.profile);
+      console.log('타임블럭 번호: ', item);
+      this.reservationDateBlock = item;
+      this.dateBlock = item.businessMeetingTimeList.dateBlock;
+      this.timeBlock = item.businessMeetingTimeList.timeBlock;
       this.modalStatus = true;
 
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const selectDate = this.$refs.selectDate.firstElementChild;
-          const selectTime = this.$refs.selectTime.firstElementChild;
-          const selectDateBlock = selectDate.firstElementChild.lastElementChild;
-          const selectTimeBlock = selectTime.firstElementChild.lastElementChild;
-
-          selectDate.addEventListener('click', (e) => {
-            if (selectDateBlock.classList.contains('noDisplay')) {
-              selectDateBlock.classList.remove('noDisplay');
-            }
-
-            if (!selectTimeBlock.classList.contains('noDisplay')) {
-              selectTimeBlock.classList.add('noDisplay');
-            }
-          });
-
-          selectTime.addEventListener('click', (e) => {
-            if (selectTimeBlock.classList.contains('noDisplay')) {
-              selectTimeBlock.classList.remove('noDisplay');
-            }
-
-            if (!selectDateBlock.classList.contains('noDisplay')) {
-              selectDateBlock.classList.add('noDisplay');
-            }
-          });
-        }, 10);
-      });
+      setTimeout(() => {}, 10);
     },
     modalClose() {
       this.modalStatus = false;
     },
     fnMemoRemove() {
       this.meetingMemo = '';
-    },
-    selectedDate() {
-      console.log('날짜 선택됨');
-    },
-    selectedTime() {
-      console.log('시간 선택됨');
     },
   },
 };
@@ -339,8 +300,9 @@ export default {
 <style lang="scss">
 .__meeting {
   width: 100%;
-  padding-top: 40px;
+  // padding-top: 40px;
   .__dates {
+    padding-top: 40px;
     overflow-y: hidden;
     overflow-x: auto;
     width: 290px;
@@ -386,9 +348,10 @@ export default {
     margin: 0;
     background-color: #f2f2f2;
     min-height: calc(100vh - 89px);
+
     > li {
       list-style: none;
-      > div {
+      .__time-block {
         display: flex;
         align-content: center;
         justify-content: space-between;
@@ -415,7 +378,11 @@ export default {
     }
   }
 }
+.__active {
+  visibility: visible !important;
+}
 .__meeting-modal {
+  visibility: hidden;
   top: 0;
   > .__overlay {
     display: none;

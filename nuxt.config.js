@@ -1,3 +1,6 @@
+const session = require('express-session');
+const bodyParser = require('body-parser');
+
 module.exports = {
   mode: 'universal',
   /*
@@ -31,7 +34,8 @@ module.exports = {
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  // loading: { color: '#fff' },
+  loading: false,
   /*
    ** Global CSS
    */
@@ -98,4 +102,23 @@ module.exports = {
     port: 3003, // default: 3000
     host: 'localhost', // default: localhost
   },
+  /*
+   ** Add server middleware
+   ** Nuxt.js uses `connect` module as server
+   ** So most of express middleware works with nuxt.js server middleware
+   */
+  serverMiddleware: [
+    // body-parser middleware
+    bodyParser.json(),
+    // session middleware
+    session({
+      secret: 'xsync-jhkim',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 60000 },
+    }),
+    // Api middleware
+    // We add /api/login & /api/logout routes
+    '~/api',
+  ],
 };

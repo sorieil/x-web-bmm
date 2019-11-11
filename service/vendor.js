@@ -1,4 +1,3 @@
-// import { PROJECT_GET } from '../store/constant_types'
 import Base from './base';
 
 export default class Vendor extends Base {

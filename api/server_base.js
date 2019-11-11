@@ -1,21 +1,11 @@
 import Axios from 'axios';
-import { TOKEN_GET } from '../store/constant_types';
-
-export default class Base {
-  constructor(componentScope) {
-    this._rentStore = componentScope.$store;
-
+export default class ServerBase {
+  constructor() {
     this._params = '';
-
-    if (!process.server) {
-      this._axios = componentScope.$axios;
-      this._baseUrl = process.env.API_URL;
-    } else {
-      this._axios = Axios;
-      this._baseUrl = '';
-      this._req = componentScope.req;
-    }
-
+    this._baseUrl = '';
+    this._axios = Axios;
+    this._baseUrl = '';
+    this._req = '';
     this._apiName = '';
     this._apiUrl = '';
   }
@@ -68,21 +58,9 @@ export default class Base {
     this._params = value;
   }
 
-  setupToken() {
-    const token = this.rentStore.getters[TOKEN_GET.load].ACCESS_TOKEN;
-    if (token) {
-      return Promise.resolve(true);
-    } else {
-      return this.errorPrint(403);
-    }
-  }
-
   requestUrl(url) {
-    if (!process.server) {
-      console.log(`>>>>>>>>>>>> Request: ${url}`);
-    } else {
-      console.log(`Server Request: ${url}`);
-    }
+    // console.log('server: ', process.server, this.req);
+    console.log(`Server Request: ${url}`);
   }
   /**
    * 토큰이 있는지 체크 한다.
@@ -90,25 +68,25 @@ export default class Base {
    * @returns
    * @memberof Base
    */
-  async checkToken() {
+  checkToken() {
     this.requestUrl(this.getUrl());
     if (!process.server) {
-      const token = this.rentStore.getters[TOKEN_GET.load].ACCESS_TOKEN;
+      const token = this.req.session.token;
       if (token) {
-        // console.log('Load success token', token);
-        await this.axios.setToken(token);
-        return true;
+        // console.log('Server Load success token', token);
+        this.axios.defaults.headers.common.Authorization = token;
+        return Promise.resolve(true);
       } else {
-        return false;
+        return Promise.resolve(false);
       }
     } else {
       const token = this.req.session.token;
       if (token) {
         // console.log('Load success token', token);
-        await this.axios.setToken(token);
-        return true;
+        this.axios.defaults.headers.common.Authorization = token;
+        return Promise.resolve(true);
       } else {
-        return false;
+        return Promise.resolve(false);
       }
     }
   }
@@ -117,7 +95,7 @@ export default class Base {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
-        .$get(this.getUrl(), {
+        .get(this.getUrl(), {
           params: this.params,
           progress: false,
         })
@@ -131,7 +109,7 @@ export default class Base {
   getDirect(url) {
     this.requestUrl(url);
     return this.axios
-      .$get(url)
+      .get(url)
       .then(this.response)
       .catch(this.errorPrint);
   }
@@ -140,7 +118,7 @@ export default class Base {
     this.requestUrl(url);
     console.log(this.axios.headers);
     return this.axios
-      .$post(url)
+      .post(url)
       .then(this.response)
       .catch(this.errorPrint);
   }
@@ -149,7 +127,7 @@ export default class Base {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
-        .$post(this.getUrl(), this.params)
+        .post(this.getUrl(), this.params)
         .then(this.response)
         .catch(this.errorPrint);
     } else {
@@ -161,7 +139,7 @@ export default class Base {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
-        .$put(this.getUrl(), this.params)
+        .put(this.getUrl(), this.params)
         .then(this.response)
         .catch(this.errorPrint);
     } else {
@@ -173,7 +151,7 @@ export default class Base {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
-        .$delete(this.getUrl(), this.params)
+        .delete(this.getUrl(), this.params)
         .then(this.response)
         .catch(this.errorPrint);
     } else {
@@ -185,7 +163,7 @@ export default class Base {
     const checkToken = await this.checkToken();
     if (checkToken) {
       return this.axios
-        .$patch(this.getUrl(), this.params)
+        .patch(this.getUrl(), this.params)
         .then(this.response)
         .catch(this.errorPrint);
     } else {
@@ -208,18 +186,18 @@ export default class Base {
       'API Start ========================================================='
     );
     // console.log(`API NAME: ${this.getUrl()}`)
-    console.log(res);
+    console.log(res.data);
     console.log(
       'API End ==========================================================='
     );
 
-    return res;
+    return res.data;
   }
 
   errorPrint(e) {
     const code =
       typeof e !== 'number' ? parseInt(e.response && e.response.status) : e;
-    console.log('error print:', code);
+    // console.log('error print:', code);
     switch (code) {
       case 400:
         console.log('정상적인 데이터를 넣어주세요. =>', e);
@@ -231,10 +209,7 @@ export default class Base {
         console.log('토큰이 없습니다. 토큰을 설정해주세요.=>', e);
         return Promise.reject(new Error(e));
       case 500:
-        console.log(
-          '서버에서 에러 발생했군요. 관리자에게 문의 해주세요.',
-          e.response
-        );
+        console.log('서버에서 에러 발생했군요. 관리자에게 문의 해주세요.', e);
         return Promise.reject(new Error(e));
       default:
         // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);

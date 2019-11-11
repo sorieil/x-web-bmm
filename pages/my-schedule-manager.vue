@@ -2,20 +2,30 @@
   <div class="__container">
     <div class="__schedule">
       <div class="__user">
-        <div v-if="profile" class="__profile">
+        <div
+          v-if="profileManager.businessVendorFieldManagerValues"
+          class="__profile"
+        >
           <div class="__profile-img">
             <img v-img="''" />
           </div>
-          <p>{{ profile.name }}</p>
+          <p
+            v-managerName="profileManager.businessVendorFieldManagerValues"
+          ></p>
         </div>
-        <div v-if="profile" class="__profile-detail">
-          <p>
-            <span>전화번호</span>
-            {{ profile.phone }}
-          </p>
-          <p>
-            <span>이메일</span>
-            {{ profile.email }}
+        <div
+          v-if="profileManager.businessVendorFieldManagerValues"
+          class="__profile-detail"
+        >
+          <p
+            v-for="(item,
+            index) in profileManager.businessVendorFieldManagerValues"
+            :key="index"
+          >
+            <span v-if="item.businessVendorField.name !== '담당자명'">{{
+              item.businessVendorField.name
+            }}</span>
+            {{ item.businessVendorField.name !== '담당자명' ? item.value : '' }}
           </p>
         </div>
         <img
@@ -47,26 +57,19 @@
             <!--  여기에서 내부적으로 예약의 상황에 따라서 처리 우선은 방 하나만 있다는 가정아래   -->
 
             <!-- businessMeetingRoomReservation 의 null 값으로 체크 -->
-            <div
-              v-if="item.businessMeetingRoomReservation"
-              class="__time-block"
-            >
-              <span class="__time">{{
-                item.businessMeetingTimeList.timeBlock
-              }}</span>
-              <span class="__company">예약한 회사명</span>
-              <span class="__user" @click="fnOpneMeetingInfo()">예약명</span>
-              <span class="__status __complate" @click="openStatusModal(index)"
-                >예약완료</span
-              >
+            <div v-if="!item.meetingAvailable" class="__time-block">
+              <span class="__time">
+                {{ item.businessMeetingTimeList.timeBlock }}
+              </span>
+              <span class="__company">{{ item.userName }}</span>
+              <!-- <span class="__user" @click="fnOpneMeetingInfo()">예약명</span> -->
+              <span class="__status __complate">예약완료</span>
             </div>
             <div v-else class="__time-block">
-              <span class="__time">{{
-                item.businessMeetingTimeList.timeBlock
-              }}</span>
-              <span class="__company">
-                {{ item.businessMeetingRoomReservation }}
+              <span class="__time">
+                {{ item.businessMeetingTimeList.timeBlock }}
               </span>
+              <span class="__company">{{ item.userName }}</span>
               <span class="__user" @click="fnOpneMeetingInfo()"></span>
               <span class="__status __possible" @click="openStatusModal(index)"
                 >예약가능</span
@@ -75,12 +78,12 @@
           </div>
           <!-- 예약 불가능 -->
           <div v-else class="__time-block __disabled">
-            <span class="__time">{{
-              item.businessMeetingTimeList.timeBlock
-            }}</span>
-            <span class="__company">
-              {{ item.businessMeetingRoomReservation }}
+            <span class="__time">
+              {{ item.businessMeetingTimeList.timeBlock }}
             </span>
+            <span class="__company">{{
+              item.businessMeetingRoomReservation
+            }}</span>
             <!-- <span class="__user" @click="fnOpneMeetingInfo()"></span> -->
             <span class="__status __complete" @click="openStatusModal(index)"
               >예약불가</span
@@ -245,11 +248,24 @@ import Modal from '../components/common/ModalFull';
 import IconCheckbox from '../components/features/IconCheckbox';
 import { SUB_HEADER_SET } from '../store/constant_types';
 import BusinessTime from '../service/business_time';
-import Schedule from '../service/schedule';
+import UserSchedule from '../service/user_schedule';
 const moment = require('moment');
 export default {
-  layout: 'subDefault',
+  layout: 'sub_default',
   components: { Modal, IconCheckbox },
+  directives: {
+    managerName: {
+      inserted(el, binding, vnode) {
+        const item = binding.value;
+        console.log('bind valeu:', item);
+        const managerName = item.filter(
+          (v) => v.businessVendorField.name === '담당자명'
+        )[0].value;
+        console.log();
+        vnode.elm.textContent = managerName;
+      },
+    },
+  },
   mixins: [DirectiveImage, MixinUserType],
   data() {
     return {
@@ -338,7 +354,7 @@ export default {
     },
     // 스케쥴 정보를 선택한 날짜 기준으로 가져온다.
     async getSchedule(date) {
-      const service = new Schedule(this);
+      const service = new UserSchedule(this);
       const { result } = await service.get(date);
       this.times = result;
     },

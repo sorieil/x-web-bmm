@@ -1,5 +1,5 @@
 <template>
-  <div class="__default">
+  <div class="Default">
     <Header id="Header" ref="Header" :prop-header-option="headerOption" />
     <div class="__side-company-name">
       <span class="__text">
@@ -162,7 +162,11 @@ export default {
     },
     selectUserTypeOpen() {
       // this.USER_TYPE_ON();
-      this.$router.push({ path: 'my-schedule' });
+      if (this.USER_GET.type === 'buyer') {
+        this.$router.push({ path: 'my-schedule' });
+      } else {
+        this.$router.push({ path: 'my-schedule-manager' });
+      }
     },
     selectTab(index, $event) {
       // const filterActive = this.filters[index].name;
@@ -261,7 +265,7 @@ body {
   position: fixed;
 }
 
-.__default {
+.Default {
   display: flex;
   flex-direction: column;
   position: relative;

@@ -17,7 +17,7 @@
       </div>
     </div>
     <div v-else class="__view-option-box">
-      <div class="__company-name">
+      <div class="__company-name animated fadeIn">
         <span>{{ companyName }}</span>
       </div>
     </div>

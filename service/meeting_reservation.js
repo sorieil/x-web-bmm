@@ -1,14 +1,12 @@
-// import { PROJECT_GET } from '../store/constant_types'
 import Base from './base';
 
-export default class Schedule extends Base {
+export default class MeetingReservation extends Base {
   constructor(componentScope) {
     super(componentScope);
-    this.apiName = 'v1/user/schedule';
+    this.apiName = 'v1/user/meeting-reservation';
   }
 
-  get(date) {
-    this.apiUrl = date;
+  get() {
     return this.baseGet();
   }
 
@@ -19,13 +17,12 @@ export default class Schedule extends Base {
 
   patch(id, params) {
     this.apiUrl = id;
-    this.params = { data: params };
+    this.params = params;
     return this.basePatch();
   }
 
-  delete(id, params) {
+  delete(id) {
     this.apiUrl = id;
-    this.params = params;
     return this.baseDelete();
   }
 }

@@ -44,7 +44,7 @@ import {
 } from '../store/constant_types';
 
 export default {
-  layout: 'profileDefault',
+  layout: 'profile_default',
   mixins: [
     DirectiveImage,
     Filter,
@@ -83,19 +83,22 @@ export default {
       const profileHeaderButton = document.querySelector(
         '#profileHeaderButton'
       );
-      profileHeaderButton.addEventListener(
-        'click',
-        this.actionsHeaderCompleteButton
-      );
+      if (profileHeaderButton) {
+        profileHeaderButton.addEventListener(
+          'click',
+          this.actionsHeaderCompleteButton
+        );
+      }
     });
   },
   destroyed() {
     const profileHeaderButton = document.querySelector('#profileHeaderButton');
-
-    profileHeaderButton.removeEventListener(
-      'click',
-      this.actionsHeaderCompleteButton
-    );
+    if (profileHeaderButton) {
+      profileHeaderButton.removeEventListener(
+        'click',
+        this.actionsHeaderCompleteButton
+      );
+    }
   },
   methods: {
     actionsHeaderCompleteButton() {

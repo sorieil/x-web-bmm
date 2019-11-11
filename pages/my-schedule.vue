@@ -50,33 +50,34 @@
             <div
               v-if="item.businessMeetingRoomReservation"
               class="__time-block"
+              @click="fnOpneMeetingInfo(index)"
             >
-              <span class="__time">{{
-                item.businessMeetingTimeList.timeBlock
-              }}</span>
-              <span class="__company">예약한 회사명</span>
-              <span class="__user" @click="fnOpneMeetingInfo()">예약명</span>
+              <span class="__time">
+                {{ item.businessMeetingTimeList.timeBlock }}
+              </span>
+              <span class="__company">{{ item.companyName }}</span>
+              <span class="__user">{{ item.companyName }}</span>
               <span class="__status __complate">예약완료</span>
             </div>
-            <div v-else class="__time-block" @click="fnOpneMeetingInfo()">
-              <span class="__time">{{
-                item.businessMeetingTimeList.timeBlock
-              }}</span>
-              <span class="__company">
-                {{ item.businessMeetingRoomReservation }}
+            <div v-else class="__time-block">
+              <span class="__time">
+                {{ item.businessMeetingTimeList.timeBlock }}
               </span>
+              <span class="__company">{{
+                item.businessMeetingRoomReservation
+              }}</span>
               <span class="__user"></span>
               <span class="__status __possible">예약가능</span>
             </div>
           </div>
           <!-- 예약 불가능 -->
           <div v-else class="__time-block __disabled">
-            <span class="__time">{{
-              item.businessMeetingTimeList.timeBlock
-            }}</span>
-            <span class="__company">
-              {{ item.businessMeetingRoomReservation }}
+            <span class="__time">
+              {{ item.businessMeetingTimeList.timeBlock }}
             </span>
+            <span class="__company">{{
+              item.businessMeetingRoomReservation
+            }}</span>
             <!-- <span class="__user" @click="fnOpneMeetingInfo()"></span> -->
             <span class="__status __complete">예약불가</span>
           </div>
@@ -133,16 +134,8 @@
               </div>
               <div class="__applicant-detail">
                 <p>
-                  <span>직위</span>
-                  {{ profile.position }}
-                </p>
-                <p>
-                  <span>부서</span>
-                  {{ profile.department }}
-                </p>
-                <p>
                   <span>연락처</span>
-                  {{ profile.number }}
+                  {{ profile.phone }}
                 </p>
                 <p>
                   <span>이메일</span>
@@ -154,29 +147,58 @@
           <div class="__date-time">
             <h3>날짜/시간</h3>
             <div>
-              <span>{{ meetingDateMM }}월 {{ meetingDateDD }}일</span>
-              <span class="timepicker"
-                >{{ meetingTime }} {{ meetingAmPm }}</span
-              >
+              <span>
+                {{
+                  reservationDetail.businessMeetingTimeList.dateBlock.split(
+                    '-'
+                  )[1]
+                }}월
+                {{
+                  reservationDetail.businessMeetingTimeList.dateBlock.split(
+                    '-'
+                  )[2]
+                }}일
+              </span>
+              <span class="timepicker">
+                {{ reservationDetail.businessMeetingTimeList.timeBlock }}
+              </span>
               <span>15min</span>
             </div>
           </div>
           <div class="__request-content">
             <h3>메모</h3>
             <div>
-              <p class="__memo-content">{{ meetingMemo }}</p>
+              <p class="__memo-content">
+                {{ reservationDetail.businessMeetingRoomReservation.memo }}
+              </p>
             </div>
           </div>
           <div class="__room">
             <h3>미팅룸</h3>
-            <div>{{ meetingRoom }}</div>
+            <div>
+              {{
+                reservationDetail.businessMeetingRoomReservation
+                  .businessMeetingRoom.name
+              }}
+              [
+              {{
+                reservationDetail.businessMeetingRoomReservation
+                  .businessMeetingRoom.location
+              }}]
+            </div>
           </div>
 
           <div class="__meeting-btns">
-            <button class="__meeting-cancel-btn" type="button">
+            <button
+              class="__meeting-cancel-btn"
+              type="button"
+              @click="cancleReservation"
+            >
               미팅 신청 취소
             </button>
-            <button class="__meeting-btn" type="button">미팅 신청 확인</button>
+            <button class="__meeting-btn" type="button" @click="modalClose">
+              미팅 신청 확인
+            </button>
           </div>
         </div>
       </div>
@@ -201,10 +223,10 @@
           <div class="__date-time">
             <h3>날짜/시간</h3>
             <div>
-              <span>{{ meetingDateMM }}월 {{ meetingDateDD }}일</span>
-              <span class="timepicker"
-                >{{ meetingTime }} {{ meetingAmPm }}</span
-              >
+              <span>
+                {{ dateBlock.split('-')[1] }}월 {{ dateBlock.split('-')[2] }}일
+              </span>
+              <span class="timepicker">{{ timeBlock }}</span>
               <span>15min</span>
             </div>
           </div>
@@ -239,10 +261,11 @@ import Modal from '../components/common/ModalFull';
 import IconCheckbox from '../components/features/IconCheckbox';
 import { SUB_HEADER_SET } from '../store/constant_types';
 import BusinessTime from '../service/business_time';
-import Schedule from '../service/schedule';
+import UserSchedule from '../service/user_schedule';
+import MeetingReservation from '../service/meeting_reservation';
 const moment = require('moment');
 export default {
-  layout: 'subDefault',
+  layout: 'sub_default',
   components: { Modal, IconCheckbox },
   mixins: [DirectiveImage, MixinUserType],
   data() {
@@ -284,22 +307,30 @@ export default {
           status: false,
         },
       ],
+      reservationDetail: {},
     };
   },
   created() {
     this.getBusinessTime().then((r) => {
-      console.log(']]]]]] result ', r);
+      console.log('result:', r);
     });
     // await this.getSchedule(this.dates[0].date);
   },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '내 스케줄' });
-
-    // 이부분이 계속 오류나고 있는 것이다.
-    console.log('==========> <<<<<<<<<<<<<<<<<<<<< ', this.dates[0]);
   },
   methods: {
+    cancleReservation() {
+      const service = new MeetingReservation(this);
+      const reservationId = this.reservationDetail
+        .businessMeetingRoomReservation.id;
+      service.delete(reservationId).then((r) => {
+        alert('취소가 완료 되었습니다.', r.message);
+        this.getBusinessTime();
+        this.modalClose();
+      });
+    },
     async getBusinessTime() {
       const service = new BusinessTime(this);
       const { result } = await service.get();
@@ -327,12 +358,13 @@ export default {
             date: newDate.format('YYYY-MM-DD'),
           });
         }
+        this.dateScrollWidth = this.dates.length * 120;
         return this.dates;
       });
     },
     // 스케쥴 정보를 선택한 날짜 기준으로 가져온다.
     async getSchedule(date) {
-      const service = new Schedule(this);
+      const service = new UserSchedule(this);
       const { result } = await service.get(date);
       this.times = result;
     },
@@ -340,7 +372,7 @@ export default {
       this.activeDate = index;
       this.getSchedule(this.dates[index].date);
     },
-    fnOpneMeetingInfo() {
+    fnOpneMeetingInfo(index) {
       const meetingModal = this.$refs.MeetingModal.$el;
       meetingModal.style = '';
 
@@ -350,6 +382,7 @@ export default {
 
       modalFullEl.style.top = window.scrollY + 'px';
       document.body.style.overflow = 'hidden';
+      this.reservationDetail = this.times[index];
     },
     modalClose() {
       this.activeMeetingModal = false;

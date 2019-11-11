@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-Header" :style="{ backgroundColor: propHeaderBg }">
+  <div class="SubHeader" :style="{ backgroundColor: propHeaderBg }">
     <div class="__menu" @click="goBack">
       <i class="material-icons-round __icon">keyboard_backspace</i>
     </div>
@@ -13,7 +13,7 @@
 <script>
 import SubHeaderMixin from '../../mixin/sub_header';
 export default {
-  name: 'Header',
+  name: 'SubHeader',
   mixins: [SubHeaderMixin],
   props: {
     propHeaderBg: {
@@ -31,17 +31,13 @@ export default {
   },
   methods: {
     goBack() {
-      console.log(this.$route.name);
-      // switch(this.$route.name) {
-      //   case
-      // }
-      this.$router.back();
+      this.$router.push('/');
     },
   },
 };
 </script>
 <style lang="scss" scoped>
-.sub-Header {
+.SubHeader {
   background-color: yellow;
   justify-content: center;
   align-items: center;

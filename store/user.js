@@ -5,7 +5,8 @@ export const state = () => ({
 });
 
 export const getters = {
-  [USER_GET.defines]: (state) => state,
+  [USER_GET.defines]: (state) =>
+    state || { type: localStorage.getters('userType') },
 };
 
 export const actions = {};

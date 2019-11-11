@@ -51,7 +51,12 @@
         </div>
       </div>
       <div class="__meeting">
-        <button class="__meeting-btn" type="button" @click="goMeeting">
+        <button
+          v-show="USER_GET.type === 'buyer'"
+          class="__meeting-btn"
+          type="button"
+          @click="goMeeting"
+        >
           미팅신청
         </button>
       </div>
@@ -59,12 +64,19 @@
   </div>
 </template>
 <script>
-import DirectiveImage from '../mixin/directive_image';
-import VendorMixin from '../mixin/vendor';
-import Vendor from '../service/vendor';
-import { SUB_HEADER_SET } from '../store/constant_types';
+import DirectiveImage from '../../mixin/directive_image';
+import VendorMixin from '../../mixin/vendor';
+import MixinUser from '../../mixin/user';
+import ServerVendor from '../../api/server_vendor';
+import Vendor from '../../service/vendor';
+import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
-  layout: 'subDefault',
+  layout: 'sub_default',
+  validate({ params }) {
+    console.log('params:', params);
+    // 숫자만 가능합니다.
+    return /^\d+$/.test(params.id);
+  },
   components: {},
   directives: {
     managerName: {
@@ -78,20 +90,60 @@ export default {
       },
     },
   },
-  mixins: [DirectiveImage, VendorMixin],
+  mixins: [DirectiveImage, VendorMixin, MixinUser],
   data() {
+    return {};
+  },
+  async asyncData({
+    app,
+    isDev,
+    route,
+    store,
+    env,
+    params,
+    query,
+    req,
+    res,
+    redirect,
+    error,
+  }) {
+    let topField = null;
+    let bottomField = null;
+    const vendorFields = [];
+    const managers = [];
+
+    if (route.params.id) {
+      if (process.server) {
+        const { result } = await new ServerVendor(req)._getVendor(
+          route.params.id
+        );
+        console.log('result[0]:', result[0]);
+        for (const field of result[0].businessVendorFieldValues) {
+          if (field.businessVendorField.name === '제품소개') {
+            topField = field.value;
+            bottomField = field.value;
+          } else {
+            vendorFields.push(field);
+          }
+        }
+
+        managers.push(...result[0].businessVendorManagers);
+      }
+    }
     return {
-      vendorFields: [],
-      topField: null,
-      bottomField: null,
-      managers: [],
+      vendorFields,
+      managers,
+      topField,
+      bottomField,
     };
   },
   mounted() {
+    console.log('before message:', this.vendorFields);
     this.vendorInit();
     setTimeout(() => {
       for (const item of this.vendorFields) {
         if (item.businessVendorField.name === '기업명') {
+          console.log('header:', item.value);
           this.$store.commit(SUB_HEADER_SET.load, {
             subHeaderTitle: item.value,
           });
@@ -101,24 +153,22 @@ export default {
   },
   methods: {
     goMeeting() {
-      this.$router.push({ path: 'meeting' });
+      this.$router.push('/meeting/' + this.$route.params.id);
     },
     async vendorInit() {
-      const selectedVendor = JSON.parse(
-        localStorage.getItem('selectVendorItem')
-      );
-
-      if (selectedVendor) {
-        const id = selectedVendor.id;
-        const { result } = await new Vendor(this).selectGet(id);
-        result[0].businessVendorFieldValues.forEach((field) => {
+      if (this.managers.length === 0) {
+        const { result } = await new Vendor(this).selectGet(
+          this.$route.params.id
+        );
+        console.log('result[0]:', result[0]);
+        for (const field of result[0].businessVendorFieldValues) {
           if (field.businessVendorField.name === '제품소개') {
             this.topField = field.value;
             this.bottomField = field.value;
           } else {
             this.vendorFields.push(field);
           }
-        });
+        }
 
         this.managers.push(...result[0].businessVendorManagers);
       }

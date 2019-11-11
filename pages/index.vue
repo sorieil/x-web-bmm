@@ -48,7 +48,7 @@
         >
           <IconFavorite
             v-model="vendor.businessVendorFavorite"
-            v-on:change="changeIconFavorite(vendor, $event)"
+            @change="changeIconFavorite(vendor, $event)"
           />
         </div>
       </div>
@@ -65,6 +65,7 @@ import Favorite from '../service/favorite';
 import FilterMixin from '../mixin/filter';
 import VendorMixin from '../mixin/vendor';
 import { VENDOR_SET } from '../store/constant_types';
+import ServerVendor from '../api/server_vendor';
 export default {
   components: {
     SearchForm,
@@ -78,6 +79,23 @@ export default {
       selectFormIndex: null,
       searchData: null,
     };
+  },
+  async asyncData({
+    isDev,
+    route,
+    store,
+    env,
+    params,
+    query,
+    req,
+    res,
+    redirect,
+    error,
+  }) {
+    if (process.server) {
+      const { result } = await new ServerVendor(req).get();
+      store.commit(VENDOR_SET.load, { vendors: result });
+    }
   },
   mounted() {
     this.getServiceVendorList();
@@ -95,11 +113,14 @@ export default {
         JSON.stringify(vendor.businessVendor)
       );
 
-      this.$router.push({ path: 'vender' });
+      this.$router.push('vendor/' + vendor.businessVendor.id);
     },
     async getServiceVendorList() {
-      const { result } = await new Vendor(this).get();
-      this.$store.commit(VENDOR_SET.load, { vendors: result });
+      console.log('this.VENDOR_GET.vendors:', this.VENDOR_GET.vendors === 0);
+      if (this.VENDOR_GET.vendors.length === 0) {
+        const { result } = await new Vendor(this).get();
+        this.$store.commit(VENDOR_SET.load, { vendors: result });
+      }
     },
     async changeIconFavorite(vendor, status) {
       const id = vendor.businessVendor.id;

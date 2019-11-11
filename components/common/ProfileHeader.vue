@@ -1,5 +1,5 @@
 <template>
-  <div class="sub-Header">
+  <div class="ProfileHeader">
     <div class="__menu" @click="goBack">
       <i class="material-icons-round __icon">keyboard_backspace</i>
     </div>
@@ -17,7 +17,7 @@
 import SubHeaderMixin from '../../mixin/sub_header';
 import FieldMixin from '../../mixin/field';
 export default {
-  name: 'Header',
+  name: 'ProfileHeader',
   mixins: [SubHeaderMixin, FieldMixin],
   props: {
     propName: {
@@ -41,7 +41,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.sub-Header {
+.ProfileHeader {
   background-color: white;
   justify-content: center;
   align-items: center;
