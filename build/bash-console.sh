@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-ssh -i ./bmm-web.pem centos@13.209.49.155
+ssh -i ./bmm-web.pem ubuntu@52.79.120.204

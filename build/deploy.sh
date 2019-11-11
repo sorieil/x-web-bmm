@@ -3,7 +3,7 @@ set -e
 CLEAR_LINE='\r\033[K'
 DIRECTORY=web-xsync-2.0-bmm
 
-cd /home/centos
+cd /home/ubuntu
 
 #TODO 다음부터는 도커로 세팅을 해놓는다.
 
@@ -43,7 +43,7 @@ printf "  build \n "
 yarn build >/dev/null
 printf "================================\n "
 
-yarn server-start >/dev/null
+yarn start >/dev/null
 printf "  Web start \n"
 printf "================================\n "
 
