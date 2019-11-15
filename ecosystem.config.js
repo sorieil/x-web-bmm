@@ -10,6 +10,7 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         API_URL: 'https://bmm.xsync.info/api',
+        PORT: 3001,
       },
     },
   ],

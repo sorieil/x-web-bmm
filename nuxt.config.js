@@ -99,7 +99,7 @@ module.exports = {
     API_URL: process.env.API_URL || 'http://localhost:8989/api',
   },
   server: {
-    port: 3001, // default: 3000
+    port: process.env.PORT || 3001, // default: 3001
     host: 'localhost', // default: localhost
   },
   /*
