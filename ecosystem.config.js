@@ -6,11 +6,11 @@ module.exports = {
       autorestart: true,
       script: './server/index.js',
       watch: false,
-      // max_memory_restart: '1.8G',
+      max_memory_restart: '1.8G',
       env: {
         NODE_ENV: 'production',
         API_URL: 'https://bmm.xsync.info/api',
-        PORT: 3001,
+        PORT: 80,
       },
     },
   ],
