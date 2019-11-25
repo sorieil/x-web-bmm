@@ -70,8 +70,8 @@ export default {
     async checkVendorCode() {
       const selectvendor = this.SEARCH_LEFT_GET.selectCompanyCodeVendor;
       const id = selectvendor.businessVendor.id;
-      console.log(id);
-      console.log(this.inputCode);
+      // console.log(id);
+      // console.log(this.inputCode);
       const params = {
         vendorCode: this.inputCode,
       };
@@ -83,7 +83,7 @@ export default {
           company: result[0],
         });
 
-        console.log(result);
+        // console.log(result);
         this.companyCodeStatus = true;
       } else {
         this.companyCodeStatus = false;

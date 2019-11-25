@@ -62,7 +62,7 @@ export default {
     async headerInit() {
       const { result } = await new Business(this).get();
 
-      console.log(result[0]);
+      // console.log(result[0]);
 
       this.companyName = result[0].title;
       this.messages = result[0].subTitle;

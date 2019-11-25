@@ -4,13 +4,27 @@ const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 const app = express();
 
-app.use(
-  session({
-    secret: 'xSync-bmm',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+// const connectRedis = require('connect-redis');
+// const RedisStore = connectRedis(session);
+const sess = {
+  resave: false,
+  saveUninitialized: false,
+  secret: 'xsync-web',
+  name: 'xsync-session',
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+  // store: new RedisStore({ url: '52.79.120.204:8754', logErrors: true }),
+};
+
+app.use(session(sess));
+app.use(function(req, res, next) {
+  if (!req.session) {
+    return next(new Error('oh no active session')); // handle error
+  }
+  next(); // otherwise continue
+});
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js');

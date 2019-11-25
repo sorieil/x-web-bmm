@@ -107,7 +107,7 @@ export default {
       // 필터를 다시 설정하게 하는것이 아니라 필터를 캐싱해둬야 한다.
     },
     selectVendor(vendor) {
-      console.log(vendor);
+      // console.log(vendor);
       localStorage.setItem(
         'selectVendorItem',
         JSON.stringify(vendor.businessVendor)
@@ -116,7 +116,7 @@ export default {
       this.$router.push('vendor/' + vendor.businessVendor.id);
     },
     async getServiceVendorList() {
-      console.log('this.VENDOR_GET.vendors:', this.VENDOR_GET.vendors === 0);
+      // console.log('this.VENDOR_GET.vendors:', this.VENDOR_GET.vendors === 0);
       if (this.VENDOR_GET.vendors.length === 0) {
         const { result } = await new Vendor(this).get();
         this.$store.commit(VENDOR_SET.load, { vendors: result });
@@ -150,7 +150,7 @@ export default {
 
       this.$store.commit(VENDOR_SET.load, { selectedFilterItems: status });
 
-      console.log(status.value);
+      // console.log(status.value);
 
       if (status.value === 'favorite') {
         for (const vendorItem of vendorItems) {

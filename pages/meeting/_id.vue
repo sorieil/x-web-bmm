@@ -140,7 +140,7 @@ const moment = require('moment');
 export default {
   layout: 'sub_default',
   validate({ params }) {
-    console.log('params:', params);
+    // console.log('params:', params);
     // 숫자만 가능합니다.
     return /^\d+$/.test(params.id);
   },
@@ -208,7 +208,7 @@ export default {
   methods: {
     async submit() {
       if (this.meetingMemo !== null) {
-        console.log('this.reservationDateBlock:', this.reservationDateBlock);
+        // console.log('this.reservationDateBlock:', this.reservationDateBlock);
         const service = new MeetingReservation(this);
         const data = {
           vendorId: this.$route.params.id, // Vendor id
@@ -218,7 +218,7 @@ export default {
           memo: this.meetingMemo, // Memo
         };
         const query = await service.post(data);
-        console.log('query', query);
+        // console.log('query', query);
 
         if (query) {
           alert('예약이 완료 되었습니다.');
@@ -278,8 +278,8 @@ export default {
     fnOpneMeetingRequest(index) {
       this.getBusinessMeetingRoom();
       const item = this.times[index];
-      console.log('profile:', this.profile);
-      console.log('타임블럭 번호: ', item);
+      // console.log('profile:', this.profile);
+      // console.log('타임블럭 번호: ', item);
       this.reservationDateBlock = item;
       this.dateBlock = item.businessMeetingTimeList.dateBlock;
       this.timeBlock = item.businessMeetingTimeList.timeBlock;

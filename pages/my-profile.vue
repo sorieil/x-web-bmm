@@ -115,12 +115,12 @@ export default {
     getBuyer() {
       const service = new Buyer(this);
       service.get().then(({ result, resCode }) => {
-        console.log(result, resCode);
+        // console.log(result, resCode);
         if (resCode === 200) {
           if (result[0] !== null) {
             const buyer = result[0];
             for (const [key, value] of Object.entries(buyer)) {
-              console.log(key, value);
+              // console.log(key, value);
               this.form[key] = value;
             }
           }
@@ -131,10 +131,10 @@ export default {
       const formCheckCount = Object.entries(this.form)
         .filter(([key, value]) => key !== 'profileImage')
         .every(([key, value]) => {
-          console.log('v:', key, value);
+          // console.log('v:', key, value);
           return value !== null && value !== '';
         });
-      console.log(formCheckCount);
+      // console.log(formCheckCount);
       if (formCheckCount) {
         // 여기에서 패치인지 포스트 인지 구별
         const service = new Buyer(this);

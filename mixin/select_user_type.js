@@ -12,7 +12,7 @@ export default {
   },
   watch: {
     'USER_TYPE_GET.status': (newValue, oldValue) => {
-      console.log(newValue, oldValue);
+      // console.log(newValue, oldValue);
     },
   },
   methods: {

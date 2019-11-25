@@ -5,7 +5,7 @@ export default class ServerSampleCode extends ServerBase {
     super();
     this.req = req;
     this.baseUrl = process.env.API_URL;
-    this.apiName = 'v1/user';
+    this.apiName = '/user';
   }
 
   get() {

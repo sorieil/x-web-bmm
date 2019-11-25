@@ -257,11 +257,11 @@ export default {
     managerName: {
       inserted(el, binding, vnode) {
         const item = binding.value;
-        console.log('bind valeu:', item);
+        // console.log('bind valeu:', item);
         const managerName = item.filter(
           (v) => v.businessVendorField.name === '담당자명'
         )[0].value;
-        console.log();
+        // console.log();
         vnode.elm.textContent = managerName;
       },
     },
@@ -310,7 +310,7 @@ export default {
   },
   created() {
     this.getBusinessTime().then((r) => {
-      console.log(']]]]]] result ', r);
+      // console.log(']]]]]] result ', r);
     });
     // await this.getSchedule(this.dates[0].date);
   },

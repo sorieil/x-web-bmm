@@ -38,7 +38,7 @@ router.post(
     }
 
     const { result, resCode } = await new ServerToken(req);
-    console.log('token result:', result, resCode);
+    console.log('Inside server token result:', result, resCode);
 
     if (resCode) {
       req.session.authUser = { username: 'demo' };

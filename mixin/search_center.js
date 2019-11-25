@@ -12,7 +12,7 @@ export default {
   },
   watch: {
     'SEARCH_CENTER_GET.returnValue': (newValue, oldValue) => {
-      console.log(newValue, oldValue);
+      // console.log(newValue, oldValue);
     },
   },
   methods: {

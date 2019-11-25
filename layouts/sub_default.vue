@@ -22,7 +22,7 @@ export default {
     return {};
   },
   created() {
-    console.log('console:', this.USER_GET.type);
+    // console.log('console:', this.USER_GET.type);
   },
   mounted() {
     this.$nextTick(() => {

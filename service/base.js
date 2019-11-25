@@ -79,7 +79,7 @@ export default class Base {
 
   requestUrl(url) {
     if (!process.server) {
-      console.log(`>>>>>>>>>>>> Request: ${url}`);
+      console.log(`Client Request: ${url}`);
     } else {
       console.log(`Server Request: ${url}`);
     }
@@ -138,7 +138,7 @@ export default class Base {
 
   postDirect(url) {
     this.requestUrl(url);
-    console.log(this.axios.headers);
+    // console.log(this.axios.headers);
     return this.axios
       .$post(url)
       .then(this.response)

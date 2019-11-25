@@ -71,7 +71,6 @@ export default {
         const managerName = item.filter(
           (v) => v.businessVendorField.name === '담당자명'
         )[0].value;
-        console.log();
         vnode.elm.textContent = managerName;
       },
     },

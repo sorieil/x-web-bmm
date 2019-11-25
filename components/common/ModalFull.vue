@@ -14,12 +14,14 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      modalName: 'Global modal',
+    };
   },
   mounted() {
     this.$nextTick(() => {
-      const body = document.getElementsByTagName('body');
-      console.log('body: ', body.style);
+      // const body = document.getElementsByTagName('body');
+      // console.log('body: ', body.style);
     });
   },
   methods: {
