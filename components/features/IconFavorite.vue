@@ -1,5 +1,5 @@
 <template>
-  <div class="IconFavorite" @click="chanage">
+  <div @click="chanage" class="IconFavorite">
     <i class="material-icons-round">star</i>
   </div>
 </template>

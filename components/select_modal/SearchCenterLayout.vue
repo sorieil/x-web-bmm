@@ -1,11 +1,11 @@
 <template>
   <ModalFull
     ref="searchCenterLayoutModal"
-    class="animated"
     :class="{
       fadeInUpBig: SEARCH_CENTER_GET.status,
       fadeOutUpBig: !SEARCH_CENTER_GET.status,
     }"
+    class="animated"
   >
     <div slot="ModalContent" class="__modal-content">
       <div class="__header">
@@ -13,7 +13,7 @@
           <i class="material-icons">search</i>
           <input type="text" class="__search-input" />
         </div>
-        <button class="__close" @click="modalClose">완료</button>
+        <button @click="modalClose" class="__close">완료</button>
       </div>
       <div class="__content">
         <div
@@ -23,8 +23,8 @@
           <div v-if="!SEARCH_CENTER_GET.selectFieldValue">
             <div
               ref="companyTypeItem"
-              class="__companyType"
               @click="eddCompanyType(type, field, $event)"
+              class="__companyType"
             >
               <p>{{ type.text }}</p>
             </div>
@@ -33,13 +33,13 @@
           <div v-else>
             <div
               ref="companyTypeItem"
-              class="__companyType"
               :class="
                 type.text && SEARCH_CENTER_GET.selectFieldValue === type.id
                   ? '__active'
                   : ''
               "
               @click="eddCompanyType(type, field, $event)"
+              class="__companyType"
             >
               <p>{{ type.text }}</p>
             </div>

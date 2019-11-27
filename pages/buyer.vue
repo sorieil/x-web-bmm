@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="__meeting">
-        <button class="__meeting-btn" type="button" @click="goMeeting">
+        <button @click="goMeeting" class="__meeting-btn" type="button">
           미팅신청
         </button>
       </div>

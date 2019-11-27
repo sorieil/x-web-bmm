@@ -4,15 +4,15 @@
       <div class="__dates">
         <div
           v-if="dates.length > 0"
-          class="__scroll"
           :style="{ width: dateScrollWidth + 'px' }"
+          class="__scroll"
         >
           <div
             v-for="(date, index) in dates"
             :key="index"
-            class="__item"
             :class="{ __active: activeDate === index }"
             @click="fnDateChange(index, activeDate, $event)"
+            class="__item"
           >
             <span>{{ date.mm }}.{{ date.dd }}</span>
             <span>{{ date.week }}</span>
@@ -26,7 +26,7 @@
             class="__time-block"
           >
             <div v-if="item.meetingAvailable">
-              <span class="__time" @click="fnOpneMeetingRequest(index)">{{
+              <span @click="fnOpneMeetingRequest(index)" class="__time">{{
                 item.businessMeetingTimeList.timeBlock
               }}</span>
               <span class="__status __complete">예약가능</span>
@@ -48,17 +48,17 @@
       </ul>
     </div>
     <Modal
-      class="__meeting-modal animated"
       :class="{
         fadeInUpBig: modalStatus,
         fadeOutDownBig: !modalStatus,
         __active: modalStatus,
       }"
+      class="__meeting-modal animated"
     >
       <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">미팅 신청 정보</span>
-          <button class="__close" @click="modalClose">
+          <button @click="modalClose" class="__close">
             <i class="material-icons-round">close</i>
           </button>
         </div>
@@ -99,8 +99,8 @@
             <div>
               <i
                 v-if="memoRemoveIcon"
-                class="material-icons"
                 @click="fnMemoRemove"
+                class="material-icons"
                 >close</i
               >
               <textarea v-model="meetingMemo" placeholder="내용"></textarea>
@@ -112,13 +112,13 @@
           </div>
 
           <div class="__meeting-btns">
-            <button class="__meeting-btn" type="button" @click="submit">
+            <button @click="submit" class="__meeting-btn" type="button">
               미팅 신청 확인
             </button>
             <button
+              @click="modalClose"
               class="__meeting-cancel-btn"
               type="button"
-              @click="modalClose"
             >
               미팅 신청 취소
             </button>

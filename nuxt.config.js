@@ -99,8 +99,8 @@ module.exports = {
     API_URL: process.env.API_URL || 'http://localhost:8989/api',
   },
   server: {
-    port: process.env.PORT || 8080, // default: 8080
-    host: 'localhost', // default: localhost
+    port: process.env.PORT || 3000, // default: 3000
+    host: process.env.HOST || 'localhost', // default: localhost
   },
   /*
    ** Add server middleware

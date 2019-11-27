@@ -12,19 +12,19 @@
     </div>
     <div class="__company-list">
       <div
-        v-for="(vendor, index) in VENDOR_GET.vendors"
         ref="vendorItem"
+        v-for="(vendor, index) in VENDOR_GET.vendors"
         :key="index"
-        class="__company"
         :class="{
           '__not-favorite': !vendor.businessVendorFavorite,
           '__not-meeting': !vendor.businessVendorMeeting,
         }"
+        class="__company"
       >
         <div class="__logo">
           <img v-img="''" />
         </div>
-        <div class="__info-box" @click="selectVendor(vendor)">
+        <div @click="selectVendor(vendor)" class="__info-box">
           <ul>
             <li class="__name">
               <span>{{ vendor.companyName }}</span>
@@ -43,8 +43,8 @@
           </ul>
         </div>
         <div
-          class="__favorite"
           :class="{ '__favorite-active': vendor.businessVendorFavorite }"
+          class="__favorite"
         >
           <IconFavorite
             v-model="vendor.businessVendorFavorite"

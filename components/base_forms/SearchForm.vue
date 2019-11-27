@@ -1,6 +1,6 @@
 <!-- eslint-disable-line vue/v-bind-style -->
 <template>
-  <div class="SearchForm" :style="{ color: propFontColor }">
+  <div :style="{ color: propFontColor }" class="SearchForm">
     <label>
       <input
         :value="value"

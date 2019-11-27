@@ -19,20 +19,20 @@
           </p>
         </div>
         <img
+          @click="goProfile"
           class="__setting-icon"
           src="../assets/images/common/icon_setting.svg"
-          @click="goProfile"
         />
       </div>
       <div class="__dates">
         <div class="__scroll-wrap">
-          <div class="__scroll" :style="{ width: dateScrollWidth + 'px' }">
+          <div :style="{ width: dateScrollWidth + 'px' }" class="__scroll">
             <div
               v-for="(date, index) in dates"
               :key="index"
-              class="__item"
               :class="{ __active: activeDate === index }"
               @click="fnDateChange(index, activeDate, $event)"
+              class="__item"
             >
               <span>{{ date.mm }}.{{ date.dd }}</span>
               <span>{{ date.week }}</span>
@@ -49,8 +49,8 @@
             <!-- businessMeetingRoomReservation 의 null 값으로 체크 -->
             <div
               v-if="item.businessMeetingRoomReservation"
-              class="__time-block"
               @click="fnOpneMeetingInfo(index)"
+              class="__time-block"
             >
               <span class="__time">
                 {{ item.businessMeetingTimeList.timeBlock }}
@@ -108,17 +108,17 @@
     </div>
     <Modal
       ref="MeetingModal"
-      style="display:none"
-      class="animated"
       :class="{
         fadeInUpBig: activeMeetingModal,
         fadeOutUpBig: !activeMeetingModal,
       }"
+      style="display:none"
+      class="animated"
     >
       <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">미팅 신청 정보</span>
-          <button class="__close" @click="modalClose">
+          <button @click="modalClose" class="__close">
             <i class="material-icons-round">close</i>
           </button>
         </div>
@@ -190,13 +190,13 @@
 
           <div class="__meeting-btns">
             <button
+              @click="cancleReservation"
               class="__meeting-cancel-btn"
               type="button"
-              @click="cancleReservation"
             >
               미팅 신청 취소
             </button>
-            <button class="__meeting-btn" type="button" @click="modalClose">
+            <button @click="modalClose" class="__meeting-btn" type="button">
               미팅 신청 확인
             </button>
           </div>
@@ -205,17 +205,17 @@
     </Modal>
     <Modal
       ref="StatusModal"
-      style="display:none"
-      class="animated"
       :class="{
         fadeInUpBig: activeStatusModal,
         fadeOutUpBig: !activeStatusModal,
       }"
+      style="display:none"
+      class="animated"
     >
       <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">상태 설정</span>
-          <button class="__close" @click="modalClose">
+          <button @click="modalClose" class="__close">
             <i class="material-icons-round">close</i>
           </button>
         </div>
@@ -239,8 +239,8 @@
               <li
                 v-for="(item, index) in reservationStatus"
                 :key="index"
-                class="__item"
                 :class="[item.status ? '__active' : '']"
+                class="__item"
               >
                 <span>{{ item.text }}</span>
                 <div class="__favorite">

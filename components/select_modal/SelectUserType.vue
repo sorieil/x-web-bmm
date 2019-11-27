@@ -1,19 +1,19 @@
 <template>
   <ModalFull
     ref="selectUserTypeModal"
-    class="__user-type-select animated"
     :class="{
       fadeInUpBig: USER_TYPE_GET.status,
       fadeOutUpBig: !USER_TYPE_GET.status,
     }"
+    class="__user-type-select animated"
   >
     <div slot="ModalContent" class="__modal-content">
       <div class="__user-type-select-box">
         <div class="__buttons">
-          <button type="button" @click="selectUserType('vendor')">
+          <button @click="selectUserType('vendor')" type="button">
             Vendor
           </button>
-          <button type="button" @click="selectUserType('buyer')">Buyer</button>
+          <button @click="selectUserType('buyer')" type="button">Buyer</button>
         </div>
       </div>
     </div>

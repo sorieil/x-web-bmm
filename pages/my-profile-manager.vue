@@ -1,7 +1,7 @@
 <template>
   <div ref="ProfileForm" class="__container">
     <div class="__my-profile">
-      <div class="__select" @click="openLeftLayoutModal">
+      <div @click="openLeftLayoutModal" class="__select">
         <p class="__title">기업선택</p>
         <i class="material-icons">keyboard_arrow_right</i>
       </div>
@@ -11,8 +11,8 @@
           <div v-for="(field, index) of companyInformation" :key="index">
             <div
               v-if="field.fieldType.columnType === 'idx'"
-              class="__select"
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
+              class="__select"
             >
               <p class="__title">{{ field.name }}</p>
 
@@ -75,8 +75,8 @@
           <div v-for="(field, index) of informationType" :key="index">
             <div
               v-if="field.fieldType.columnType === 'idx'"
-              class="__select"
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
+              class="__select"
             >
               <p class="__title">{{ field.name }}</p>
 
@@ -123,8 +123,8 @@
           <div v-for="(field, index) of manager" :key="index">
             <div
               v-if="field.fieldType.columnType === 'idx'"
-              class="__select"
               @click="openCenterLayoutModal(field.fieldChildNodes, field)"
+              class="__select"
             >
               <p class="__title">{{ field.name }}</p>
 
@@ -189,8 +189,8 @@
           </div>-->
           <div class="__item">
             <button
-              class="__manager-swich-button-buyer"
               @click="buttonSwichManager"
+              class="__manager-swich-button-buyer"
             >
               바이어 전환
             </button>
@@ -204,14 +204,14 @@
     <SearchLeftLayout ref="SearchLeftLayout" style="display:none;" />
     <SearchCenterLayout
       ref="SearchCenterLayout"
-      style="display:none;"
       :field="selectField"
       @changeCompanyType="changeCompanyType"
+      style="display:none;"
     />
     <CompanyCode
       ref="CompanyCode"
-      style="display:none;"
       @close="companyCodeModalClose"
+      style="display:none;"
     />
   </div>
 </template>

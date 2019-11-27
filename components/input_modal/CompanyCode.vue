@@ -1,18 +1,18 @@
 <template>
   <ModalFull
-    class="__company-code animated"
     :class="{
       fadeInUpBig: COMPANY_CODE_GET.status,
       fadeOutUpBig: !COMPANY_CODE_GET.status,
     }"
+    class="__company-code animated"
   >
     <div slot="ModalContent" class="__modal-content">
       <div v-if="companyCodeStatus === null" class="__company-code-box">
         <h3>기업코드를 입력하세요.</h3>
         <SearchForm v-model="inputCode" />
         <div class="__buttons">
-          <button type="button" @click="modalClose">취소</button>
-          <button type="button" @click="checkVendorCode">확인</button>
+          <button @click="modalClose" type="button">취소</button>
+          <button @click="checkVendorCode" type="button">확인</button>
         </div>
       </div>
       <div
@@ -21,14 +21,14 @@
       >
         <i class="material-icons">check</i>
         <h3>기업코드가 확인되었습니다.</h3>
-        <button type="button" class="__button" @click="allModalClose">
+        <button @click="allModalClose" type="button" class="__button">
           확인
         </button>
       </div>
       <div v-else class="__company-code-box __company-code-alert">
         <i class="material-icons">check</i>
         <h3>기업코드가 잘못되었습니다.</h3>
-        <button type="button" class="__button" @click="modalClose">확인</button>
+        <button @click="modalClose" type="button" class="__button">확인</button>
       </div>
     </div>
   </ModalFull>

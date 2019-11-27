@@ -1,6 +1,6 @@
 <template>
-  <div class="SubHeader" :style="{ backgroundColor: propHeaderBg }">
-    <div class="__menu" @click="goBack">
+  <div :style="{ backgroundColor: propHeaderBg }" class="SubHeader">
+    <div @click="goBack" class="__menu">
       <i class="material-icons-round __icon">keyboard_backspace</i>
     </div>
     <div class="__messages">

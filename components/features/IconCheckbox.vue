@@ -1,9 +1,9 @@
 <template>
-  <div ref="IconCheckbox" class="IconCheckbox" @click="chanage">
+  <div ref="IconCheckbox" @click="chanage" class="IconCheckbox">
     <i
       :id="'__checkbox-' + index"
-      class="material-icons"
       :class="{ __active: tempValue }"
+      class="material-icons"
       >check</i
     >
   </div>

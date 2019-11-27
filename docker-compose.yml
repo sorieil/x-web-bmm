@@ -1,38 +1,23 @@
-version: '0.0'
+version: '3.4'
 
 services:
-  nodejs:
-    build: .
-    dockerfile: ./docker/app
-    image: node:8
-    container_name: nodejs3001
+  bmm-front:
+    image: node:lts-alpine
+    working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=development
+      - API_URL=https://bmm.xsync.info/api
+      - HOST=0.0.0.0
+    container_name: bmm-front
     restart: unless-stopped
-    # env_file: .env
-    working_dir: '/app'
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3000:3000'
     networks:
       - app-network
-    ports:
-      - '8080:3001'
-    volumes:
-      - .:/app
-      # - ./node_modules:/home/app/node_modules
-    # command: yarn dev-live-api
-  # redis6001:
-  #   image: redis:5.0.3
-  #   container_name: redis8754
-  #   hostname: redis8754
-  #   labels:
-  #     - 'name=redis'
-  #     - 'mode=standalone'
-  #   networks:
-  #     - app-network
-  #   network_mode: host
-  #   ports:
-  #     - 8754:6379
-  #   volumes:
-  #     - /root/docker/redis-5.0.3/6379:/data
-  #   command: redis-server /data/redis.conf
-
+    command: >
+      sh -c 'yarn global add nodemon &&
+      yarn && yarn run docker-dev'
 networks:
   app-network:
-    driver: bridge

@@ -1,6 +1,6 @@
 <template>
   <div class="ProfileHeader">
-    <div class="__menu" @click="goBack">
+    <div @click="goBack" class="__menu">
       <i class="material-icons-round __icon">keyboard_backspace</i>
     </div>
     <div class="__messages">

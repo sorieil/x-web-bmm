@@ -7,7 +7,7 @@
         {{ companyName }}
       </span>
     </div>
-    <div ref="Containers" class="__containers" @scroll="headerScroll">
+    <div ref="Containers" @scroll="headerScroll" class="__containers">
       <div class="__shodow-box"></div>
       <nuxt />
     </div>
@@ -20,20 +20,20 @@
       class="__filter-modal animated"
     >
       <div class="__header">
-        <button class="__reset" @click="checkReset">
+        <button @click="checkReset" class="__reset">
           <span>Reset</span>
         </button>
         <span class="__title">Filter</span>
-        <button class="__close" @click="closeFilter">
+        <button @click="closeFilter" class="__close">
           <i class="material-icons-round">close</i>
         </button>
       </div>
       <ul class="__tabs">
         <li v-for="(item, index) in filters" :key="index">
           <div
-            class="__tab"
             :class="{ __active: filterActive === index }"
             @click="selectTab(index, $event)"
+            class="__tab"
           >
             {{ item.name }}
           </div>
@@ -41,8 +41,8 @@
       </ul>
       <ul class="__items">
         <li
-          v-for="(item, index) in filterChild"
           ref="FilterItem"
+          v-for="(item, index) in filterChild"
           :key="index"
           class="__item"
         >
@@ -56,7 +56,7 @@
       </ul>
     </div>
 
-    <div class="__schedule-icon-wrap" @click="selectUserTypeOpen">
+    <div @click="selectUserTypeOpen" class="__schedule-icon-wrap">
       <img src="../assets/images/common/icon_schedule.svg" />
     </div>
 

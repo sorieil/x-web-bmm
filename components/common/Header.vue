@@ -1,5 +1,5 @@
 <template>
-  <div class="Header" :style="{ backgroundColor: propHeaderBg }">
+  <div :style="{ backgroundColor: propHeaderBg }" class="Header">
     <div v-if="!propHeaderOption" class="__view-default-box">
       <div class="__menu">
         <i class="material-icons-round __icon">menu</i>

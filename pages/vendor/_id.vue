@@ -53,9 +53,9 @@
       <div class="__meeting">
         <button
           v-show="USER_GET.type === 'buyer'"
+          @click="goMeeting"
           class="__meeting-btn"
           type="button"
-          @click="goMeeting"
         >
           미팅신청
         </button>

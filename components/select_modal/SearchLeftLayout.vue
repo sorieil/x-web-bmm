@@ -1,25 +1,25 @@
 <template>
   <ModalFull
     ref="searchLeftLayoutModal"
-    class="animated"
     :class="{
       fadeInUpBig: SEARCH_LEFT_GET.status,
       fadeOutUpBig: !SEARCH_LEFT_GET.status,
     }"
+    class="animated"
   >
     <div slot="ModalContent" class="__modal-content">
       <div class="__header">
         <div class="__search-input-wrap">
           <SearchForm v-model="searchData" v-on:submit="submitSearchForm" />
         </div>
-        <button class="__close" @click="modalClose">취소</button>
+        <button @click="modalClose" class="__close">취소</button>
       </div>
       <div class="__content">
         <div
           v-for="(vendor, index) in SEARCH_LEFT_GET.vendors"
           :key="index"
-          class="__company"
           @click="selectCompanyCodeModal(vendor)"
+          class="__company"
         >
           <div class="__company-image">
             <img v-img="''" />

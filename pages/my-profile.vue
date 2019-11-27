@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <button class="__manager-swich-button" @click="buttonSwichManager">
+      <button @click="buttonSwichManager" class="__manager-swich-button">
         매니저 전환
       </button>
     </div>

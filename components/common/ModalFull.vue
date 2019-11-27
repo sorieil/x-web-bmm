@@ -1,5 +1,5 @@
 <template>
-  <div class="ModalFull" @click="close">
+  <div @click="close" class="ModalFull">
     <div class="__overlay"></div>
     <slot name="ModalContent" class="__container"></slot>
   </div>

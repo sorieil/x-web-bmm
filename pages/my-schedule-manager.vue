@@ -29,20 +29,20 @@
           </p>
         </div>
         <img
+          @click="goProfile"
           class="__setting-icon"
           src="../assets/images/common/icon_setting.svg"
-          @click="goProfile"
         />
       </div>
       <div class="__dates">
         <div class="__scroll-wrap">
-          <div class="__scroll" :style="{ width: dateScrollWidth + 'px' }">
+          <div :style="{ width: dateScrollWidth + 'px' }" class="__scroll">
             <div
               v-for="(date, index) in dates"
               :key="index"
-              class="__item"
               :class="{ __active: activeDate === index }"
               @click="fnDateChange(index, activeDate, $event)"
+              class="__item"
             >
               <span>{{ date.mm }}.{{ date.dd }}</span>
               <span>{{ date.week }}</span>
@@ -70,8 +70,8 @@
                 {{ item.businessMeetingTimeList.timeBlock }}
               </span>
               <span class="__company">{{ item.userName }}</span>
-              <span class="__user" @click="fnOpneMeetingInfo()"></span>
-              <span class="__status __possible" @click="openStatusModal(index)"
+              <span @click="fnOpneMeetingInfo()" class="__user"></span>
+              <span @click="openStatusModal(index)" class="__status __possible"
                 >예약가능</span
               >
             </div>
@@ -85,7 +85,7 @@
               item.businessMeetingRoomReservation
             }}</span>
             <!-- <span class="__user" @click="fnOpneMeetingInfo()"></span> -->
-            <span class="__status __complete" @click="openStatusModal(index)"
+            <span @click="openStatusModal(index)" class="__status __complete"
               >예약불가</span
             >
           </div>
@@ -116,17 +116,17 @@
     </div>
     <Modal
       ref="MeetingModal"
-      style="display:none"
-      class="animated"
       :class="{
         fadeInUpBig: activeMeetingModal,
         fadeOutUpBig: !activeMeetingModal,
       }"
+      style="display:none"
+      class="animated"
     >
       <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">미팅 신청 정보</span>
-          <button class="__close" @click="modalClose">
+          <button @click="modalClose" class="__close">
             <i class="material-icons-round">close</i>
           </button>
         </div>
@@ -192,17 +192,17 @@
     </Modal>
     <Modal
       ref="StatusModal"
-      style="display:none"
-      class="animated"
       :class="{
         fadeInUpBig: activeStatusModal,
         fadeOutUpBig: !activeStatusModal,
       }"
+      style="display:none"
+      class="animated"
     >
       <div slot="ModalContent" class="__modal-content">
         <div class="__header">
           <span class="__title">상태 설정</span>
-          <button class="__close" @click="modalClose">
+          <button @click="modalClose" class="__close">
             <i class="material-icons-round">close</i>
           </button>
         </div>
@@ -226,8 +226,8 @@
               <li
                 v-for="(item, index) in reservationStatus"
                 :key="index"
-                class="__item"
                 :class="[item.status ? '__active' : '']"
+                class="__item"
               >
                 <span>{{ item.text }}</span>
                 <div class="__favorite">
