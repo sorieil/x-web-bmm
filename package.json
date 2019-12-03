@@ -5,7 +5,6 @@
   "author": "Xsync",
   "private": true,
   "scripts": {
-    "docker-dev": "nodemon server/index.js --watch server",
     "dev": "clear && cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "dev-local": "clear && cross-env NODE_ENV=development API_URL=http://10.80.211.64:8989/api nodemon server/index.js --watch server",
     "dev-live-api": "clear && cross-env NODE_ENV=development API_URL=https://bmm.xsync.info/api nodemon server/index.js --watch server",

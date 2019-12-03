@@ -79,9 +79,9 @@ export default class Base {
 
   requestUrl(url) {
     if (!process.server) {
-      console.log(`Client Request: ${url}`);
+      console.log(`Client Request`);
     } else {
-      console.log(`Server Request: ${url}`);
+      console.log(`Server Request`);
     }
   }
   /**
@@ -207,8 +207,8 @@ export default class Base {
     console.log(
       'API Start ========================================================='
     );
-    // console.log(`API NAME: ${this.getUrl()}`)
-    console.log(res);
+    console.log(`API NAME: ${this.getUrl()}`);
+    // console.log(res);
     console.log(
       'API End ==========================================================='
     );

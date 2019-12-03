@@ -1,23 +1,21 @@
-version: '3.4'
+version: '3.7'
 
 services:
-  bmm-front:
+  xsync-bmm-front-development:
     image: node:lts-alpine
+    container_name: xsync-bmm-front-development
     working_dir: /usr/src/app
     environment:
       - NODE_ENV=development
-      - API_URL=https://bmm.xsync.info/api
       - HOST=0.0.0.0
-    container_name: bmm-front
-    restart: unless-stopped
+      - API_URL=127.0.0.1:8989
+    restart: always
     volumes:
       - .:/usr/src/app
+      - app_node_modules:/usr/src/app/node_modules
     ports:
       - '3000:3000'
-    networks:
-      - app-network
     command: >
-      sh -c 'yarn global add nodemon &&
-      yarn && yarn run docker-dev'
-networks:
-  app-network:
+      sh -c 'npm i -g nodemon npm i && npm run dev'
+volumes:
+  app_node_modules:

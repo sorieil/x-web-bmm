@@ -47,10 +47,7 @@ module.exports = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
-  ],
+  buildModules: ['@nuxtjs/eslint-module'],
   /*
    ** Nuxt.js modules
    */
@@ -59,7 +56,9 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
     // '@nuxtjs/pwa'
+    // Doc: https://github.com/nuxt-community/eslint-module
   ],
+
   styleResources: {
     // your settings here
     scss: ['./assets/scss/common.scss'],
