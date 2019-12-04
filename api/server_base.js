@@ -214,7 +214,7 @@ export default class ServerBase {
       default:
         // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);
         // window.location.href = process.env.managerUrl;
-        console.log('Else error: ', e);
+        // console.log('Else error: ', e);
         return Promise.reject(new Error(e));
     }
   }
