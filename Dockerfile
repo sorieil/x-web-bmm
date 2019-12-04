@@ -7,7 +7,7 @@ ENV PORT=3000
 RUN npm i -g pm2
 RUN pm2 link uc0d267w80u4837 huiiiy90kar9kie 'BMM WEB(ec2)'
 COPY package*.json ./
-RUN npm install --production
+RUN npm install --only=production
 COPY . .
 RUN npm run build
 CMD ["pm2-docker", "server/index.js"]

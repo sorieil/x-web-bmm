@@ -8,3 +8,10 @@ docker-compose*
 README.md
 LICENSE
 .vscode
+*.pem
+*.tar
+.nuxt
+npm-debug.log
+build
+*.sh
+*.yml

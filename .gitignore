@@ -92,3 +92,4 @@ sw.*
 
 *.pem
 *.tar
+build
