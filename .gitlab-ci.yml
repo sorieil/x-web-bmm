@@ -10,13 +10,13 @@ stages:
   - deploy
 
 job-test:
-  image: node:8.15.1-alpine
+  image: node:lts-alpine
   stage: test
   script:
     - npm install mocha -g
     - npm test
   tags:
-    - devqa90
+    - release*
 
 job-deploy:
   image: docker:latest
@@ -25,7 +25,6 @@ job-deploy:
     - docker:dind
   script:
     - grep . /etc/*-release
-    - docker build -t server-xsync-api-2.0/node-web-app .
-    - docker images
+    - docker-build.sh
   tags:
-    - devqa90
+    - release*
