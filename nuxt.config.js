@@ -8,12 +8,13 @@ module.exports = {
    */
   head: {
     title: process.env.npm_package_name || '',
-    meta: [{
-        charset: 'utf-8'
+    meta: [
+      {
+        charset: 'utf-8',
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
+        content: 'width=device-width, initial-scale=1',
       },
       {
         hid: 'description',
@@ -21,18 +22,21 @@ module.exports = {
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [{
+    link: [
+      {
         rel: 'icon',
         type: 'image/x-icon',
-        href: '/favicon.ico'
+        href: '/favicon.ico',
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round',
+        href:
+          'https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round',
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900',
+        href:
+          'https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900',
       },
     ],
   },
@@ -52,9 +56,7 @@ module.exports = {
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: [
-    '@nuxtjs/eslint-module'
-  ],
+  buildModules: ['@nuxtjs/eslint-module'],
   eslint: {
     /* module options */
   },
@@ -123,7 +125,7 @@ module.exports = {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 60000
+        maxAge: 60000,
       },
     }),
     // Api middleware

@@ -1,7 +1,7 @@
 // import { PROJECT_GET } from '../store/constant_types'
 import Base from './base';
 
-export default class Vendor extends Base {
+export default class Business extends Base {
   constructor(componentScope) {
     super(componentScope);
     this.apiName = 'v1/user/business';

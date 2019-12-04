@@ -85,7 +85,6 @@ export default {
         const managerName = item.filter(
           (v) => v.businessVendorField.name === '담당자명'
         )[0].value;
-        console.log();
         vnode.elm.textContent = managerName;
       },
     },
@@ -139,17 +138,18 @@ export default {
   },
   mounted() {
     console.log('before message:', this.vendorFields);
-    this.vendorInit();
-    setTimeout(() => {
-      for (const item of this.vendorFields) {
-        if (item.businessVendorField.name === '기업명') {
-          console.log('header:', item.value);
-          this.$store.commit(SUB_HEADER_SET.load, {
-            subHeaderTitle: item.value,
-          });
+    this.vendorInit().then(() => {
+      setTimeout(() => {
+        for (const item of this.vendorFields) {
+          if (item.businessVendorField.name === '기업명') {
+            console.log('header:', item.value);
+            this.$store.commit(SUB_HEADER_SET.load, {
+              subHeaderTitle: item.value,
+            });
+          }
         }
-      }
-    }, 100);
+      }, 100);
+    });
   },
   methods: {
     goMeeting() {

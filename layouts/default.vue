@@ -261,10 +261,6 @@ export default {
 };
 </script>
 <style lang="scss">
-body {
-  position: fixed;
-}
-
 .Default {
   display: flex;
   flex-direction: column;

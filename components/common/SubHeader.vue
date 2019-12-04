@@ -29,6 +29,11 @@ export default {
       type: String,
     },
   },
+  data() {
+    return {
+      title: null,
+    };
+  },
   methods: {
     goBack() {
       this.$router.push('/');

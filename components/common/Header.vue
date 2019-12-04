@@ -76,8 +76,6 @@ export default {
   justify-content: center;
   align-items: center;
   display: flex;
-  position: relative;
-  height: 10em;
   .__view-default-box {
     .__logo {
       position: absolute;

@@ -1,7 +1,7 @@
 import { SUB_HEADER_GET, SUB_HEADER_SET } from './constant_types';
 
 export const state = () => ({
-  subHeaderTitle: 'test',
+  subHeaderTitle: null,
 });
 
 export const getters = {
