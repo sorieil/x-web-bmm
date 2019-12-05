@@ -22,6 +22,8 @@ export default {
             // console.log('user type result:', result);
             const userType = result[0].type === 'null' ? null : result[0].type;
             this.$store.commit(USER_SET.load, { type: userType });
+
+            console.log('aaaaaaaaa');
           })
           .catch((e) => {
             console.log('catch error:', e);
