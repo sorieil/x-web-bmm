@@ -92,3 +92,5 @@ sw.*
 
 *.pem
 *.tar
+
+*-lock.json
