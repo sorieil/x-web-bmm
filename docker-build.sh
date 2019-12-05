@@ -7,4 +7,4 @@ docker save -o bmm-frontend.tar bmm-frontend:latest
 printf "=============== Docker Sending to Server ============\n "
 scp -i ./build/bmm-web.pem bmm-frontend.tar ubuntu@52.79.120.204:/home/ubuntu
 printf "=============== Docker Sending Done ============\n "
-bash ./build/bash-console.sh
+bash ./build/deploy.sh

@@ -28,7 +28,7 @@ npm generate
 docker-compose up
 
 # Docker attach shell, npm 관련 명령어를 넣어야 한다면, 여기서 해야 한다.
-- docker exec -it container_hash /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
+- docker exec -it 45b5c156c869 /bin/sh -c "[ -e /bin/bash ] && /bin/bash || /bin/sh"
 - 접속후
 npm install package_name
 
