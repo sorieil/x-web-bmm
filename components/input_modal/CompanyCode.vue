@@ -11,8 +11,8 @@
         <h3>기업코드를 입력하세요.</h3>
         <SearchForm v-model="inputCode" />
         <div class="__buttons">
-          <button @click="modalClose" type="button">취소</button>
-          <button @click="checkVendorCode" type="button">확인</button>
+          <button type="button" @click="modalClose">취소</button>
+          <button type="button" @click="checkVendorCode">확인</button>
         </div>
       </div>
       <div
@@ -21,14 +21,14 @@
       >
         <i class="material-icons">check</i>
         <h3>기업코드가 확인되었습니다.</h3>
-        <button @click="allModalClose" type="button" class="__button">
+        <button type="button" class="__button" @click="allModalClose">
           확인
         </button>
       </div>
       <div v-else class="__company-code-box __company-code-alert">
         <i class="material-icons">check</i>
         <h3>기업코드가 잘못되었습니다.</h3>
-        <button @click="modalClose" type="button" class="__button">확인</button>
+        <button type="button" class="__button" @click="modalClose">확인</button>
       </div>
     </div>
   </ModalFull>
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       companyCodeStatus: null,
-      inputCode: 'UAZK',
+      inputCode: '',
     };
   },
   methods: {
@@ -64,6 +64,8 @@ export default {
       this.$emit('close');
       const body = this.$el.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement;
+      this.companyCodeStatus = null;
+      this.inputCode = null;
 
       body.style.overflow = 'auto';
     },
@@ -77,7 +79,7 @@ export default {
       };
       const { result } = await new Vendor(this).codePost(id, params);
 
-      if (result) {
+      if (result[0].businessCode.code === this.inputCode) {
         const { result } = await new Vendor(this).selectGet(id);
         this.$store.commit(COMPANY_CODE_SET.load, {
           company: result[0],
