@@ -10,5 +10,4 @@ COPY package*.json ./
 RUN yarn --production=false
 COPY . .
 RUN yarn run build
-# CMD ["yarn", "run", "docker"]
 CMD [ "pm2-docker", "server/index.js" ]

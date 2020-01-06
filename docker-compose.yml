@@ -10,15 +10,16 @@ services:
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
-      # - API_URL=127.0.0.1:8989
-      - API_URL=https://bmm.xsync.info/api
+      - API_URL=http://0.0.0.0:8989/api
+      # - API_URL=https://bmm.xsync.info/api
     restart: unless-stopped
+    network_mode: bridge
     volumes:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
     ports:
-      - "3000:3000"
-    command: npm run dev
+      - "3000:3001"
+    command: yarn run dev
 
 volumes:
   node_modules:

@@ -186,7 +186,7 @@ export default class ServerBase {
       'API Start ========================================================='
     );
     // console.log(`API NAME: ${this.getUrl()}`)
-    console.log(res.data);
+    // console.log(res);
     console.log(
       'API End ==========================================================='
     );
@@ -212,10 +212,11 @@ export default class ServerBase {
         console.log('서버에서 에러 발생했군요. 관리자에게 문의 해주세요.', e);
         return Promise.reject(new Error(e));
       default:
-        // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + code);
+        // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + e);
         // window.location.href = process.env.managerUrl;
-        // console.log('Else error: ', e);
-        return Promise.reject(new Error(e));
+        console.log('Else error: ', code);
+        return false;
+      // return Promise.reject(new Error(e));
     }
   }
 }

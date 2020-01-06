@@ -113,10 +113,10 @@ module.exports = {
     },
   },
   env: {
-    API_URL: process.env.API_URL || 'http://localhost:8989/api',
+    API_URL: process.env.API_URL || 'http://0.0.0.0:8989/api',
   },
   server: {
-    port: process.env.PORT || 3000, // default: 3000
+    port: process.env.PORT || 3001, // default: 3000
     host: process.env.HOST || 'localhost', // default: localhost
   },
   /*

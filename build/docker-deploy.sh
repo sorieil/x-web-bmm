@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+sudo docker stop $(sudo docker ps -q) >/dev/null
 if ! command -v sudo docker ps >/dev/null; then
   sudo docker stop $(sudo docker ps -q) >/dev/null
 fi
@@ -14,4 +15,3 @@ sudo docker container prune --force
 
 sudo docker load -i bmm-frontend.tar >/dev/null
 sudo docker run -it -p 3000:3000 -d bmm-frontend:latest >/dev/null
-sudo docker ps

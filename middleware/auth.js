@@ -4,6 +4,10 @@ import { TOKEN_SET, USER_SET } from '~/store/constant_types';
 
 // 중요함:::::: 이 페이지는 무조건 토큰을 받아서 처리를 해야 합니다.
 export default async ({ app, route, store, from, redirect, req }) => {
+  console.log('Middleware route:', route.query.token);
+  // const ACCESS_TOKEN = `JWT ${route.query.token}`;
+  // const ACCESS_TOKEN =
+  // 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJldmVudElkIjoiNWQ2Yzc4MWEwYzJkNTk0YWZiMzc5ZWZlIiwiZXZlbnROYW1lIjoiQk1NIENvbnRlc3QiLCJwYWNrYWdlTmFtZSI6ImNvbS54c3luYy5ldmVudCIsImV2ZW50VXBkYXRlVmVyc2lvbiI6MywiX2lkIjoiNWQ1ZTYxM2QwMTI4MmUwYTUzZDkzOWE2IiwiZW1haWwiOiJqaGtpbUB4YXluYy5jbyIsIm5hbWUiOiJqaGtpbSIsImxldmVsIjoiZVVzZXIiLCJpYXQiOjE1NzU4NzI5MzAsImV4cCI6MTAwMDAxNTc1ODcyOTI5fQ.CLuYsX_hjObBLSNS04ocEOfcZnB18LQAPxHiboZZNgw';
   const ACCESS_TOKEN =
     'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJldmVudElkIjoiNWQ2Yzc4MWEwYzJkNTk0YWZiMzc5ZWZlIiwiZXZlbnROYW1lIjoiQk1NIENvbnRlc3QiLCJwYWNrYWdlTmFtZSI6ImNvbS54c3luYy5ldmVudCIsImV2ZW50VXBkYXRlVmVyc2lvbiI6MywiX2lkIjoiNWQ1ZTYxM2QwMTI4MmUwYTUzZDkzOWE2IiwiZW1haWwiOiJqaGtpbUB4YXluYy5jbyIsIm5hbWUiOiLrsqDri4jsiqTrpqwiLCJsZXZlbCI6ImVVc2VyIiwiaWF0IjoxNTcxMTE4NjA1LCJleHAiOjEwMDAwMTU3MTExODYwNH0.6Po92mlcZ42HS4ZrpREUBQJlypnT9CK8ln93QX9mIek';
 
@@ -27,14 +31,19 @@ export default async ({ app, route, store, from, redirect, req }) => {
     // 유저 인정 정보 가져오기
     const token = await new ServerToken(req).tokenVerify(ACCESS_TOKEN);
     if (token.resCode === 200) {
-      store.commit(TOKEN_SET.load, { ACCESS_TOKEN });
+      store.commit(TOKEN_SET.load, {
+        ACCESS_TOKEN,
+      });
 
       if (process.server) {
+        console.log('Server');
         req.session.token = ACCESS_TOKEN;
         const user = await new ServerUser(req).get();
 
         req.session.userType = user.result[0].type;
-        store.commit(USER_SET.load, { type: user.result[0].type });
+        store.commit(USER_SET.load, {
+          type: user.result[0].type,
+        });
       }
     } else {
       console.log('인증 못받음.');

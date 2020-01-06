@@ -21,5 +21,8 @@
     "docs": "md",
     "i18n": "json"
   },
-  "vetur.validation.template": true
+  "vetur.validation.template": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
