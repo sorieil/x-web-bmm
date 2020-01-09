@@ -65,7 +65,7 @@ import Favorite from '../service/favorite';
 import FilterMixin from '../mixin/filter';
 import VendorMixin from '../mixin/vendor';
 import { VENDOR_SET } from '../store/constant_types';
-import ServerVendor from '../api/server_vendor';
+import ServerVendor from '../service_server/server_vendor';
 export default {
   components: {
     SearchForm,

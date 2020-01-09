@@ -1,11 +1,12 @@
 import Axios from 'axios';
+import { errorPrint } from './server_error';
 export default class ServerBase {
-  constructor() {
+  constructor(req) {
     this._params = '';
     this._baseUrl = '';
     this._axios = Axios;
     this._baseUrl = '';
-    this._req = '';
+    this._req = req;
     this._apiName = '';
     this._apiUrl = '';
   }
@@ -59,6 +60,9 @@ export default class ServerBase {
   }
 
   requestUrl(url) {
+    console.log(
+      '[SERVER]API Start ========================================================='
+    );
     // console.log('server: ', process.server, this.req);
     console.log(`Server Request: ${url}`);
   }
@@ -70,22 +74,14 @@ export default class ServerBase {
    */
   checkToken() {
     this.requestUrl(this.getUrl());
-    if (!process.server) {
+    console.log('>>>>>>>>>>>>>>>> process.server:', process.server);
+    if (process.server) {
       const token = this.req.session.token;
       if (token) {
-        // console.log('Server Load success token', token);
         this.axios.defaults.headers.common.Authorization = token;
         return Promise.resolve(true);
       } else {
-        return Promise.resolve(false);
-      }
-    } else {
-      const token = this.req.session.token;
-      if (token) {
-        // console.log('Load success token', token);
-        this.axios.defaults.headers.common.Authorization = token;
-        return Promise.resolve(true);
-      } else {
+        console.log('토큰이 없습니다.');
         return Promise.resolve(false);
       }
     }
@@ -99,75 +95,56 @@ export default class ServerBase {
           params: this.params,
           progress: false,
         })
-        .then(this.response)
-        .catch(this.errorPrint);
+        .then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
   getDirect(url) {
     this.requestUrl(url);
-    return this.axios
-      .get(url)
-      .then(this.response)
-      .catch(this.errorPrint);
+    return this.axios.get(url).then(this.response);
   }
 
   postDirect(url) {
     this.requestUrl(url);
     console.log(this.axios.headers);
-    return this.axios
-      .post(url)
-      .then(this.response)
-      .catch(this.errorPrint);
+    return this.axios.post(url).then(this.response);
   }
 
   async basePost() {
     const checkToken = await this.checkToken();
     if (checkToken) {
-      return this.axios
-        .post(this.getUrl(), this.params)
-        .then(this.response)
-        .catch(this.errorPrint);
+      return this.axios.post(this.getUrl(), this.params).then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
   async basePut() {
     const checkToken = await this.checkToken();
     if (checkToken) {
-      return this.axios
-        .put(this.getUrl(), this.params)
-        .then(this.response)
-        .catch(this.errorPrint);
+      return this.axios.put(this.getUrl(), this.params).then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
   async baseDelete() {
     const checkToken = await this.checkToken();
     if (checkToken) {
-      return this.axios
-        .delete(this.getUrl(), this.params)
-        .then(this.response)
-        .catch(this.errorPrint);
+      return this.axios.delete(this.getUrl(), this.params).then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
   async basePatch() {
     const checkToken = await this.checkToken();
     if (checkToken) {
-      return this.axios
-        .patch(this.getUrl(), this.params)
-        .then(this.response)
-        .catch(this.errorPrint);
+      return this.axios.patch(this.getUrl(), this.params).then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
@@ -182,41 +159,10 @@ export default class ServerBase {
   }
 
   response(res) {
-    console.log(
-      'API Start ========================================================='
-    );
-    // console.log(`API NAME: ${this.getUrl()}`)
-    // console.log(res);
+    console.log(res.data.resCode);
     console.log(
       'API End ==========================================================='
     );
-
     return res.data;
-  }
-
-  errorPrint(e) {
-    const code =
-      typeof e !== 'number' ? parseInt(e.response && e.response.status) : e;
-    // console.log('error print:', code);
-    switch (code) {
-      case 400:
-        console.log('정상적인 데이터를 넣어주세요. =>', e);
-        return Promise.reject(new Error(e));
-      case 401:
-        console.log('정상적인 토큰이 아닙니다.=>', e);
-        return Promise.reject(new Error(e));
-      case 403:
-        console.log('토큰이 없습니다. 토큰을 설정해주세요.=>', e);
-        return Promise.reject(new Error(e));
-      case 500:
-        console.log('서버에서 에러 발생했군요. 관리자에게 문의 해주세요.', e);
-        return Promise.reject(new Error(e));
-      default:
-        // alert('잘못된 접근 입니다. \n처음 페이  지로 돌아 갑니다.' + e);
-        // window.location.href = process.env.managerUrl;
-        console.log('Else error: ', code);
-        return false;
-      // return Promise.reject(new Error(e));
-    }
   }
 }

@@ -11,10 +11,10 @@ export default {
   mounted() {
     // 레이아웃 단에서 해줘야 함.
     // auth 에서 안되는 이유는 auth 에서는 로컬 스토리지에 접근이 안됨. auth는 서버단임.
-    new Base(this).setupToken().then((r) => {
-      if (!r) {
+    new Base(this).setupToken().then((result) => {
+      if (!result) {
         // 토큰 설정이 되지 않았습니다. 토큰을 입력해주세요.
-        alert('토큰 설정이 안됐어요.');
+        this.$route.push({ path: '/error' });
       } else {
         const userResult = new User(this).get();
         userResult
@@ -22,11 +22,12 @@ export default {
             // console.log('user type result:', result);
             const userType = result[0].type === 'null' ? null : result[0].type;
             this.$store.commit(USER_SET.load, { type: userType });
-
             console.log('aaaaaaaaa');
           })
-          .catch((e) => {
-            console.log('catch error:', e);
+          .catch((error) => {
+            console.error('Error start------------->\n');
+            console.log(error);
+            console.error('Error end--------------->\n');
           });
       }
     });

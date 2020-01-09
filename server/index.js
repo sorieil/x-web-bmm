@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 const app = express();
@@ -17,7 +18,7 @@ const sess = {
   },
   // store: new RedisStore({ url: '52.79.120.204:8754', logErrors: true }),
 };
-
+app.use(cookieParser());
 app.use(session(sess));
 app.use(function(req, res, next) {
   if (!req.session) {

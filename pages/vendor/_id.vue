@@ -67,7 +67,7 @@
 import DirectiveImage from '../../mixin/directive_image';
 import VendorMixin from '../../mixin/vendor';
 import MixinUser from '../../mixin/user';
-import ServerVendor from '../../api/server_vendor';
+import ServerVendor from '../../service_server/server_vendor';
 import Vendor from '../../service/vendor';
 import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {

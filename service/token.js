@@ -7,13 +7,9 @@ export default class Token extends Base {
     this.apiName = 'token';
   }
 
-  async requestToken(accessToken) {
-    console.log('Environment :', process.server);
-    this.params = {
-      token: accessToken,
-    };
-    const result = await this.postDirect(this.getUrl());
-    console.log('token request = ', result);
-    return true;
+  requestToken(accessToken) {
+    this.axios.Authorization = `${accessToken}`;
+    this.axios.contentType = 'application/json';
+    return this.postDirect(this.getUrl());
   }
 }
