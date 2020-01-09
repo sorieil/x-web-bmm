@@ -116,7 +116,7 @@ module.exports = {
     API_URL: process.env.API_URL || 'http://0.0.0.0:8989/api',
   },
   server: {
-    port: process.env.PORT || 3001, // default: 3000
+    port: process.env.PORT || 3001, // default: 3001
     host: process.env.HOST || 'localhost', // default: localhost
   },
   /*
@@ -138,6 +138,6 @@ module.exports = {
     }),
     // Api middleware
     // We add /api/login & /api/logout routes
-    '~/api',
+    '~/service_server',
   ],
 };
