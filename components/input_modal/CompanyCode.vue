@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       companyCodeStatus: null,
-      inputCode: 'UAZK',
+      inputCode: '',
     };
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
       this.$emit('close');
       const body = this.$el.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement;
-
+      this.companyCodeStatus = null;
       body.style.overflow = 'auto';
     },
     async checkVendorCode() {

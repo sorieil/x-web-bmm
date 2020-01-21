@@ -1,4 +1,5 @@
 import Axios from 'axios';
+// import { request } from 'express';
 import { errorPrint } from './server_error';
 export default class ServerBase {
   constructor(req) {
@@ -6,9 +7,17 @@ export default class ServerBase {
     this._baseUrl = '';
     this._axios = Axios;
     this._baseUrl = '';
-    this._req = req;
     this._apiName = '';
     this._apiUrl = '';
+    this._req = req;
+  }
+
+  set req(value) {
+    this._req = value;
+  }
+
+  get req() {
+    return this._req;
   }
 
   get rentStore() {
@@ -60,10 +69,7 @@ export default class ServerBase {
   }
 
   requestUrl(url) {
-    console.log(
-      '[SERVER]API Start ========================================================='
-    );
-    // console.log('server: ', process.server, this.req);
+    console.log('[BASE SERVER]API START +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
     console.log(`Server Request: ${url}`);
   }
   /**
@@ -74,31 +80,34 @@ export default class ServerBase {
    */
   checkToken() {
     this.requestUrl(this.getUrl());
-    console.log('>>>>>>>>>>>>>>>> process.server:', process.server);
     if (process.server) {
-      const token = this.req.session.token;
-      if (token) {
-        this.axios.defaults.headers.common.Authorization = token;
+      if (this.req) {
+        const token = this.req.cookies.token;
+        if (token) {
+          this.axios.defaults.headers.common.Authorization = token;
+        }
         return Promise.resolve(true);
       } else {
-        console.log('토큰이 없습니다.');
         return Promise.resolve(false);
       }
     }
   }
 
-  async baseGet() {
-    const checkToken = await this.checkToken();
-    if (checkToken) {
-      return this.axios
-        .get(this.getUrl(), {
-          params: this.params,
-          progress: false,
-        })
-        .then(this.response);
-    } else {
-      return errorPrint(403);
-    }
+  baseGet() {
+    this.checkToken()
+      .then((checkToken) => {
+        if (checkToken) {
+          return this.axios
+            .get(this.getUrl(), {
+              params: this.params,
+              progress: false,
+            })
+            .then(this.response);
+        } else {
+          return errorPrint(403);
+        }
+      })
+      .catch(errorPrint);
   }
 
   getDirect(url) {
@@ -108,7 +117,7 @@ export default class ServerBase {
 
   postDirect(url) {
     this.requestUrl(url);
-    console.log(this.axios.headers);
+    // console.log(this.axios.headers);
     return this.axios.post(url).then(this.response);
   }
 
@@ -159,10 +168,8 @@ export default class ServerBase {
   }
 
   response(res) {
-    console.log(res.data.resCode);
-    console.log(
-      'API End ==========================================================='
-    );
+    console.log(res.data);
+    console.log('[BASE SERVER]API END +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
     return res.data;
   }
 }

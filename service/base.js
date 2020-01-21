@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import { TOKEN_GET } from '../store/constant_types';
 import { errorPrint } from './error';
 
@@ -6,16 +5,8 @@ export default class Base {
   constructor(componentScope) {
     this._rentStore = componentScope.$store;
     this._params = '';
-
-    if (!process.server) {
-      this._axios = componentScope.$axios;
-      this._baseUrl = process.env.API_URL;
-    } else {
-      this._axios = Axios;
-      this._baseUrl = '';
-      this._req = componentScope.req;
-    }
-
+    this._axios = componentScope.$axios;
+    this._baseUrl = process.env.API_URL;
     this._apiName = '';
     this._apiUrl = '';
   }
@@ -68,24 +59,9 @@ export default class Base {
     this._params = value;
   }
 
-  setupToken() {
-    const token = this.rentStore.getters[TOKEN_GET.load].ACCESS_TOKEN;
-    if (token) {
-      return Promise.resolve(true);
-    } else {
-      return errorPrint(403);
-    }
-  }
-
   requestUrl(url) {
-    console.log(
-      '[CLIENT]API Start ========================================================='
-    );
-    if (!process.server) {
-      console.log(`Client Request`);
-    } else {
-      console.log(`Server Request`);
-    }
+    console.log('[BASE CLIENT]API START +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
+    console.log(`Client Request: ${url}`);
   }
   /**
    * 토큰이 있는지 체크 한다.
@@ -95,24 +71,12 @@ export default class Base {
    */
   async checkToken() {
     this.requestUrl(this.getUrl());
-    if (!process.server) {
-      const token = this.rentStore.getters[TOKEN_GET.load].ACCESS_TOKEN;
-      if (token) {
-        // console.log('Load success token', token);
-        await this.axios.setToken(token);
-        return true;
-      } else {
-        return false;
-      }
+    const token = this.rentStore.getters[TOKEN_GET.load];
+    if (token) {
+      await this.axios.setToken(token);
+      return true;
     } else {
-      const token = this.req.session.token;
-      if (token) {
-        // console.log('Load success token', token);
-        await this.axios.setToken(token);
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     }
   }
 
@@ -126,7 +90,7 @@ export default class Base {
         })
         .then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
@@ -137,8 +101,8 @@ export default class Base {
 
   postDirect(url) {
     this.requestUrl(url);
-    console.log('Post direct headers: \n');
-    console.log(this.axios.headers);
+    // console.log('Post direct headers: \n');
+    // console.log(this.axios.headers);
     return this.axios.$post(url).then(this.response);
   }
 
@@ -147,7 +111,7 @@ export default class Base {
     if (checkToken) {
       return this.axios.$post(this.getUrl(), this.params).then(this.response);
     } else {
-      return this.errorPrint(403);
+      return errorPrint(403);
     }
   }
 
@@ -190,10 +154,7 @@ export default class Base {
 
   response(res) {
     console.log(res);
-    console.log(
-      'API End ==========================================================='
-    );
-
+    console.log('[BASE SERVER]API END +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
     return res;
   }
 }

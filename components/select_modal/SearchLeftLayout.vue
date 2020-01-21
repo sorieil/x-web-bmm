@@ -51,7 +51,6 @@ export default {
   watch: {
     'SEARCH_LEFT_GET.status'(newValue) {
       if (newValue) {
-        console.log(newValue);
         const thisModalEl = this.$refs.searchLeftLayoutModal.$el;
         thisModalEl.style.top = window.scrollY + 'px';
       }

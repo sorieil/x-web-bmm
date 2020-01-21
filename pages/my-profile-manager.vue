@@ -295,14 +295,14 @@ export default {
       // 매니저인 경우 매니저의 밴더를 가져 올수 있다.?!!!!
       // 매니저가 속한 밴더 정보를 가져온다.
       if (this.USER_GET.type === 'manager') {
-        const { result } = new Vendor(this).get();
-        console.log('vendor infor: ', result[0]);
+        // const { result } = new Vendor(this).get();
+        // console.log('vendor infor: ', result[0]);
       } else {
         alert('벤더 정보를 입력해주세요.');
       }
     },
     getVendorWithManager() {
-      console.log('User type:', this.USER_GET.type);
+      // console.log('User type:', this.USER_GET.type);
       if (this.USER_GET.type === 'manager') {
         // 매니저 인경우 등록된 밴더 정보를 불러온다.
         // 바이어에서 전환 한 경우도 새로 가입으로 보기 때문에
@@ -311,11 +311,11 @@ export default {
         const query = serviceManagerManager.get();
         query
           .then(({ result, resCode }) => {
-            console.log(
-              '매니저 이시군요. 밴저 정보 불러 오기',
-              result,
-              resCode
-            );
+            // console.log(
+            //   '매니저 이시군요. 밴저 정보 불러 오기',
+            //   result,
+            //   resCode
+            // );
             this.vendorManagerId = result[0].id;
             // TODO 불러온 매니저 정보 바인딩 해준다.
             // 그리고 vendorManagerId 변수에 아이디 값을 넣어준다.
@@ -330,7 +330,7 @@ export default {
                   id: item.id,
                 });
               } else {
-                console.log(fieldId, item.id, item.value);
+                // console.log(fieldId, item.id, item.value);
                 this.$set(formManager, fieldId, {
                   value: item.value,
                   id: item.id,
@@ -363,7 +363,7 @@ export default {
             setTimeout(() => {
               Object.assign(this.form, form);
               Object.assign(this.formManager, formManager);
-              console.log('Success bind:', this.form, this.formManager);
+              // console.log('Success bind:', this.form, this.formManager);
               this.requestType = 'patch';
             }, 0);
           })
@@ -375,14 +375,14 @@ export default {
     actionsHeaderCompleteButton() {
       if (this.vendorId) {
         this.saveVendorManager().then(async (result) => {
-          console.log('Update vendor');
+          // console.log('Update vendor');
           if (result) {
             await this.patchField();
           }
         });
       } else {
         this.saveVendorManager().then(async (result) => {
-          console.log('Add vendor');
+          // console.log('Add vendor');
           if (result) {
             await this.postField();
           }
@@ -392,13 +392,15 @@ export default {
     saveVendorManager() {
       if (this.vendorId) {
         const items = [];
-        for (const [key, value] of Object.entries(this.formManager)) {
-          if (!value.id || !value.value) {
+        console.log('this.formManager:', this.formManager);
+        for (const [key] of Object.entries(this.formManager)) {
+          console.log(key);
+          if (!this.formManager[key].id || !this.formManager[key].value) {
             alert('모든 정보를 입력해주세요.');
             return Promise.resolve(false);
           }
-          console.log('key:', key);
-          items.push(value);
+          // console.log('key:', key);
+          items.push(this.formManager[key]);
         }
 
         /**
@@ -410,14 +412,14 @@ export default {
          **/
 
         if (this.vendorManagerId) {
-          console.log('update saveVendorManager', this.vendorManagerId, items);
+          // console.log('update saveVendorManager', this.vendorManagerId, items);
           const serviceManager = new Manager(this);
           serviceManager.patch(this.vendorManagerId, items).catch(() => {
             alert('매니저 업데이트 실패');
             return Promise.resolve(false);
           });
         } else {
-          console.log('save saveVendorManager', this.vendorId, items);
+          // console.log('save saveVendorManager', this.vendorId, items);
           const serviceManager = new Manager(this);
           serviceManager.post(this.vendorId, items).catch(() => {
             alert('새로 입력 매니저 입력 실패');
@@ -447,7 +449,7 @@ export default {
 
       const params = { data: items };
 
-      console.log(params);
+      // console.log(params);
 
       const { resCode } = await new Vendor(this).post(params);
 
@@ -520,7 +522,7 @@ export default {
       }
     },
     getSelectCompany() {
-      console.log('select company = ' + this.selectCompany);
+      // console.log('select company = ' + this.selectCompany);
     },
     // 필드 생성
     async profileInit() {
@@ -565,7 +567,7 @@ export default {
         const field = item.businessVendorField;
         const key = field.id;
         if (item.businessVendorField.fieldType.columnType === 'idx') {
-          console.log('item.id:', item.id);
+          // console.log('item.id:', item.id);
           this.$set(form, key, { value: item.value.id, id: item.id });
         } else {
           this.$set(form, key, { value: item.value, id: item.id });

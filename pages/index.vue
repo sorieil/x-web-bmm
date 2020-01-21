@@ -92,8 +92,10 @@ export default {
     redirect,
     error,
   }) {
+    // console.log('index.vue: ', process.server);
     if (process.server) {
       const { result } = await new ServerVendor(req).get();
+      // console.log('index.vue vender result:', result);
       store.commit(VENDOR_SET.load, { vendors: result });
     }
   },
@@ -116,7 +118,7 @@ export default {
       this.$router.push('vendor/' + vendor.businessVendor.id);
     },
     async getServiceVendorList() {
-      // console.log('this.VENDOR_GET.vendors:', this.VENDOR_GET.vendors === 0);
+      // console.log('this.VENDOR_GET.vendors:', this.VENDOR_GET.vendors);
       if (this.VENDOR_GET.vendors.length === 0) {
         const { result } = await new Vendor(this).get();
         this.$store.commit(VENDOR_SET.load, { vendors: result });

@@ -8,7 +8,7 @@ export default class ServerToken extends ServerBase {
   }
 
   tokenVerify(accessToken) {
-    this.axios.Authorization = `${accessToken}`;
+    this.axios.defaults.headers.common.Authorization = `${accessToken}`;
     this.axios.contentType = 'application/json';
     return this.getDirect(this.getUrl());
   }

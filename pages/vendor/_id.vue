@@ -73,7 +73,7 @@ import { SUB_HEADER_SET } from '../../store/constant_types';
 export default {
   layout: 'sub_default',
   validate({ params }) {
-    console.log('params:', params);
+    // console.log('params:', params);
     // 숫자만 가능합니다.
     return /^\d+$/.test(params.id);
   },
@@ -113,10 +113,8 @@ export default {
 
     if (route.params.id) {
       if (process.server) {
-        const { result } = await new ServerVendor(req)._getVendor(
-          route.params.id
-        );
-        console.log('result[0]:', result[0]);
+        const { result } = await new ServerVendor()._getVendor(route.params.id);
+        // console.log('result[0]:', result[0]);
         for (const field of result[0].businessVendorFieldValues) {
           if (field.businessVendorField.name === '제품소개') {
             topField = field.value;
@@ -137,12 +135,12 @@ export default {
     };
   },
   mounted() {
-    console.log('before message:', this.vendorFields);
+    // console.log('before message:', this.vendorFields);
     this.vendorInit().then(() => {
       setTimeout(() => {
         for (const item of this.vendorFields) {
           if (item.businessVendorField.name === '기업명') {
-            console.log('header:', item.value);
+            // console.log('header:', item.value);
             this.$store.commit(SUB_HEADER_SET.load, {
               subHeaderTitle: item.value,
             });
@@ -160,7 +158,7 @@ export default {
         const { result } = await new Vendor(this).selectGet(
           this.$route.params.id
         );
-        console.log('result[0]:', result[0]);
+        // console.log('result[0]:', result[0]);
         for (const field of result[0].businessVendorFieldValues) {
           if (field.businessVendorField.name === '제품소개') {
             this.topField = field.value;

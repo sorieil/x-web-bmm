@@ -1,5 +1,5 @@
-const session = require('express-session');
-const bodyParser = require('body-parser');
+// const session = require('express-session');
+// const bodyParser = require('body-parser');
 
 module.exports = {
   mode: 'universal',
@@ -93,7 +93,7 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {},
+    // extend(config, ctx) { },
     postcss: {
       // Add plugin names as key and arguments as value
       // Install them before as dependencies with npm or yarn
@@ -126,18 +126,8 @@ module.exports = {
    */
   serverMiddleware: [
     // body-parser middleware
-    bodyParser.json(),
-    // session middleware
-    session({
-      secret: 'xsync-jhkim',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        maxAge: 60000,
-      },
-    }),
     // Api middleware
     // We add /api/login & /api/logout routes
-    '~/service_server',
+    // '~/service_server',
   ],
 };

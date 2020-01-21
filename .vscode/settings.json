@@ -1,5 +1,4 @@
 {
-  "eslint.autoFixOnSave": true,
   "eslint.alwaysShowStatus": true,
   // IDE 에서 설정하는 옵션 .prettierrc.json 사용안하는 경우
   // "prettier.singleQuote": true,

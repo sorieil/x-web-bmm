@@ -3,16 +3,17 @@
     <div id="notfound">
       <div class="notfound">
         <div class="notfound-404">
-          <h3>Oops! Page not found</h3>
+          <h3>회원가입 및 로그인을 하셔야 합니다.</h3>
         </div>
-        <h2>we are sorry, retry.</h2>
       </div>
     </div>
   </section>
 </template>
 
 <script>
-export default {};
+export default {
+  layout: 'external',
+};
 </script>
 <style lang="scss">
 * {

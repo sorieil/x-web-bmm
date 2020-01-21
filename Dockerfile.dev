@@ -1,5 +1,5 @@
 FROM node:lts-alpine
 WORKDIR /usr/src/app
-RUN yarn global add nodemon
+RUN npm i -g nodemon
 COPY package*.json ./
-RUN yarn
+RUN npm i

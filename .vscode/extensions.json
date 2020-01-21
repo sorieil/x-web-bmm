@@ -4,6 +4,23 @@
     "dbaeumer.vscode-eslint",
     "hollowtree.vue-snippets",
     "dariofuzinato.vue-peek",
-    "octref.vetur"
+    "octref.vetur",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "steoates.autoimport",
+    "michelemelluso.code-beautifier",
+    "aaron-bond.better-comments",
+    "alefragnani.bookmarks",
+    "streetsidesoftware.code-spell-checker",
+    "ms-azuretools.vscode-docker",
+    "p1c2u.docker-compose",
+    "formulahendry.docker-explorer",
+    "henriiik.docker-linter",
+    "zim.vsc-docker",
+    "joelday.docthis",
+    "donjayamanne.githistory",
+    "felipecaputo.git-project-manager",
+    "codezombiech.gitignore",
+    "fatihacet.gitlab-workflow",
+    "christian-kohler.npm-intellisense"
   ]
 }

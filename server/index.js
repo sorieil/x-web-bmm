@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const consola = require('consola');
 const { Nuxt, Builder } = require('nuxt');
 const app = express();
+const bodyParser = require('body-parser');
 
 // const connectRedis = require('connect-redis');
 // const RedisStore = connectRedis(session);
@@ -18,12 +19,18 @@ const sess = {
   },
   // store: new RedisStore({ url: '52.79.120.204:8754', logErrors: true }),
 };
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session(sess));
-app.use(function(req, res, next) {
-  if (!req.session) {
-    return next(new Error('oh no active session')); // handle error
-  }
+app.use((req, res, next) => {
+  console.clear();
+  // if (!req.session) {
+  //   return next(new Error('oh no active session')); // handle error
+  // }
+  // console.log('[ROOT SERVER]START +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
+  // console.log('===========>>> req.session');
+  // console.log(req.session);
+  // console.log('[ROOT SERVER]END +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
   next(); // otherwise continue
 });
 

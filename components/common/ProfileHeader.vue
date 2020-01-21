@@ -27,7 +27,10 @@ export default {
   },
   methods: {
     goBack() {
+      // 만약에 백 히스토리가 없는 경우에는 메인으로 보낸다.
+      // 그 이유는 토큰값을 전달 할 수 없기 때문이다.. 물론 할순 있음.
       this.$router.back();
+      console.log(this.$router);
     },
     // complete() {
     //   const formBusinessVendor = this.FIELD_GET.formBusinessVendor;

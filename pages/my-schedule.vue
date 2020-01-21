@@ -311,10 +311,9 @@ export default {
     };
   },
   created() {
-    this.getBusinessTime().then((r) => {
-      console.log('result:', r);
+    this.getBusinessTime().then(async (r) => {
+      await this.getSchedule(this.dates[0].date);
     });
-    // await this.getSchedule(this.dates[0].date);
   },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;
@@ -339,8 +338,8 @@ export default {
       this.profile = result[0].userBuyer || null;
       this.profileManager = result[0].businessVendorManager || null;
 
-      console.log('result:', this.profile);
-      console.log('result manager:', this.profileManager);
+      // console.log('result:', this.profile);
+      // console.log('result manager:', this.profileManager);
       const startDate = moment(result[0].businessTime.startDate).add(
         -1,
         'days'
@@ -348,19 +347,17 @@ export default {
       const endDate = moment(result[0].businessTime.endDate);
       const diffDay = endDate.diff(startDate, 'days');
       this.dates = [];
-      return setTimeout(() => {
-        for (let i = 0; i < diffDay; i++) {
-          const newDate = startDate.add(1, 'days');
-          this.dates.push({
-            mm: newDate.format('MM'),
-            dd: newDate.format('DD'),
-            week: newDate.format('ddd').toUpperCase(),
-            date: newDate.format('YYYY-MM-DD'),
-          });
-        }
-        this.dateScrollWidth = this.dates.length * 120;
-        return this.dates;
-      });
+      for (let i = 0; i < diffDay; i++) {
+        const newDate = startDate.add(1, 'days');
+        this.dates.push({
+          mm: newDate.format('MM'),
+          dd: newDate.format('DD'),
+          week: newDate.format('ddd').toUpperCase(),
+          date: newDate.format('YYYY-MM-DD'),
+        });
+      }
+      this.dateScrollWidth = this.dates.length * 120;
+      return this.dates;
     },
     // 스케쥴 정보를 선택한 날짜 기준으로 가져온다.
     async getSchedule(date) {

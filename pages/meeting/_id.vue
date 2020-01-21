@@ -198,7 +198,11 @@ export default {
     },
   },
   created() {
-    this.getBusinessTime();
+    this.getBusinessTime().then(async (r) => {
+      const autoDate = await this.getSchedule(this.dates[0].date);
+      console.log('Created >>>>>>>>>>>>>>>>>>> \n');
+      console.log(autoDate);
+    });
   },
   mounted() {
     this.dateScrollWidth = this.dates.length * 120;

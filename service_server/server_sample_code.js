@@ -1,9 +1,8 @@
 import ServerBase from './server_base';
 
 export default class ServerSampleCode extends ServerBase {
-  constructor(req) {
+  constructor() {
     super();
-    this.req = req;
     this.baseUrl = process.env.API_URL;
     this.apiName = '/user';
   }

@@ -203,6 +203,7 @@ export default {
     },
     async getServiceFilterType() {
       const { result } = await new Filter(this).get();
+      console.log('Get filter:', result);
       this.filters = result;
     },
     handleFilter() {},

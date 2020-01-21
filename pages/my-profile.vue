@@ -79,7 +79,9 @@ export default {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '정보입력' });
 
     this.$nextTick(() => {
-      this.getBuyer();
+      if (this.USER_GET.type !== null) {
+        this.getBuyer();
+      }
       const profileHeaderButton = document.querySelector(
         '#profileHeaderButton'
       );

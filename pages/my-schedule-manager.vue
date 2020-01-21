@@ -319,7 +319,7 @@ export default {
     this.$store.commit(SUB_HEADER_SET.load, { subHeaderTitle: '내 스케줄' });
 
     // 이부분이 계속 오류나고 있는 것이다.
-    console.log('==========> <<<<<<<<<<<<<<<<<<<<< ', this.dates[0]);
+    // console.log('==========> <<<<<<<<<<<<<<<<<<<<< ', this.dates[0]);
   },
   methods: {
     async getBusinessTime() {
@@ -330,8 +330,8 @@ export default {
       this.profile = result[0].userBuyer || null;
       this.profileManager = result[0].businessVendorManager || null;
 
-      console.log('result:', this.profile);
-      console.log('result manager:', this.profileManager);
+      // console.log('result:', this.profile);
+      // console.log('result manager:', this.profileManager);
       const startDate = moment(result[0].businessTime.startDate).add(
         -1,
         'days'

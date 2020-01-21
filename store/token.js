@@ -5,7 +5,7 @@ export const state = () => ({
 });
 
 export const getters = {
-  [TOKEN_GET.defines]: (state) => state,
+  [TOKEN_GET.defines]: (state) => state.ACCESS_TOKEN,
 };
 
 export const actions = {};
