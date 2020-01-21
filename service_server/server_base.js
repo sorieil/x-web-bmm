@@ -112,7 +112,10 @@ export default class ServerBase {
 
   getDirect(url) {
     this.requestUrl(url);
-    return this.axios.get(url).then(this.response);
+    return this.axios
+      .get(url)
+      .then(this.response)
+      .catch((e) => errorPrint(e));
   }
 
   postDirect(url) {

@@ -3,7 +3,7 @@
     <div id="notfound">
       <div class="notfound">
         <div class="notfound-404">
-          <h3>서버에 문제가 생겼습니다. 관리자에게 문의해주세요.</h3>
+          <h3>회원가입 및 로그인을 하셔야 합니다.</h3>
         </div>
       </div>
     </div>

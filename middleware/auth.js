@@ -21,7 +21,7 @@ export default async ({
    * */
   const errorRedirect = (error) => {
     console.log(error);
-    return redirect('/error');
+    return redirect('/error-auth');
   };
 
   // Active when server side request.
@@ -65,13 +65,11 @@ export default async ({
                 });
               }
             } else {
-              return errorRedirect(
-                '맞는 토큰이지만, 회원 정보 조회 하는데 문제가 있네요.'
-              );
+              return errorRedirect('회원 인증에 문제가 있는거 같아요.');
             }
           })
           .catch((error) => {
-            errorRedirect(error.response.data.message);
+            errorRedirect(error.message);
           });
       } else {
         return errorRedirect('맞는 토큰이지만, 회원이 아닌거 같습니다.');
