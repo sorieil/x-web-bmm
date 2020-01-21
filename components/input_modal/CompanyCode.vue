@@ -65,6 +65,8 @@ export default {
       const body = this.$el.parentElement.parentElement.parentElement
         .parentElement.parentElement.parentElement;
       this.companyCodeStatus = null;
+      this.inputCode = null;
+
       body.style.overflow = 'auto';
     },
     async checkVendorCode() {
@@ -77,7 +79,7 @@ export default {
       };
       const { result } = await new Vendor(this).codePost(id, params);
 
-      if (result) {
+      if (result[0].businessCode.code === this.inputCode) {
         const { result } = await new Vendor(this).selectGet(id);
         this.$store.commit(COMPANY_CODE_SET.load, {
           company: result[0],
