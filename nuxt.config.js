@@ -113,7 +113,7 @@ module.exports = {
     },
   },
   env: {
-    API_URL: process.env.API_URL || 'http://localhost:8989/api',
+    API_URL: process.env.API_URL || 'https://bmm.xsync.info/api',
   },
   server: {
     port: process.env.PORT || 3000, // default: 3000
