@@ -8,6 +8,6 @@ export default class ServerUser extends ServerBase {
   }
 
   get() {
-    return this.baseGet();
+    return Promise.resolve(this.baseGet());
   }
 }

@@ -80,30 +80,39 @@ export default class Base {
     }
   }
 
-  async baseGet() {
-    const checkToken = await this.checkToken();
-    if (checkToken) {
-      return this.axios
-        .$get(this.getUrl(), {
-          params: this.params,
-          progress: false,
-        })
-        .then(this.response);
-    } else {
-      return errorPrint(403);
-    }
+  baseGet() {
+    this.checkToken()
+      .then((checkToken) => {
+        if (checkToken) {
+          return this.axios
+            .$get(this.getUrl(), {
+              params: this.params,
+              progress: false,
+            })
+            .then(this.response);
+        } else {
+          return errorPrint(403);
+        }
+      })
+      .catch(errorPrint);
   }
 
   getDirect(url) {
     this.requestUrl(url);
-    return this.axios.$get(url).then(this.response);
+    return this.axios
+      .$get(url)
+      .then(this.response)
+      .catch(errorPrint);
   }
 
   postDirect(url) {
     this.requestUrl(url);
     // console.log('Post direct headers: \n');
     // console.log(this.axios.headers);
-    return this.axios.$post(url).then(this.response);
+    return this.axios
+      .$post(url)
+      .then(this.response)
+      .catch(errorPrint);
   }
 
   async basePost() {
@@ -115,22 +124,32 @@ export default class Base {
     }
   }
 
-  async basePut() {
-    const checkToken = await this.checkToken();
-    if (checkToken) {
-      return this.axios.$put(this.getUrl(), this.params).then(this.response);
-    } else {
-      return errorPrint(403);
-    }
+  basePut() {
+    this.checkToken()
+      .then((checkToken) => {
+        if (checkToken) {
+          return this.axios
+            .$put(this.getUrl(), this.params)
+            .then(this.response);
+        } else {
+          return errorPrint(403);
+        }
+      })
+      .catch(errorPrint);
   }
 
-  async baseDelete() {
-    const checkToken = await this.checkToken();
-    if (checkToken) {
-      return this.axios.$delete(this.getUrl(), this.params).then(this.response);
-    } else {
-      return errorPrint(403);
-    }
+  baseDelete() {
+    this.checkToken()
+      .then((checkToken) => {
+        if (checkToken) {
+          return this.axios
+            .$delete(this.getUrl(), this.params)
+            .then(this.response);
+        } else {
+          return Promise.resolve(errorPrint(403));
+        }
+      })
+      .catch(errorPrint);
   }
 
   async basePatch() {

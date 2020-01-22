@@ -52,7 +52,8 @@ export default async ({
       if (resCode === 200) {
         new ServerUser(req)
           .get()
-          .then(({ resCode, result }) => {
+          .then((result) => {
+            console.log('resCode', result);
             // If user exist, Save user type.
             if (resCode === 200) {
               console.log('serverUser route:', route.path);
