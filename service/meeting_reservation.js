@@ -23,6 +23,6 @@ export default class MeetingReservation extends Base {
 
   delete(id) {
     this.apiUrl = id;
-    return this.baseDelete();
+    return Promise.resolve(this.baseDelete());
   }
 }

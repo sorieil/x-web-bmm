@@ -132,7 +132,7 @@
 import DirectiveImage from '../../mixin/directive_image';
 import { SUB_HEADER_SET } from '../../store/constant_types';
 import BusinessTime from '../../service/business_time';
-import UserSchedule from '../../service/user_schedule';
+import VendorSchedule from '../../service/vendor_schedule';
 import BusinessMeetingRoom from '../../service/business_meeting_room';
 import MeetingReservation from '../../service/meeting_reservation';
 import Modal from '~/components/common/ModalFull';
@@ -210,7 +210,7 @@ export default {
   },
 
   methods: {
-    async submit() {
+    submit() {
       if (this.meetingMemo !== null) {
         // console.log('this.reservationDateBlock:', this.reservationDateBlock);
         const service = new MeetingReservation(this);
@@ -221,23 +221,28 @@ export default {
             .businessMeetingTimeList.id, // businessTimeBlock id
           memo: this.meetingMemo, // Memo
         };
-        const query = await service.post(data);
+        service
+          .post(data)
+          .then(async (result) => {
+            if (result) {
+              alert('예약이 완료 되었습니다.');
+              await this.getBusinessTime();
+              this.modalClose();
+            }
+          })
+          .catch((error) => {
+            alert('이미 예약이 완료 되었습니다. 다른 시간대를 선택해주세요.');
+            console.log('error:', error);
+          });
         // console.log('query', query);
-
-        if (query) {
-          alert('예약이 완료 되었습니다.');
-          this.getBusinessTime();
-          this.modalClose();
-        } else {
-          alert('이미 예약이 완료 되었습니다. 다른 시간대를 선택해주세요.');
-        }
       } else {
         alert('메모를 입력해주세요.');
       }
     },
     async getSchedule(date) {
-      const service = new UserSchedule(this);
-      const { result } = await service.get(date);
+      const service = new VendorSchedule(this);
+      const { result } = await service.get(this.$route.params.id, date);
+      console.log('result:', result);
       this.times = result;
     },
     async getBusinessTime() {
@@ -253,21 +258,21 @@ export default {
       const endDate = moment(result[0].businessTime.endDate);
       const diffDay = endDate.diff(startDate, 'days');
       this.dates = [];
-      return setTimeout(() => {
-        for (let i = 0; i < diffDay; i++) {
-          const newDate = startDate.add(1, 'days');
-          this.dates.push({
-            mm: newDate.format('MM'),
-            dd: newDate.format('DD'),
-            week: newDate.format('ddd').toUpperCase(),
-            date: newDate.format('YYYY-MM-DD'),
-          });
-        }
-        this.dateScrollWidth = this.dates.length * 120;
-        return this.dates;
-      });
+
+      for (let i = 0; i < diffDay; i++) {
+        const newDate = startDate.add(1, 'days');
+        this.dates.push({
+          mm: newDate.format('MM'),
+          dd: newDate.format('DD'),
+          week: newDate.format('ddd').toUpperCase(),
+          date: newDate.format('YYYY-MM-DD'),
+        });
+      }
+      this.dateScrollWidth = this.dates.length * 120;
+      return this.dates;
     },
     fnDateChange(index, active, event) {
+      console.log('Reservation start:', index, active, event);
       this.activeDate = index;
       this.getSchedule(this.dates[index].date);
     },
@@ -282,14 +287,12 @@ export default {
     fnOpneMeetingRequest(index) {
       this.getBusinessMeetingRoom();
       const item = this.times[index];
-      // console.log('profile:', this.profile);
-      // console.log('타임블럭 번호: ', item);
-      this.reservationDateBlock = item;
-      this.dateBlock = item.businessMeetingTimeList.dateBlock;
-      this.timeBlock = item.businessMeetingTimeList.timeBlock;
-      this.modalStatus = true;
-
-      setTimeout(() => {}, 10);
+      if (item) {
+        this.reservationDateBlock = item;
+        this.dateBlock = item.businessMeetingTimeList.dateBlock;
+        this.timeBlock = item.businessMeetingTimeList.timeBlock;
+        this.modalStatus = true;
+      }
     },
     modalClose() {
       this.modalStatus = false;

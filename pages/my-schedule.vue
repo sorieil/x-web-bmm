@@ -325,7 +325,7 @@ export default {
       const reservationId = this.reservationDetail
         .businessMeetingRoomReservation.id;
       service.delete(reservationId).then((r) => {
-        alert('취소가 완료 되었습니다.', r.message);
+        alert('취소가 완료 되었습니다.');
         this.getBusinessTime();
         this.modalClose();
       });

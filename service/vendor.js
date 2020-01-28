@@ -6,11 +6,13 @@ export default class Vendor extends Base {
     this.apiName = 'v1/user/vendor';
   }
 
-  get() {
+  get(id) {
+    this.apiUrl = id;
     return this.baseGet();
   }
 
-  post(params) {
+  post(id, params) {
+    this.apiUrl = id;
     this.params = params;
     return this.basePost();
   }

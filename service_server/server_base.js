@@ -93,22 +93,18 @@ export default class ServerBase {
     }
   }
 
-  baseGet() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios
-            .get(this.getUrl(), {
-              params: this.params,
-              progress: false,
-            })
-            .then(this.response);
-        } else {
-          // 403 은 토큰 에러
-          return Promise.resolve(errorPrint(403));
-        }
-      })
-      .catch(errorPrint);
+  async baseGet() {
+    const checkToken = await this.checkToken();
+    if (checkToken) {
+      return this.axios
+        .get(this.getUrl(), {
+          params: this.params,
+          progress: false,
+        })
+        .then(this.response);
+    } else {
+      return Promise.resolve(errorPrint(403));
+    }
   }
 
   getDirect(url) {
@@ -122,64 +118,43 @@ export default class ServerBase {
   postDirect(url) {
     this.requestUrl(url);
     // console.log(this.axios.headers);
-    return this.axios
-      .post(url)
-      .then(this.response)
-      .catch((e) => errorPrint(e));
+    return this.axios.post(url).then(this.response);
   }
 
-  basePost() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios
-            .post(this.getUrl(), this.params)
-            .then(this.response);
-        } else {
-          return Promise.resolve(errorPrint(403));
-        }
-      })
-      .catch(errorPrint);
+  async basePost() {
+    const checkToken = await this.checkToken();
+    if (checkToken) {
+      return this.axios.post(this.getUrl(), this.params).then(this.response);
+    } else {
+      return errorPrint(403);
+    }
   }
 
-  basePut() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios.put(this.getUrl(), this.params).then(this.response);
-        } else {
-          return Promise.resolve(errorPrint(403));
-        }
-      })
-      .catch(errorPrint);
+  async basePut() {
+    const checkToken = await this.checkToken();
+    if (checkToken) {
+      return this.axios.put(this.getUrl(), this.params).then(this.response);
+    } else {
+      return errorPrint(403);
+    }
   }
 
-  baseDelete() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios
-            .delete(this.getUrl(), this.params)
-            .then(this.response);
-        } else {
-          return Promise.resolve(errorPrint(403));
-        }
-      })
-      .catch(errorPrint);
+  async baseDelete() {
+    const checkToken = await this.checkToken();
+    if (checkToken) {
+      return this.axios.delete(this.getUrl(), this.params).then(this.response);
+    } else {
+      return errorPrint(403);
+    }
   }
 
-  basePatch() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios
-            .patch(this.getUrl(), this.params)
-            .then(this.response);
-        } else {
-          return Promise.resolve(errorPrint(403));
-        }
-      })
-      .catch(errorPrint);
+  async basePatch() {
+    const checkToken = await this.checkToken();
+    if (checkToken) {
+      return this.axios.patch(this.getUrl(), this.params).then(this.response);
+    } else {
+      return errorPrint(403);
+    }
   }
 
   getUrl() {
@@ -193,7 +168,7 @@ export default class ServerBase {
   }
 
   response(res) {
-    // console.log(res.data);
+    console.log(res.data);
     console.log('[BASE SERVER]API END +_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+');
     return res.data;
   }

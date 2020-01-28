@@ -80,21 +80,19 @@ export default class Base {
     }
   }
 
-  baseGet() {
-    this.checkToken()
-      .then((checkToken) => {
-        if (checkToken) {
-          return this.axios
-            .$get(this.getUrl(), {
-              params: this.params,
-              progress: false,
-            })
-            .then(this.response);
-        } else {
-          return errorPrint(403);
-        }
-      })
-      .catch(errorPrint);
+  async baseGet() {
+    const checkToken = await this.checkToken();
+
+    if (checkToken) {
+      return this.axios
+        .$get(this.getUrl(), {
+          params: this.params,
+          progress: false,
+        })
+        .then(this.response);
+    } else {
+      return errorPrint(403);
+    }
   }
 
   getDirect(url) {

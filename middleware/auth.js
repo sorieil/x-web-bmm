@@ -52,13 +52,15 @@ export default async ({
       if (resCode === 200) {
         new ServerUser(req)
           .get()
-          .then((result) => {
-            console.log('resCode', result);
+          .then(({ resCode, result }) => {
             // If user exist, Save user type.
             if (resCode === 200) {
-              console.log('serverUser route:', route.path);
+              console.log('serverUser result:', result[0].type);
               // If the user type is null, set the buyer type.
-              if (result[0].type === 'null' && route.path !== '/my-profile') {
+              if (
+                (result[0].type === 'null' || result[0].type === null) &&
+                route.path !== '/my-profile'
+              ) {
                 return redirect(`/my-profile?token=${req.query.token}`);
               } else {
                 return store.commit(USER_SET.load, {
