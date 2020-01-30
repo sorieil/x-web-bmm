@@ -350,7 +350,7 @@ export default {
     cancleReservation() {
       const service = new MeetingReservation(this);
       const reservationId = this.reservationDetail
-        .businessMeetingRoomReservation.id;
+        .businessMeetingRoomReservations[0].id;
       service.delete(reservationId).then((r) => {
         alert('취소가 완료 되었습니다.');
         this.getBusinessTime();
