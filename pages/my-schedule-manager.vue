@@ -61,8 +61,10 @@
               <span class="__time">
                 {{ item.businessMeetingTimeList.timeBlock }}
               </span>
-              <span class="__company">{{ item.userName }}</span>
-              <!-- <span class="__user" @click="fnOpneMeetingInfo()">예약명</span> -->
+              <!-- <span class="__company">{{ item.userName }}</span> -->
+              <span @click="fnOpneMeetingInfo(index)" class="__user">{{
+                item.userName
+              }}</span>
               <span class="__status __complate">예약완료</span>
             </div>
             <div v-else class="__time-block">
@@ -70,7 +72,7 @@
                 {{ item.businessMeetingTimeList.timeBlock }}
               </span>
               <span class="__company">{{ item.userName }}</span>
-              <span @click="fnOpneMeetingInfo()" class="__user"></span>
+              <!-- <span @click="fnOpneMeetingInfo()" class="__user"></span> -->
               <span @click="openStatusModal(index)" class="__status __possible"
                 >예약가능</span
               >
@@ -142,16 +144,8 @@
               </div>
               <div class="__applicant-detail">
                 <p>
-                  <span>직위</span>
-                  {{ profile.position }}
-                </p>
-                <p>
-                  <span>부서</span>
-                  {{ profile.department }}
-                </p>
-                <p>
                   <span>연락처</span>
-                  {{ profile.number }}
+                  {{ profile.phone }}
                 </p>
                 <p>
                   <span>이메일</span>
@@ -163,29 +157,58 @@
           <div class="__date-time">
             <h3>날짜/시간</h3>
             <div>
-              <span>{{ meetingDateMM }}월 {{ meetingDateDD }}일</span>
-              <span class="timepicker"
-                >{{ meetingTime }} {{ meetingAmPm }}</span
-              >
+              <span>
+                {{
+                  reservationDetail.businessMeetingTimeList.dateBlock.split(
+                    '-'
+                  )[1]
+                }}월
+                {{
+                  reservationDetail.businessMeetingTimeList.dateBlock.split(
+                    '-'
+                  )[2]
+                }}일
+              </span>
+              <span class="timepicker">
+                {{ reservationDetail.businessMeetingTimeList.timeBlock }}
+              </span>
               <span>15min</span>
             </div>
           </div>
           <div class="__request-content">
             <h3>메모</h3>
             <div>
-              <p class="__memo-content">{{ meetingMemo }}</p>
+              <p class="__memo-content">
+                {{ reservationDetail.businessMeetingRoomReservations[0].memo }}
+              </p>
             </div>
           </div>
           <div class="__room">
             <h3>미팅룸</h3>
-            <div>{{ meetingRoom }}</div>
+            <div>
+              {{
+                reservationDetail.businessMeetingRoomReservations[0]
+                  .businessMeetingRoom.name
+              }}
+              [
+              {{
+                reservationDetail.businessMeetingRoomReservations[0]
+                  .businessMeetingRoom.location
+              }}]
+            </div>
           </div>
 
           <div class="__meeting-btns">
-            <button class="__meeting-cancel-btn" type="button">
+            <button
+              @click="cancleReservation"
+              class="__meeting-cancel-btn"
+              type="button"
+            >
               미팅 신청 취소
             </button>
-            <button class="__meeting-btn" type="button">미팅 신청 확인</button>
+            <button @click="modalClose" class="__meeting-btn" type="button">
+              미팅 신청 확인
+            </button>
           </div>
         </div>
       </div>
@@ -249,6 +272,7 @@ import IconCheckbox from '../components/features/IconCheckbox';
 import { SUB_HEADER_SET } from '../store/constant_types';
 import BusinessTime from '../service/business_time';
 import UserSchedule from '../service/user_schedule';
+import MeetingReservation from '../service/meeting_reservation';
 const moment = require('moment');
 export default {
   layout: 'sub_default',
@@ -306,6 +330,7 @@ export default {
           status: false,
         },
       ],
+      reservationDetail: {},
     };
   },
   created() {
@@ -322,16 +347,30 @@ export default {
     // console.log('==========> <<<<<<<<<<<<<<<<<<<<< ', this.dates[0]);
   },
   methods: {
+    cancleReservation() {
+      const service = new MeetingReservation(this);
+      const reservationId = this.reservationDetail
+        .businessMeetingRoomReservation.id;
+      service.delete(reservationId).then((r) => {
+        alert('취소가 완료 되었습니다.');
+        this.getBusinessTime();
+        this.modalClose();
+      });
+    },
     async getBusinessTime() {
       const service = new BusinessTime(this);
       const { result } = await service.get();
-
+      console.log('result:', result);
       // 스케쥴의 담당자 혹은 바이어의 정보를 가져온다.
-      this.profile = result[0].userBuyer || null;
+      this.profile = {
+        name: '',
+        phone: '',
+        email: '',
+      };
       this.profileManager = result[0].businessVendorManager || null;
 
-      // console.log('result:', this.profile);
-      // console.log('result manager:', this.profileManager);
+      console.log('result:', this.profile);
+      console.log('result manager:', this.profileManager);
       const startDate = moment(result[0].businessTime.startDate).add(
         -1,
         'days'
@@ -362,7 +401,7 @@ export default {
       this.activeDate = index;
       this.getSchedule(this.dates[index].date);
     },
-    fnOpneMeetingInfo() {
+    fnOpneMeetingInfo(index) {
       const meetingModal = this.$refs.MeetingModal.$el;
       meetingModal.style = '';
 
@@ -372,6 +411,11 @@ export default {
 
       modalFullEl.style.top = window.scrollY + 'px';
       document.body.style.overflow = 'hidden';
+      console.log('this.times[index]:', this.times[index]);
+      this.reservationDetail = this.times[index];
+      this.profile.name = this.times[index].userName;
+      this.profile.phone = this.times[index].userPhone;
+      this.profile.email = this.times[index].userEmail;
     },
     modalClose() {
       this.activeMeetingModal = false;

@@ -16,5 +16,5 @@ sudo docker stop $(sudo docker ps -q) >/dev/null
 # sudo docker container prune --force
 
 sudo docker load -i frontend.tar >/dev/null
-sudo docker run -it -p 3001:3001 -d frontend:latest >/dev/null
+sudo docker run -it -p 3000:3000 -d frontend:latest >/dev/null
 sudo docker ps >/dev/null

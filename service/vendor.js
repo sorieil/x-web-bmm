@@ -6,8 +6,7 @@ export default class Vendor extends Base {
     this.apiName = 'v1/user/vendor';
   }
 
-  get(id) {
-    this.apiUrl = id;
+  get() {
     return this.baseGet();
   }
 
