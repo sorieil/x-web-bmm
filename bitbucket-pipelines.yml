@@ -11,12 +11,13 @@ pipelines:
           - echo $MY_ACCESS_KEY
           - echo $MY_ACCESS_KEY > ./access_key.pem
           - chmod 600 ./access_key.pem
+          - chmod 600 ./build/bmm-web.pem
           - ls -alh
           # - docker build -t frontend:latest .
           # - docker save -o frontend.tar frontend:latest
           # - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
           - cat ./access_key.pem
-          - ssh -i ./access_key.pem ubuntu@52.79.120.204 'bash -s' < ./build/docker-run.sh
+          - ssh -i ./build/bmm-web.pem ubuntu@52.79.120.204 'bash -s' < ./build/docker-run.sh
           - echo 'Deploy success!!!'
         # services:
         #   - docker
