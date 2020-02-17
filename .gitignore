@@ -90,7 +90,8 @@ sw.*
 # Vim swap files
 *.swp
 
-*.pem
 *.tar
 
 *-lock.json
+
+*.pem
