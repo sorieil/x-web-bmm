@@ -3,7 +3,7 @@ pipelines:
   default:
     - step:
         name: Deploy
-        deployment: deployment_docker
+        deployment: test
         script:
           - docker build -t frontend:latest .
           - docker save -o frontend.tar frontend:latest
