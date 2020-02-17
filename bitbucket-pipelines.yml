@@ -14,4 +14,4 @@ pipelines:
           - echo "Deploy step finished"
         services:
           - docker
-ssh ubuntu@$(echo $DEPLOY_SERVER_IP)
+# ssh ubuntu@$(echo $DEPLOY_SERVER_IP)
