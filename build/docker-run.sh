@@ -17,4 +17,4 @@ sudo docker stop $(sudo docker ps -q) >/dev/null
 
 sudo docker load -i frontend.tar >/dev/null
 sudo docker run -it -p 3000:3000 -d frontend:latest >/dev/null
-sudo docker ps >/dev/null
+sudo docker ps
