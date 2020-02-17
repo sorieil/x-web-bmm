@@ -3,12 +3,13 @@ pipelines:
   default:
     - step:
         name: Deploy
-        deployment: test
+        deployment: Test
         script:
           # - pwd
           # - ssh -V
           # - mkdir -p ~/.ssh
           - echo $MY_ACCESS_KEY
+          - echo $DEPLOY_SERVER_IP
           - echo $MY_ACCESS_KEY > ./access_key.pem
           - chmod 600 ./access_key.pem
           - chmod 600 ./build/bmm-web.pem
