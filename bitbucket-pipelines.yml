@@ -13,5 +13,5 @@ pipelines:
           - cat ./my_ssh_key.pem
           - ssh -i ./my_ssh_key.pem ubuntu@$(echo $DEPLOY_SERVER_IP) 'bash -s' < ./build/docker-run.sh
           - echo 'Deploy success!!!'
-        # services:
-        #   - docker
+        services:
+          - docker
