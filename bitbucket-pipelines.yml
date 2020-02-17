@@ -3,16 +3,14 @@ pipelines:
   default:
     - step:
         name: Deploy
-        deployment: Test
+        deployment: test
         script:
           - mkdir -p ~/.ssh
           - echo $MY_ACCESS_KEY > access_key.pem
-          - cat access_key.pem
           # - docker build -t frontend:latest .
           # - docker save -o frontend.tar frontend:latest
           # - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
-          - ssh -i ./access_key.pem ubuntu@52.79.120.204 'bash -s' <./build/docker-run.sh
-          - echo "Deploy step finished"
+          - ssh -i ./access_key.pem ubuntu@52.79.120.204 'bash -s' <./build/docker-run.sh 'echo "Deploy step finished"''
         # services:
         #   - docker
 # ssh ubuntu@$(echo $DEPLOY_SERVER_IP)
