@@ -114,11 +114,11 @@ module.exports = {
     },
   },
   env: {
-    API_URL: process.env.API_URL || 'https://bmm.xsync.info/api',
+    API_URL: process.env.API_URL,
   },
   server: {
-    port: process.env.PORT || 3001, // default: 3001
-    host: process.env.HOST || 'localhost', // default: localhost
+    port: process.env.PORT,
+    host: process.env.HOST,
   },
   /*
    ** Add server middleware

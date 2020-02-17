@@ -1,18 +1,17 @@
 version: '3.7'
 
 services:
-  frontend:
+  app:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: bmm-development
+    container_name: bmm-dev
     working_dir: /usr/src/app
     environment:
+      - API_URL=https://bmm-dev.xsync.info/api
       - NODE_ENV=development
       - HOST=0.0.0.0
-      - API_URL=http://192.168.35.127:8989/api
-      - PORT=3001 # 포트 변경할경우 요기랑 밑에 변경해줘야 함.
-      # - API_URL=https://bmm.xsync.info/api 로컬 서버가 없는 경우
+      - PORT=3000
     restart: unless-stopped
     networks: 
       - app-network
@@ -20,8 +19,8 @@ services:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
     ports:
-      - '3001:3001'
-    command: yarn run dev
+      - '3000:3000'
+    command: pm2-docker start ecosystem.config.js --env development
 
 volumes:
   node_modules:

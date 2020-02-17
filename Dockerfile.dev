@@ -1,5 +1,7 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as development
 WORKDIR /usr/src/app
-RUN yarn global add nodemon
+RUN yarn global add pm2
 COPY package*.json ./
 RUN yarn
+COPY . .
+
