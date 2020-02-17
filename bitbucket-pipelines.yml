@@ -5,16 +5,16 @@ pipelines:
         name: Deploy
         deployment: test
         script:
-          - ls
           - pwd
           - ssh -V
           - mkdir -p ~/.ssh
           - echo $MY_ACCESS_KEY > ./access_key.pem
           - chmod 400 ./access_key.pem
+          - ls -al
           # - docker build -t frontend:latest .
           # - docker save -o frontend.tar frontend:latest
           # - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
-          - ssh -i ~/build/bmm-web.pem ubuntu@52.79.120.204 'bash -s' < ~/build/docker-run.sh
+          - ssh -i ./build/bmm-web.pem ubuntu@52.79.120.204 'bash -s' < ./build/docker-run.sh
           # - cat deploy_result.txt
         # services:
         #   - docker
