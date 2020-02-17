@@ -3,7 +3,6 @@ pipelines:
   default:
     - step:
         name: Deploy
-        deployment: deployment_docker
         script:
           - printenv
         services:
