@@ -15,7 +15,8 @@ pipelines:
           # - docker save -o frontend.tar frontend:latest
           # - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
           - cat ./access_key.pem
-          - ssh -i ./build/bmm-web.pem ubuntu@52.79.120.204 'bash -s' < ./build/docker-run.sh
+          # - ssh -i ./build/bmm-web.pem ubuntu@52.79.120.204 'bash -s' < ./build/docker-run.sh
+          - ssh -i ./build/bmm-web.pem ubuntu@52.79.120.204
           # - cat deploy_result.txt
         # services:
         #   - docker
