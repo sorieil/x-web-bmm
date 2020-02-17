@@ -5,12 +5,10 @@ pipelines:
         name: Deploy
         deployment: Test
         script:
-          # - printenv
-          - echo $DEPLOY_SEVER_IP
-          # - docker build -t frontend:latest .
-          # - docker save -o frontend.tar frontend:latest
-          - ssh ubuntu@$52.79.120.204
-          # - ssh ubuntu@$(echo $DEPLOY_SERVER_IP) 'bash -s' <./build/docker-run.sh
+          - docker build -t frontend:latest .
+          - docker save -o frontend.tar frontend:latest
+          - ssh ubuntu@52.79.120.204
+          - ssh ubuntu@52.79.120.204 'bash -s' <./build/docker-run.sh
           - echo "Deploy step finished"
         services:
           - docker
