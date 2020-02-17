@@ -7,12 +7,11 @@ pipelines:
         script:
           - (umask  077 ; echo $MY_SSH_KEY | base64 --decode > ./my_ssh_key.pem)
           - chmod 400 ./my_ssh_key.pem
-          # - docker build -t frontend:latest .
-          # - docker save -o frontend.tar frontend:latest
-          # - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
+          - docker build -t frontend:latest .
+          - docker save -o frontend.tar frontend:latest
+          - scp frontend.tar ubuntu@$(echo $DEPLOY_SERVER_IP):/home/ubuntu
           - cat ./my_ssh_key.pem
           - ssh -i ./my_ssh_key.pem ubuntu@$(echo $DEPLOY_SERVER_IP) 'bash -s' < ./build/docker-run.sh
           - echo 'Deploy success!!!'
         # services:
         #   - docker
-# ssh ubuntu@$(echo $DEPLOY_SERVER_IP)
