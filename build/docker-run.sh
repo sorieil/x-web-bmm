@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
-sudo docker stop $(sudo docker ps -q)
-# if command -v sudo docker ps; then
-#   sudo docker stop $(sudo docker ps -q) >/dev/null
-# fi
+# sudo docker stop $(sudo docker ps -q)
+if !command -v sudo docker ps; then
+  sudo docker stop $(sudo docker ps -q) >/dev/null
+fi
 
 # Rollback 을 위해서 우선 주석처리
 # if command -v docker images; then
