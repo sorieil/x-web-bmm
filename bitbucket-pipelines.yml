@@ -5,6 +5,7 @@ pipelines:
         name: Deploy
         deployment: test
         script:
+          - ssh -V
           - mkdir -p ~/.ssh
           - echo $MY_ACCESS_KEY > ./access_key.pem
           - chmod 400 ./access_key.pem
