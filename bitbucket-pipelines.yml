@@ -7,7 +7,7 @@ pipelines:
         script:
           - docker build -t frontend:latest .
           - docker save -o frontend.tar frontend:latest
-          - ssh ubuntu@52.79.120.204
+          - scp frontend.tar ubuntu@52.79.120.204:/home/ubuntu
           - ssh ubuntu@52.79.120.204 'bash -s' <./build/docker-run.sh
           - echo "Deploy step finished"
         services:
