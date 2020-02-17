@@ -10,4 +10,4 @@ COPY package*.json ./
 RUN yarn --production=false
 COPY . .
 RUN yarn run build
-CMD ["pm2-docker", "start", "ecosystem.config.js", "--env production"]
+CMD ["pm2-docker", "start", "ecosystem.config.js", "--env=production"]
