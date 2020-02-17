@@ -5,6 +5,7 @@ pipelines:
         name: Deploy
         deployment: test
         script:
+          - ls
           - pwd
           - ssh -V
           - mkdir -p ~/.ssh
