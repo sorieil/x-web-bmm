@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 # sudo docker stop $(sudo docker ps -q)
-if !command -v sudo docker ps; then
+if command -v sudo docker ps; then
   sudo docker stop $(sudo docker ps -q) >/dev/null
 fi
 
