@@ -5,6 +5,7 @@ pipelines:
         name: Deploy
         deployment: deployment_docker
         script:
+          - printenv
           - docker build -t frontend:latest .
           - docker save -o frontend.tar frontend:latest
           - scp -i frontend.tar ubuntu@$DEPLOY_SERVER_IP:/home/ubuntu
