@@ -9,8 +9,8 @@ pipelines:
           # - cat $DEPLOY_SERVER_IP >/dev/null
           # - docker build -t frontend:latest .
           # - docker save -o frontend.tar frontend:latest
-          - scp frontend.tar ubuntu@echo $DEPLOY_SERVER_IP:/home/ubuntu
-          - ssh ubuntu@echo $DEPLOY_SERVER_IP 'bash -s' <./build/docker-run.sh
+          - scp frontend.tar ubuntu@$(echo $DEPLOY_SERVER_IP):/home/ubuntu
+          - ssh ubuntu@$(echo $DEPLOY_SERVER_IP) 'bash -s' <./build/docker-run.sh
           - echo "Deploy step finished"
         services:
           - docker
