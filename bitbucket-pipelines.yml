@@ -10,3 +10,5 @@ pipelines:
           - scp -i frontend.tar ubuntu@$DEPLOY_SERVER_IP:/home/ubuntu
           - ssh ubuntu@$DEPLOY_SERVER_IP 'bash -s' <./build/docker-run.sh
           - echo "Deploy step finished"
+        services:
+          - docker
