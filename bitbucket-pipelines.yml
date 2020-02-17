@@ -3,13 +3,14 @@ pipelines:
   default:
     - step:
         name: Deploy
-        deployment: test
+        deployment: Test
         script:
           - printenv
-          - docker build -t frontend:latest .
-          - docker save -o frontend.tar frontend:latest
-          - scp -i frontend.tar ubuntu@$DEPLOY_SERVER_IP:/home/ubuntu
-          - ssh ubuntu@$DEPLOY_SERVER_IP 'bash -s' <./build/docker-run.sh
-          - echo "Deploy step finished"
+          - cat $DEPLOY_SERVER_IP
+          # - docker build -t frontend:latest .
+          # - docker save -o frontend.tar frontend:latest
+          # - scp -i frontend.tar ubuntu@$DEPLOY_SERVER_IP:/home/ubuntu
+          # - ssh ubuntu@$DEPLOY_SERVER_IP 'bash -s' <./build/docker-run.sh
+          # - echo "Deploy step finished"
         services:
           - docker
