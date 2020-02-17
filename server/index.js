@@ -61,5 +61,6 @@ async function start() {
     message: `Server listening on http://${host}:${port}`,
     badge: true,
   });
+  //TODO 성공이 되면, 성공적으로 배포가 됐다고, 메세지를 보내줘야 한다.
 }
 start();
