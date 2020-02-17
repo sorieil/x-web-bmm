@@ -10,7 +10,7 @@ services:
     environment:
       - NODE_ENV=development
       - HOST=0.0.0.0
-      - API_URL=http://192.168.1.18:8989/api
+      - API_URL=http://192.168.35.127:8989/api
       - PORT=3001 # 포트 변경할경우 요기랑 밑에 변경해줘야 함.
       # - API_URL=https://bmm.xsync.info/api 로컬 서버가 없는 경우
     restart: unless-stopped
