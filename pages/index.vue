@@ -6,7 +6,7 @@
       <div class="__filter">
         <button @click="openFilter">
           <img src="../assets/images/common/icon_filter.svg" />
-          <span>필터</span>
+          <span>필터*</span>
         </button>
       </div>
     </div>
