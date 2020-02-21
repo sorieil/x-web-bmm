@@ -15,13 +15,11 @@ services:
     restart: unless-stopped
     networks: 
       - app-network
+    ports:
+      - '3000:3000'
     volumes:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
-    ports:
-      - '3000:3000'
-    command: pm2-docker start ecosystem.config.js --env=development
-
 volumes:
   node_modules:
 networks:
